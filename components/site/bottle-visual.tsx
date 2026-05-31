@@ -14,8 +14,8 @@ export function BottleVisual({
   label?: string
 }) {
   return (
-    <div className={cn('relative flex items-end justify-center', className)}>
-      <div className="relative h-full w-[58%]">
+    <div className={cn('relative mx-auto flex aspect-[5/9] items-end justify-center', className)}>
+      <div className="relative h-full w-full">
         {/* Cap */}
         <div className="absolute left-1/2 top-0 z-20 h-[14%] w-[34%] -translate-x-1/2 rounded-[3px] border border-foreground/15 bg-foreground/10 backdrop-blur-sm" />
         {/* Neck */}
