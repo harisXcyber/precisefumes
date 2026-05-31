@@ -1,0 +1,242 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import { Minus, Plus, ShoppingBag, Check } from "lucide-react";
+import type { Product } from "@/types";
+import { formatPrice } from "@/lib/utils";
+import { useCart } from "@/lib/store/cart";
+
+export function ProductDetail({ product }: { product: Product }) {
+  const addItem = useCart((s) => s.addItem);
+
+  const [activeImage, setActiveImage] = useState(0);
+  const [sizeIdx, setSizeIdx] = useState(0);
+  const [qty, setQty] = useState(1);
+  const [added, setAdded] = useState(false);
+
+  const selectedSize = product.sizes[sizeIdx] ?? {
+    label: "One size",
+    price: product.price,
+    stock: product.stock,
+  };
+  const images = product.images?.length ? product.images : ["/logo-light.png"];
+  const inStock = selectedSize.stock > 0;
+  const onSale =
+    product.compareAtPrice && product.compareAtPrice > selectedSize.price;
+
+  const handleAdd = () => {
+    if (!inStock) return;
+    addItem({
+      productId: product.id,
+      name: product.name,
+      slug: product.slug,
+      image: images[0],
+      size: selectedSize.label,
+      price: selectedSize.price,
+      quantity: qty,
+    });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
+
+  return (
+    <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+      {/* Gallery */}
+      <div className="flex flex-col gap-4">
+        <div className="relative aspect-square overflow-hidden rounded-[var(--radius-lg)] bg-bg-soft">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeImage}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              className="absolute inset-0"
+            >
+              <Image
+                src={images[activeImage]}
+                alt={product.name}
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-contain p-10"
+              />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Thumbnails */}
+        {images.length > 1 && (
+          <div className="flex gap-3">
+            {images.map((img, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveImage(i)}
+                className={`relative h-20 w-20 overflow-hidden rounded-[var(--radius)] bg-bg-soft transition-all ${
+                  activeImage === i
+                    ? "ring-2 ring-fg ring-offset-2 ring-offset-bg"
+                    : "opacity-60 hover:opacity-100"
+                }`}
+              >
+                <Image
+                  src={img}
+                  alt={`${product.name} ${i + 1}`}
+                  fill
+                  sizes="80px"
+                  className="object-contain p-2"
+                />
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Info */}
+      <div className="flex flex-col">
+        <p className="tracking-luxe text-xs text-accent">{product.category}</p>
+        <h1 className="mt-3 font-serif text-4xl font-light md:text-5xl">
+          {product.name}
+        </h1>
+        {product.tagline && (
+          <p className="mt-2 font-serif text-lg italic text-fg-soft">
+            {product.tagline}
+          </p>
+        )}
+
+        {/* Price */}
+        <div className="mt-6 flex items-center gap-3">
+          <span className="font-serif text-3xl tabular-nums">
+            {formatPrice(selectedSize.price)}
+          </span>
+          {onSale && (
+            <span className="text-lg tabular-nums text-fg-faint line-through">
+              {formatPrice(product.compareAtPrice!)}
+            </span>
+          )}
+        </div>
+
+        <div className="hairline my-8" />
+
+        {/* Description */}
+        <p className="leading-relaxed text-fg-soft">{product.description}</p>
+
+        {/* Sizes */}
+        {product.sizes.length > 0 && (
+          <div className="mt-8">
+            <p className="mb-3 text-xs uppercase tracking-[0.16em] text-fg-faint">
+              Size
+            </p>
+            <div className="flex flex-wrap gap-3">
+              {product.sizes.map((size, i) => (
+                <button
+                  key={size.label}
+                  onClick={() => setSizeIdx(i)}
+                  disabled={size.stock === 0}
+                  className={`min-w-20 border px-5 py-3 text-sm transition-all ${
+                    sizeIdx === i
+                      ? "border-fg bg-fg text-bg"
+                      : "border-border text-fg hover:border-fg-soft"
+                  } ${
+                    size.stock === 0
+                      ? "cursor-not-allowed opacity-40 line-through"
+                      : ""
+                  }`}
+                >
+                  {size.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Quantity + Add */}
+        <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-stretch">
+          <div className="flex items-center border border-border">
+            <button
+              onClick={() => setQty((q) => Math.max(1, q - 1))}
+              aria-label="Decrease quantity"
+              className="flex h-full w-12 items-center justify-center text-fg-soft transition-colors hover:bg-bg-soft hover:text-fg"
+            >
+              <Minus className="h-4 w-4" strokeWidth={1.5} />
+            </button>
+            <span className="w-12 text-center tabular-nums">{qty}</span>
+            <button
+              onClick={() => setQty((q) => q + 1)}
+              aria-label="Increase quantity"
+              className="flex h-full w-12 items-center justify-center text-fg-soft transition-colors hover:bg-bg-soft hover:text-fg"
+            >
+              <Plus className="h-4 w-4" strokeWidth={1.5} />
+            </button>
+          </div>
+
+          <button
+            onClick={handleAdd}
+            disabled={!inStock}
+            className="btn-primary flex-1"
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {added ? (
+                <motion.span
+                  key="added"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  className="flex items-center gap-2"
+                >
+                  <Check className="h-4 w-4" strokeWidth={2} /> Added to Cart
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="add"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  className="flex items-center gap-2"
+                >
+                  <ShoppingBag className="h-4 w-4" strokeWidth={1.5} />
+                  {inStock ? "Add to Cart" : "Sold Out"}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
+        </div>
+
+        {inStock && selectedSize.stock <= 5 && (
+          <p className="mt-3 text-xs text-accent">
+            Only {selectedSize.stock} left in stock — order soon.
+          </p>
+        )}
+
+        {/* Notes pyramid */}
+        {product.notes && (
+          <div className="mt-12">
+            <div className="hairline mb-8" />
+            <p className="mb-6 text-xs uppercase tracking-[0.16em] text-fg-faint">
+              Olfactory Notes
+            </p>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+              {(
+                [
+                  ["Top", product.notes.top],
+                  ["Heart", product.notes.heart],
+                  ["Base", product.notes.base],
+                ] as const
+              ).map(([label, notes]) => (
+                <div key={label}>
+                  <h4 className="font-serif text-lg text-accent">{label}</h4>
+                  <ul className="mt-2 space-y-1 text-sm text-fg-soft">
+                    {notes.map((n) => (
+                      <li key={n}>{n}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
