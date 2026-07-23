@@ -1,10 +1,6 @@
-import { Metadata } from "next";
-import Link from "next/link";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Affiliate Dashboard",
-  robots: { index: false },
-};
+import Link from "next/link";
 
 // Mock affiliate data (TODO: fetch from Supabase based on session)
 const mockAffiliate = {

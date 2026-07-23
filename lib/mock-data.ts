@@ -13,7 +13,7 @@ export const MOCK_PRODUCTS: Product[] = [
       "A masterful composition of spiced notes and dark woods, Rogue is the signature of a man who refuses to be confined. Leather, cardamom, and a whisper of oud create a trail that lingers long after you've left the room.",
     category: "Him",
     price: 3000,
-    compareAtPrice: null,
+    compareAtPrice: undefined,
     sizes: [
       { label: "30ml", price: 3000, stock: 999 },
       { label: "50ml", price: 4500, stock: 999 },
@@ -38,7 +38,7 @@ export const MOCK_PRODUCTS: Product[] = [
       "A luxurious oriental built on the foundation of aged oud, Royal Oud speaks the language of tradition and sophistication. Notes of warm spices, honeyed amber, and precious resins create a symphony of warmth that evolves throughout the day.",
     category: "Him",
     price: 3000,
-    compareAtPrice: null,
+    compareAtPrice: undefined,
     sizes: [
       { label: "30ml", price: 3000, stock: 999 },
       { label: "50ml", price: 4500, stock: 999 },
@@ -63,7 +63,7 @@ export const MOCK_PRODUCTS: Product[] = [
       "Like stepping into a garden in full bloom, this fragrance captures the delicate beauty of spring florals touched by morning dew. A fleeting blend of peony, jasmine, and green notes that feels both timeless and undeniably modern.",
     category: "Her",
     price: 3000,
-    compareAtPrice: null,
+    compareAtPrice: undefined,
     sizes: [
       { label: "30ml", price: 3000, stock: 999 },
       { label: "50ml", price: 4500, stock: 999 },
@@ -88,7 +88,7 @@ export const MOCK_PRODUCTS: Product[] = [
       "Blossom is an interpretation of romance in fragrance form. Creamy florals meet soft vanillic notes to create a tender, enveloping scent that whispers rather than shouts. It's the fragrance equivalent of silk against skin.",
     category: "Her",
     price: 3000,
-    compareAtPrice: null,
+    compareAtPrice: undefined,
     sizes: [
       { label: "30ml", price: 3000, stock: 999 },
       { label: "50ml", price: 4500, stock: 999 },
@@ -113,7 +113,7 @@ export const MOCK_PRODUCTS: Product[] = [
       "A refined aromatic that stands the test of time, Legacy is inspired by the classics while remaining distinctly contemporary. Crisp spices and clean woods form the backbone of a scent that is equally at home in the boardroom or on an evening out.",
     category: "Him",
     price: 3000,
-    compareAtPrice: null,
+    compareAtPrice: undefined,
     sizes: [
       { label: "30ml", price: 3000, stock: 999 },
       { label: "50ml", price: 4500, stock: 999 },
