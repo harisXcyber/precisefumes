@@ -37,7 +37,7 @@ export function Story() {
 
           <Reveal delay={0.15}>
             <p className="tracking-luxe text-xs text-accent">Our Philosophy</p>
-            <h2 className="mt-4 font-serif text-4xl font-light leading-tight md:text-5xl">
+            <h2 className="mt-4 font-serif text-4xl font-normal leading-tight md:text-5xl">
               Fragrance as a
               <br />
               <span className="italic text-accent">deliberate craft</span>

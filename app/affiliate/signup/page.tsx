@@ -13,7 +13,7 @@ export default function AffiliateSignup() {
       {/* Hero */}
       <section className="bg-invert-bg text-invert-fg pt-40 pb-16 md:pt-44 md:pb-20">
         <div className="container-lux text-center max-w-2xl mx-auto">
-          <h1 className="font-serif text-5xl md:text-6xl font-light mb-6">
+          <h1 className="font-serif text-5xl md:text-6xl font-normal mb-6">
             Become an Affiliate
           </h1>
           <p className="text-lg text-invert-fg/80">
@@ -25,14 +25,14 @@ export default function AffiliateSignup() {
 
       {/* Benefits */}
       <section className="container-lux py-16 md:py-20 max-w-2xl mx-auto">
-        <h2 className="font-serif text-3xl font-light mb-12 text-center">
+        <h2 className="font-serif text-3xl font-normal mb-12 text-center">
           Why Join Our Affiliate Program?
         </h2>
 
         <div className="grid md:grid-cols-3 gap-8 mb-16">
           <div className="text-center">
             <div className="mb-4 text-4xl">💰</div>
-            <h3 className="font-serif text-xl font-light mb-3">Earn Per Sale</h3>
+            <h3 className="font-serif text-xl font-normal mb-3">Earn Per Sale</h3>
             <p className="text-sm text-fg-soft">
               Get PKR 300 commission for every fragrance sold through your unique
               bonus code.
@@ -41,7 +41,7 @@ export default function AffiliateSignup() {
 
           <div className="text-center">
             <div className="mb-4 text-4xl">🎁</div>
-            <h3 className="font-serif text-xl font-light mb-3">Exclusive Code</h3>
+            <h3 className="font-serif text-xl font-normal mb-3">Exclusive Code</h3>
             <p className="text-sm text-fg-soft">
               Your referral code gives customers PKR 2,500 pricing on single
               fragrances — a real incentive to share.
@@ -50,7 +50,7 @@ export default function AffiliateSignup() {
 
           <div className="text-center">
             <div className="mb-4 text-4xl">💳</div>
-            <h3 className="font-serif text-xl font-light mb-3">Easy Payouts</h3>
+            <h3 className="font-serif text-xl font-normal mb-3">Easy Payouts</h3>
             <p className="text-sm text-fg-soft">
               Get paid via EasyPaisa or JazzCash. No hassle, no delays.
             </p>
@@ -58,7 +58,7 @@ export default function AffiliateSignup() {
         </div>
 
         <div className="bg-bg-soft p-8 rounded-[var(--radius)] mb-12">
-          <h3 className="font-serif text-2xl font-light mb-4">How It Works</h3>
+          <h3 className="font-serif text-2xl font-normal mb-4">How It Works</h3>
           <ol className="space-y-4 text-fg-soft">
             <li className="flex gap-4">
               <span className="font-serif text-lg text-accent">1.</span>
@@ -102,7 +102,7 @@ export default function AffiliateSignup() {
 
       {/* Signup Form */}
       <section className="container-lux py-16 md:py-20 max-w-2xl mx-auto">
-        <h2 className="font-serif text-3xl font-light mb-12 text-center">
+        <h2 className="font-serif text-3xl font-normal mb-12 text-center">
           Get Started
         </h2>
         <AffiliateSignupForm />

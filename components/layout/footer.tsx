@@ -54,7 +54,7 @@ export function Footer() {
       <div className="border-b border-border">
         <div className="container-lux flex flex-col items-start justify-between gap-6 py-12 md:flex-row md:items-center">
           <div>
-            <h3 className="font-serif text-2xl font-light md:text-3xl">
+            <h3 className="font-serif text-2xl font-normal md:text-3xl">
               Join the house list
             </h3>
             <p className="mt-2 max-w-sm text-sm text-fg-soft">

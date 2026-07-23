@@ -57,7 +57,12 @@ export function ProductCard({ product }: { product: Product }) {
         />
 
         {/* Badges */}
-        <div className="absolute left-3 top-3 flex flex-col gap-2">
+        <div className="absolute left-3 top-3 flex flex-col items-start gap-2">
+          {product.price === 3000 && (
+            <span className="rounded-full bg-accent px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-on-accent">
+              Save PKR 500 — Launch Bonus
+            </span>
+          )}
           {onSale && (
             <span className="rounded-full bg-accent px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-on-accent">
               Sale

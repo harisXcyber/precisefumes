@@ -9,13 +9,13 @@ export default function Shipping() {
   return (
     <div className="min-h-screen bg-bg text-fg">
       <div className="container-lux pt-36 pb-20 max-w-3xl">
-        <h1 className="font-serif text-5xl font-light mb-12">
+        <h1 className="font-serif text-5xl font-normal mb-12">
           Shipping Policy
         </h1>
 
         <div className="prose prose-invert max-w-none space-y-8 text-base leading-relaxed">
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Delivery Coverage
             </h2>
             <p className="text-fg-soft">
@@ -26,13 +26,13 @@ export default function Shipping() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Shipping Options
             </h2>
 
             <div className="space-y-6 mt-4">
               <div className="border-l-2 border-accent pl-6">
-                <h3 className="font-serif text-xl font-light mb-2">
+                <h3 className="font-serif text-xl font-normal mb-2">
                   Karachi (Free Shipping)
                 </h3>
                 <p className="text-fg-soft">
@@ -48,7 +48,7 @@ export default function Shipping() {
               </div>
 
               <div className="border-l-2 border-accent pl-6">
-                <h3 className="font-serif text-xl font-light mb-2">
+                <h3 className="font-serif text-xl font-normal mb-2">
                   Nationwide (Paid Shipping)
                 </h3>
                 <p className="text-fg-soft">
@@ -66,7 +66,7 @@ export default function Shipping() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Processing Time
             </h2>
             <p className="text-fg-soft">
@@ -78,7 +78,7 @@ export default function Shipping() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Tracking Your Order
             </h2>
             <p className="text-fg-soft">
@@ -89,7 +89,7 @@ export default function Shipping() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Packaging
             </h2>
             <p className="text-fg-soft">
@@ -101,7 +101,7 @@ export default function Shipping() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Damaged or Lost Shipments
             </h2>
             <p className="text-fg-soft">
@@ -116,7 +116,7 @@ export default function Shipping() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Holidays and Special Closures
             </h2>
             <p className="text-fg-soft">
@@ -127,7 +127,7 @@ export default function Shipping() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               International Shipping
             </h2>
             <p className="text-fg-soft">
@@ -138,7 +138,7 @@ export default function Shipping() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Contact Us
             </h2>
             <p className="text-fg-soft">

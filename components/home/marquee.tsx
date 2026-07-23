@@ -17,7 +17,7 @@ export function Marquee() {
             {row.map((name, i) => (
               <span
                 key={`${half}-${i}`}
-                className={`whitespace-nowrap font-serif text-5xl font-light italic md:text-7xl ${
+                className={`whitespace-nowrap font-serif text-5xl font-normal italic md:text-7xl ${
                   i % 2 === 0 ? "pf-outline-text" : "text-accent/80"
                 }`}
               >

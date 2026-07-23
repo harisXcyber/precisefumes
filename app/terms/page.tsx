@@ -9,13 +9,13 @@ export default function Terms() {
   return (
     <div className="min-h-screen bg-bg text-fg">
       <div className="container-lux pt-36 pb-20 max-w-3xl">
-        <h1 className="font-serif text-5xl font-light mb-12">
+        <h1 className="font-serif text-5xl font-normal mb-12">
           Terms of Service
         </h1>
 
         <div className="prose prose-invert max-w-none space-y-8 text-base leading-relaxed">
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">Agreement</h2>
+            <h2 className="font-serif text-2xl font-normal mb-4">Agreement</h2>
             <p className="text-fg-soft">
               By accessing and using this website, you accept and agree to be
               bound by the terms and provision of this agreement. If you do not
@@ -24,7 +24,7 @@ export default function Terms() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">Use License</h2>
+            <h2 className="font-serif text-2xl font-normal mb-4">Use License</h2>
             <p className="text-fg-soft">
               Permission is granted to temporarily download one copy of the
               materials (information or software) on Precise Fumes website for
@@ -51,7 +51,7 @@ export default function Terms() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">Disclaimer</h2>
+            <h2 className="font-serif text-2xl font-normal mb-4">Disclaimer</h2>
             <p className="text-fg-soft">
               The materials on Precise Fumes website are provided 'as is'.
               Precise Fumes makes no warranties, expressed or implied, and
@@ -64,7 +64,7 @@ export default function Terms() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">Limitations</h2>
+            <h2 className="font-serif text-2xl font-normal mb-4">Limitations</h2>
             <p className="text-fg-soft">
               In no event shall Precise Fumes or its suppliers be liable for
               any damages (including, without limitation, damages for loss of
@@ -75,7 +75,7 @@ export default function Terms() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Accuracy of Materials
             </h2>
             <p className="text-fg-soft">
@@ -88,7 +88,7 @@ export default function Terms() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Links Disclaimer
             </h2>
             <p className="text-fg-soft">
@@ -101,7 +101,7 @@ export default function Terms() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Modifications
             </h2>
             <p className="text-fg-soft">
@@ -112,7 +112,7 @@ export default function Terms() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Governing Law
             </h2>
             <p className="text-fg-soft">

@@ -14,11 +14,7 @@ export const MOCK_PRODUCTS: Product[] = [
     category: "Him",
     price: 3000,
     compareAtPrice: undefined,
-    sizes: [
-      { label: "30ml", price: 3000, stock: 999 },
-      { label: "50ml", price: 4500, stock: 999 },
-      { label: "100ml", price: 7000, stock: 999 },
-    ],
+    sizes: [{ label: "50ml", price: 3000, stock: 999 }],
     notes: {
       top: ["Cardamom", "Black Pepper"],
       heart: ["Leather", "Geranium", "Oud"],
@@ -39,11 +35,7 @@ export const MOCK_PRODUCTS: Product[] = [
     category: "Him",
     price: 3000,
     compareAtPrice: undefined,
-    sizes: [
-      { label: "30ml", price: 3000, stock: 999 },
-      { label: "50ml", price: 4500, stock: 999 },
-      { label: "100ml", price: 7000, stock: 999 },
-    ],
+    sizes: [{ label: "50ml", price: 3000, stock: 999 }],
     notes: {
       top: ["Saffron", "Bergamot"],
       heart: ["Oud", "Rose", "Cinnamon"],
@@ -64,11 +56,7 @@ export const MOCK_PRODUCTS: Product[] = [
     category: "Her",
     price: 3000,
     compareAtPrice: undefined,
-    sizes: [
-      { label: "30ml", price: 3000, stock: 999 },
-      { label: "50ml", price: 4500, stock: 999 },
-      { label: "100ml", price: 7000, stock: 999 },
-    ],
+    sizes: [{ label: "50ml", price: 3000, stock: 999 }],
     notes: {
       top: ["Lemon Verbena", "Pink Pepper"],
       heart: ["Peony", "Jasmine", "Lily of the Valley"],
@@ -89,11 +77,7 @@ export const MOCK_PRODUCTS: Product[] = [
     category: "Her",
     price: 3000,
     compareAtPrice: undefined,
-    sizes: [
-      { label: "30ml", price: 3000, stock: 999 },
-      { label: "50ml", price: 4500, stock: 999 },
-      { label: "100ml", price: 7000, stock: 999 },
-    ],
+    sizes: [{ label: "50ml", price: 3000, stock: 999 }],
     notes: {
       top: ["Bergamot", "Neroli"],
       heart: ["Magnolia", "Red Rose", "Orchid"],
@@ -114,11 +98,7 @@ export const MOCK_PRODUCTS: Product[] = [
     category: "Him",
     price: 3000,
     compareAtPrice: undefined,
-    sizes: [
-      { label: "30ml", price: 3000, stock: 999 },
-      { label: "50ml", price: 4500, stock: 999 },
-      { label: "100ml", price: 7000, stock: 999 },
-    ],
+    sizes: [{ label: "50ml", price: 3000, stock: 999 }],
     notes: {
       top: ["Grapefruit", "Coriander"],
       heart: ["Sage", "Lavender", "Cedar"],

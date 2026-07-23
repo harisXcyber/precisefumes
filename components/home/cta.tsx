@@ -19,7 +19,7 @@ export function CTA() {
           <p className="tracking-luxe text-xs text-accent">
             Find Your Signature
           </p>
-          <h2 className="mt-5 max-w-2xl font-serif text-4xl font-light leading-tight md:text-6xl">
+          <h2 className="mt-5 max-w-2xl font-serif text-4xl font-normal leading-tight md:text-6xl">
             The right scent is{" "}
             <span className="pf-gradient-text italic">waiting for you</span>
           </h2>

@@ -51,7 +51,7 @@ export function Hero() {
         </motion.p>
 
         <motion.h1
-          className="mt-6 max-w-4xl font-serif text-5xl font-light leading-[1.04] sm:text-6xl md:text-7xl lg:text-[5.5rem]"
+          className="mt-6 max-w-4xl font-serif text-5xl font-normal leading-[1.04] sm:text-6xl md:text-7xl lg:text-[5.5rem]"
           initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, delay: 0.08, ease: EASE_LUX }}
@@ -67,8 +67,8 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.16, ease: EASE_LUX }}
         >
-          Five signature fragrances, meticulously composed and priced at
-          PKR 3,000. Delivered anywhere in Pakistan — cash on delivery.
+          Five signature fragrances in 50ml — PKR 3,000 each. Delivered
+          anywhere in Pakistan, cash on delivery.
         </motion.p>
 
         <motion.div

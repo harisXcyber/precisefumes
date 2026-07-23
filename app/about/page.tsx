@@ -13,7 +13,7 @@ export default function About() {
       {/* Hero */}
       <section className="bg-invert-bg text-invert-fg pt-40 pb-20 md:pt-48 md:pb-28">
         <div className="container-lux text-center">
-          <h1 className="font-serif text-5xl md:text-6xl font-light mb-6">
+          <h1 className="font-serif text-5xl md:text-6xl font-normal mb-6">
             Our Story
           </h1>
           <p className="text-lg max-w-2xl mx-auto text-invert-fg/80">
@@ -28,7 +28,7 @@ export default function About() {
       <section className="container-lux py-24 md:py-32">
         <div className="max-w-3xl mx-auto space-y-12">
           <div>
-            <h2 className="font-serif text-3xl font-light mb-6">
+            <h2 className="font-serif text-3xl font-normal mb-6">
               Crafted with Intention
             </h2>
             <p className="text-lg leading-relaxed text-fg-soft mb-4">
@@ -46,21 +46,21 @@ export default function About() {
           {/* Three Pillars */}
           <div className="grid md:grid-cols-3 gap-8 py-12">
             <div className="text-center">
-              <h3 className="font-serif text-2xl font-light mb-4">Restraint</h3>
+              <h3 className="font-serif text-2xl font-normal mb-4">Restraint</h3>
               <p className="text-fg-soft leading-relaxed">
                 We believe in the power of subtlety. Every ingredient serves a
                 purpose; nothing is superfluous.
               </p>
             </div>
             <div className="text-center">
-              <h3 className="font-serif text-2xl font-light mb-4">Origin</h3>
+              <h3 className="font-serif text-2xl font-normal mb-4">Origin</h3>
               <p className="text-fg-soft leading-relaxed">
                 We source the finest natural and synthetic materials from
                 around the world, ensuring quality at every level.
               </p>
             </div>
             <div className="text-center">
-              <h3 className="font-serif text-2xl font-light mb-4">
+              <h3 className="font-serif text-2xl font-normal mb-4">
                 Signature
               </h3>
               <p className="text-fg-soft leading-relaxed">
@@ -71,7 +71,7 @@ export default function About() {
           </div>
 
           <div className="border-t border-border pt-12">
-            <h2 className="font-serif text-3xl font-light mb-6">
+            <h2 className="font-serif text-3xl font-normal mb-6">
               Available in Pakistan
             </h2>
             <p className="text-lg leading-relaxed text-fg-soft mb-6">

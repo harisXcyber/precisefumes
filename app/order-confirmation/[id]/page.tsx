@@ -38,7 +38,7 @@ export default async function OrderConfirmation({
           </div>
         </div>
 
-        <h1 className="font-serif text-4xl font-light mb-4">Order Confirmed</h1>
+        <h1 className="font-serif text-4xl font-normal mb-4">Order Confirmed</h1>
         <p className="text-lg text-fg-soft mb-8">
           Thank you for your purchase. Your order has been placed successfully.
         </p>

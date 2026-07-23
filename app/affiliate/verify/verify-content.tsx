@@ -63,7 +63,7 @@ export function VerifyContent() {
               </svg>
             </div>
           </div>
-          <h2 className="font-serif text-2xl font-light mb-2">Verifying...</h2>
+          <h2 className="font-serif text-2xl font-normal mb-2">Verifying...</h2>
           <p className="text-fg-soft">Please wait while we verify your email.</p>
         </div>
       </div>
@@ -81,7 +81,7 @@ export function VerifyContent() {
               </svg>
             </div>
           </div>
-          <h2 className="font-serif text-2xl font-light mb-2">Invalid Link</h2>
+          <h2 className="font-serif text-2xl font-normal mb-2">Invalid Link</h2>
           <p className="text-fg-soft mb-6">
             The verification link is missing or invalid. Please try signing up again.
           </p>
@@ -104,7 +104,7 @@ export function VerifyContent() {
               </svg>
             </div>
           </div>
-          <h2 className="font-serif text-2xl font-light mb-2">
+          <h2 className="font-serif text-2xl font-normal mb-2">
             Verification Failed
           </h2>
           <p className="text-fg-soft mb-6">
@@ -138,7 +138,7 @@ export function VerifyContent() {
           </div>
         </div>
 
-        <h1 className="font-serif text-4xl font-light mb-4">Welcome to Precise Fumes Affiliates!</h1>
+        <h1 className="font-serif text-4xl font-normal mb-4">Welcome to Precise Fumes Affiliates!</h1>
         <p className="text-lg text-fg-soft mb-8">
           Your email has been verified. You're all set to start earning commissions.
         </p>
@@ -168,7 +168,7 @@ export function VerifyContent() {
 
         {/* What to Do Next */}
         <div className="bg-bg-soft p-8 rounded-[var(--radius)] text-left mb-12">
-          <h2 className="font-serif text-2xl font-light mb-6">What's Next?</h2>
+          <h2 className="font-serif text-2xl font-normal mb-6">What's Next?</h2>
           <ol className="space-y-4 text-sm text-fg-soft">
             <li className="flex gap-4">
               <span className="font-serif text-lg text-accent flex-shrink-0">1.</span>

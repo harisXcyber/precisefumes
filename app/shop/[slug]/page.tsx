@@ -67,7 +67,7 @@ export default async function ProductPage({ params }: PageProps) {
       {/* Related */}
       {related.length > 0 && (
         <section className="container-lux mt-24 border-t border-border pt-16">
-          <h2 className="font-serif text-3xl font-light mb-12">
+          <h2 className="font-serif text-3xl font-normal mb-12">
             You May Also Like
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

@@ -9,13 +9,13 @@ export default function Returns() {
   return (
     <div className="min-h-screen bg-bg text-fg">
       <div className="container-lux pt-36 pb-20 max-w-3xl">
-        <h1 className="font-serif text-5xl font-light mb-12">
+        <h1 className="font-serif text-5xl font-normal mb-12">
           Returns & Refunds Policy
         </h1>
 
         <div className="prose prose-invert max-w-none space-y-8 text-base leading-relaxed">
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Return Eligibility
             </h2>
             <p className="text-fg-soft">
@@ -44,7 +44,7 @@ export default function Returns() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               How to Initiate a Return
             </h2>
             <p className="text-fg-soft">
@@ -69,7 +69,7 @@ export default function Returns() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Shipping the Return
             </h2>
             <p className="text-fg-soft">
@@ -93,7 +93,7 @@ export default function Returns() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Refunds
             </h2>
             <p className="text-fg-soft">
@@ -113,7 +113,7 @@ export default function Returns() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Damaged or Defective Items
             </h2>
             <p className="text-fg-soft">
@@ -124,7 +124,7 @@ export default function Returns() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Non-Returnable Items
             </h2>
             <p className="text-fg-soft">
@@ -138,7 +138,7 @@ export default function Returns() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Exchanges
             </h2>
             <p className="text-fg-soft">
@@ -149,7 +149,7 @@ export default function Returns() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Contact Us
             </h2>
             <p className="text-fg-soft">

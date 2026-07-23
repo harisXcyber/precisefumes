@@ -212,7 +212,7 @@ export function CheckoutClient() {
       {/* ── Order Review ─────────────────────────────── */}
       <div className="lg:order-2">
         <div className="rounded-[var(--radius-lg)] border border-border bg-bg-soft p-6 md:p-8 lg:sticky lg:top-36">
-          <h2 className="mb-6 font-serif text-2xl font-light">Order Review</h2>
+          <h2 className="mb-6 font-serif text-2xl font-normal">Order Review</h2>
 
           {/* Items */}
           <ul className="mb-6 space-y-4 border-b border-border pb-6">
@@ -291,7 +291,7 @@ export function CheckoutClient() {
       <form onSubmit={handleSubmit} className="space-y-10 lg:order-1">
         {/* Delivery */}
         <fieldset>
-          <legend className="mb-6 font-serif text-xl font-light">
+          <legend className="mb-6 font-serif text-xl font-normal">
             1 · Delivery Details
           </legend>
           <div className="space-y-4">
@@ -388,7 +388,7 @@ export function CheckoutClient() {
 
         {/* Payment */}
         <fieldset>
-          <legend className="mb-6 font-serif text-xl font-light">
+          <legend className="mb-6 font-serif text-xl font-normal">
             2 · Payment Method
           </legend>
           <div className="space-y-3">
@@ -443,7 +443,7 @@ export function CheckoutClient() {
 
         {/* Bonus code */}
         <fieldset>
-          <legend className="mb-3 font-serif text-xl font-light">
+          <legend className="mb-3 font-serif text-xl font-normal">
             3 · Bonus Code{" "}
             <span className="text-sm text-fg-faint">(optional)</span>
           </legend>

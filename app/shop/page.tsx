@@ -18,7 +18,7 @@ export default async function ShopPage() {
       <section className="border-b border-border bg-bg-soft py-16 md:py-20">
         <div className="container-lux text-center">
           <p className="tracking-luxe text-xs text-accent">The Collection</p>
-          <h1 className="mt-4 font-serif text-5xl font-light md:text-6xl">
+          <h1 className="mt-4 font-serif text-5xl font-normal md:text-6xl">
             All Fragrances
           </h1>
           <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-fg-soft">

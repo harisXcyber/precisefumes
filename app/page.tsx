@@ -3,6 +3,7 @@ import { Hero } from "@/components/home/hero";
 import { Marquee } from "@/components/home/marquee";
 import { Featured } from "@/components/home/featured";
 import { Categories } from "@/components/home/categories";
+import { Atelier } from "@/components/home/atelier";
 import { Story } from "@/components/home/story";
 import { CTA } from "@/components/home/cta";
 import { getProducts } from "@/lib/products";
@@ -30,6 +31,7 @@ export default async function Home() {
       <Hero />
       <Featured products={products} />
       <Categories />
+      <Atelier />
       <Story />
       <Marquee />
       <CTA />

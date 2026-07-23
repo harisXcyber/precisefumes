@@ -12,7 +12,7 @@ export default function Contact() {
       {/* Hero */}
       <section className="bg-invert-bg text-invert-fg pt-40 pb-16 md:pt-44 md:pb-20">
         <div className="container-lux text-center">
-          <h1 className="font-serif text-5xl md:text-6xl font-light">
+          <h1 className="font-serif text-5xl md:text-6xl font-normal">
             Get in Touch
           </h1>
           <p className="mt-4 text-invert-fg/80">
@@ -26,7 +26,7 @@ export default function Contact() {
         <div className="grid md:grid-cols-2 gap-16 max-w-4xl mx-auto">
           {/* Info */}
           <div>
-            <h2 className="font-serif text-3xl font-light mb-12">
+            <h2 className="font-serif text-3xl font-normal mb-12">
               Contact Details
             </h2>
 
@@ -63,7 +63,7 @@ export default function Contact() {
 
           {/* Form */}
           <div>
-            <h2 className="font-serif text-3xl font-light mb-8">
+            <h2 className="font-serif text-3xl font-normal mb-8">
               Send us a Message
             </h2>
             <ContactForm />

@@ -61,7 +61,7 @@ export function AffiliateSignupForm() {
     <form onSubmit={handleSubmit} className="max-w-xl mx-auto space-y-6">
       {/* Contact Info */}
       <fieldset className="space-y-4">
-        <legend className="font-serif text-xl font-light mb-6">
+        <legend className="font-serif text-xl font-normal mb-6">
           Your Information
         </legend>
 
@@ -99,7 +99,7 @@ export function AffiliateSignupForm() {
 
       {/* Banking Info */}
       <fieldset className="space-y-4 pt-6 border-t border-border">
-        <legend className="font-serif text-xl font-light mb-6">
+        <legend className="font-serif text-xl font-normal mb-6">
           Payment Details
         </legend>
 

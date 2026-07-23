@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const FAQS: { q: string; a: React.ReactNode }[] = [
   {
     q: "How much do the perfumes cost?",
-    a: "Every Precise Fumes fragrance is PKR 3,000 for the standard 30ml bottle. Larger sizes are available: 50ml for PKR 4,500 and 100ml for PKR 7,000.",
+    a: "Every Precise Fumes fragrance comes in a 50ml bottle for PKR 3,000. Five scents are in stock now — and a special edition perfume is currently in the making.",
   },
   {
     q: "How does the 2-for-PKR-5,000 bundle work?",
@@ -98,7 +98,7 @@ export default function FAQ() {
     <div className="min-h-screen bg-bg text-fg">
       <div className="container-lux max-w-3xl pt-36 pb-24">
         <p className="tracking-luxe text-xs text-accent">Help Center</p>
-        <h1 className="mt-4 font-serif text-5xl font-light md:text-6xl">
+        <h1 className="mt-4 font-serif text-5xl font-normal md:text-6xl">
           Frequently Asked Questions
         </h1>
         <p className="mt-4 max-w-xl text-fg-soft">
@@ -109,7 +109,7 @@ export default function FAQ() {
         <div className="mt-14 divide-y divide-border border-y border-border">
           {FAQS.map((item) => (
             <details key={item.q} className="group py-5">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-serif text-xl font-light [&::-webkit-details-marker]:hidden">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-serif text-xl font-normal [&::-webkit-details-marker]:hidden">
                 {item.q}
                 <span
                   aria-hidden
@@ -126,7 +126,7 @@ export default function FAQ() {
         </div>
 
         <div className="mt-14 rounded-[var(--radius-lg)] border border-border bg-bg-soft p-8 text-center">
-          <h2 className="font-serif text-2xl font-light">
+          <h2 className="font-serif text-2xl font-normal">
             Still have a question?
           </h2>
           <p className="mx-auto mt-3 max-w-md text-sm text-fg-soft">

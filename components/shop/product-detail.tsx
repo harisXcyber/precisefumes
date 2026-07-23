@@ -107,7 +107,7 @@ export function ProductDetail({ product }: { product: Product }) {
               ? "For Her"
               : product.category}
         </p>
-        <h1 className="mt-3 font-serif text-4xl font-light md:text-5xl">
+        <h1 className="mt-3 font-serif text-4xl font-normal md:text-5xl">
           {product.name}
         </h1>
         {product.tagline && (
@@ -232,8 +232,9 @@ export function ProductDetail({ product }: { product: Product }) {
             bottles, the cheapest is free.
           </p>
           <p className="text-fg-soft">
-            <strong className="text-fg">Bonus code?</strong> Single perfumes
-            drop to PKR 2,500 at checkout.
+            <strong className="text-fg">Launch bonus — save up to PKR 500</strong>{" "}
+            — apply an affiliate bonus code at checkout and single perfumes
+            drop to PKR 2,500.
           </p>
           <p className="pt-1 text-xs text-fg-faint">
             Free delivery in Karachi (2–5 days) · Nationwide PKR 300 (5–7

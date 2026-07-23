@@ -9,7 +9,7 @@ export function Featured({ products }: { products: Product[] }) {
     <section className="pf-tint"><div className="container-lux py-24 md:py-32">
       <Reveal className="mb-14 flex flex-col items-center text-center">
         <p className="tracking-luxe text-xs text-accent">Curated Selection</p>
-        <h2 className="mt-4 font-serif text-4xl font-light md:text-5xl">
+        <h2 className="mt-4 font-serif text-4xl font-normal md:text-5xl">
           Signature Fragrances
         </h2>
         <p className="mt-4 max-w-md text-sm leading-relaxed text-fg-soft">

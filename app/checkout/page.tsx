@@ -11,7 +11,7 @@ export default function Checkout() {
   return (
     <div className="min-h-screen bg-bg text-fg">
       <div className="container-lux pt-32 pb-16 md:pt-36 md:pb-24">
-        <h1 className="font-serif text-4xl md:text-5xl font-light mb-12">
+        <h1 className="font-serif text-4xl md:text-5xl font-normal mb-12">
           Checkout
         </h1>
         <CheckoutClient />

@@ -93,7 +93,7 @@ function SignIn({ onSignIn }: { onSignIn: (s: AffiliateSession) => void }) {
       <div className="container-lux flex flex-col items-center pt-32 pb-24 md:pt-40">
         <div className="w-full max-w-md">
           <p className="pf-eyebrow text-center">Affiliate Area</p>
-          <h1 className="mt-3 text-center font-serif text-4xl font-light md:text-5xl">
+          <h1 className="mt-3 text-center font-serif text-4xl font-normal md:text-5xl">
             Sign In
           </h1>
           <p className="mx-auto mt-4 max-w-sm text-center text-sm leading-relaxed text-fg-soft">
@@ -186,7 +186,7 @@ function Dashboard({
         <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="pf-eyebrow">Affiliate Dashboard</p>
-            <h1 className="mt-2 font-serif text-4xl font-light md:text-5xl">
+            <h1 className="mt-2 font-serif text-4xl font-normal md:text-5xl">
               Welcome back
             </h1>
             <p className="mt-2 text-sm text-fg-soft">{session.email}</p>
@@ -218,7 +218,7 @@ function Dashboard({
           {/* Code + sales */}
           <div className="space-y-6 lg:col-span-2">
             <section className="pf-tint rounded-[var(--radius-lg)] border border-border bg-bg-soft p-6 md:p-8">
-              <h2 className="font-serif text-2xl font-light">
+              <h2 className="font-serif text-2xl font-normal">
                 Your Bonus Code
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-fg-soft">
@@ -255,7 +255,7 @@ function Dashboard({
             </section>
 
             <section className="rounded-[var(--radius-lg)] border border-border p-6 md:p-8">
-              <h2 className="font-serif text-2xl font-light">Your Sales</h2>
+              <h2 className="font-serif text-2xl font-normal">Your Sales</h2>
               <div className="mt-6 rounded-[var(--radius)] bg-bg-soft p-8 text-center">
                 <p className="font-serif text-xl">No sales yet</p>
                 <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-fg-soft">
@@ -270,7 +270,7 @@ function Dashboard({
           {/* Side */}
           <div className="space-y-6">
             <section className="rounded-[var(--radius-lg)] border border-border bg-bg-soft p-6">
-              <h3 className="font-serif text-lg font-light">Account</h3>
+              <h3 className="font-serif text-lg font-normal">Account</h3>
               <dl className="mt-4 space-y-3 text-sm">
                 <div>
                   <dt className="pf-eyebrow">Email</dt>
@@ -288,7 +288,7 @@ function Dashboard({
             </section>
 
             <section className="rounded-[var(--radius-lg)] border border-border bg-bg-soft p-6">
-              <h3 className="font-serif text-lg font-light">Payouts</h3>
+              <h3 className="font-serif text-lg font-normal">Payouts</h3>
               <p className="mt-3 text-sm leading-relaxed text-fg-soft">
                 Commissions are paid to your EasyPaisa or JazzCash once
                 confirmed. Minimum payout PKR 900 (3 sales).
@@ -296,7 +296,7 @@ function Dashboard({
             </section>
 
             <section className="rounded-[var(--radius-lg)] border border-border bg-bg-soft p-6">
-              <h3 className="font-serif text-lg font-light">Need Help?</h3>
+              <h3 className="font-serif text-lg font-normal">Need Help?</h3>
               <Link
                 href="/contact"
                 className="mt-3 inline-block text-sm font-medium text-accent-deep hover:underline"

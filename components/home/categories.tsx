@@ -34,7 +34,7 @@ export function Categories() {
               style={{ background: tile.background }}
             >
               <p className="pf-eyebrow !text-accent">{tile.eyebrow}</p>
-              <h3 className="mt-3 font-serif text-4xl font-light md:text-5xl">
+              <h3 className="mt-3 font-serif text-4xl font-normal md:text-5xl">
                 {tile.title}
               </h3>
               <p className="mt-2 text-sm text-invert-fg/70">{tile.scents}</p>

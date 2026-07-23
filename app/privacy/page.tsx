@@ -9,11 +9,11 @@ export default function Privacy() {
   return (
     <div className="min-h-screen bg-bg text-fg">
       <div className="container-lux pt-36 pb-20 max-w-3xl">
-        <h1 className="font-serif text-5xl font-light mb-12">Privacy Policy</h1>
+        <h1 className="font-serif text-5xl font-normal mb-12">Privacy Policy</h1>
 
         <div className="prose prose-invert max-w-none space-y-8 text-base leading-relaxed">
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Introduction
             </h2>
             <p className="text-fg-soft">
@@ -25,7 +25,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Information We Collect
             </h2>
             <p className="text-fg-soft">
@@ -45,7 +45,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               How We Use Your Information
             </h2>
             <p className="text-fg-soft">
@@ -62,7 +62,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Data Protection
             </h2>
             <p className="text-fg-soft">
@@ -74,7 +74,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Third-Party Sharing
             </h2>
             <p className="text-fg-soft">
@@ -86,7 +86,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Cookies and Tracking
             </h2>
             <p className="text-fg-soft">
@@ -97,7 +97,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Your Rights
             </h2>
             <p className="text-fg-soft">
@@ -111,7 +111,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">
+            <h2 className="font-serif text-2xl font-normal mb-4">
               Policy Updates
             </h2>
             <p className="text-fg-soft">
@@ -123,7 +123,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="font-serif text-2xl font-light mb-4">Contact Us</h2>
+            <h2 className="font-serif text-2xl font-normal mb-4">Contact Us</h2>
             <p className="text-fg-soft">
               If you have questions about this Privacy Policy or our privacy
               practices, please contact us at{" "}
