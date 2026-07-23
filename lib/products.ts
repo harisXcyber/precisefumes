@@ -36,24 +36,38 @@ function rowToProduct(row: any): Product {
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
-/** Fetch all active products. Falls back to mock data when Supabase
+/** Fetch products with optional filters. Falls back to mock data when Supabase
  *  isn't configured yet, so the site is browsable during development. */
-export async function getProducts(): Promise<Product[]> {
+export async function getProducts(filters?: {
+  featured?: boolean;
+}): Promise<Product[]> {
   if (!supabaseConfigured()) {
-    return MOCK_PRODUCTS.filter((p) => p.active);
+    let results = MOCK_PRODUCTS.filter((p) => p.active);
+    if (filters?.featured) {
+      results = results.filter((p) => p.featured);
+    }
+    return results;
   }
 
   const { createClient } = await import("@/lib/supabase/server");
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("products")
-    .select("*")
-    .eq("active", true)
-    .order("created_at", { ascending: false });
+  let query = supabase.from("products").select("*").eq("active", true);
+
+  if (filters?.featured) {
+    query = query.eq("featured", true);
+  }
+
+  const { data, error } = await query.order("created_at", {
+    ascending: false,
+  });
 
   if (error || !data) {
     console.error("getProducts error:", error?.message);
-    return MOCK_PRODUCTS.filter((p) => p.active);
+    let fallback = MOCK_PRODUCTS.filter((p) => p.active);
+    if (filters?.featured) {
+      fallback = fallback.filter((p) => p.featured);
+    }
+    return fallback;
   }
   return data.map(rowToProduct);
 }

@@ -61,8 +61,65 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Precise Fumes",
+    url: "https://precisefumes.com",
+    logo: "https://precisefumes.com/logo-dark.png",
+    description: "Meticulously composed luxury perfumes for Pakistan",
+    email: "contact@precisefumes.com",
+    sameAs: [
+      "https://instagram.com/precisefumes",
+      "https://facebook.com/precisefumes",
+      "https://twitter.com/precisefumes",
+    ],
+    areaServed: {
+      "@type": "Country",
+      name: "PK",
+    },
+  };
+
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: "Precise Fumes",
+    image: "https://precisefumes.com/logo-dark.png",
+    description: "Luxury fragrance store",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Karachi",
+      addressCountry: "PK",
+    },
+    telephone: "+92 300 1234567",
+    email: "contact@precisefumes.com",
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        opens: "10:00",
+        closes: "19:00",
+      },
+    ],
+  };
+
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(localBusinessSchema),
+          }}
+        />
+      </head>
       <body
         className={`${cormorant.variable} ${inter.variable} antialiased bg-bg text-fg`}
       >

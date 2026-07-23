@@ -16,6 +16,8 @@ export function CartDrawer() {
     removeItem,
     updateQuantity,
     subtotal,
+    getPromoInfo,
+    total: getTotal,
   } = useCart();
 
   // Avoid SSR/hydration mismatch for persisted cart.
@@ -41,7 +43,9 @@ export function CartDrawer() {
     return () => window.removeEventListener("keydown", onKey);
   }, [closeCart]);
 
-  const total = mounted ? subtotal() : 0;
+  const subtotalAmount = mounted ? subtotal() : 0;
+  const promo = mounted ? getPromoInfo() : { type: null, discountAmount: 0, description: "" };
+  const cartTotal = mounted ? getTotal() : 0;
   const lines = mounted ? items : [];
 
   return (
@@ -223,12 +227,29 @@ export function CartDrawer() {
             {/* Footer */}
             {lines.length > 0 && (
               <div className="border-t border-border px-6 py-5">
-                <div className="mb-1 flex items-center justify-between">
+                <div className="mb-2 flex items-center justify-between">
                   <span className="text-sm text-fg-soft">Subtotal</span>
-                  <span className="font-serif text-xl tabular-nums">
-                    {formatPrice(total)}
+                  <span className="font-serif text-lg tabular-nums">
+                    PKR {formatPrice(subtotalAmount)}
                   </span>
                 </div>
+
+                {promo.discountAmount > 0 && (
+                  <div className="mb-2 flex items-center justify-between text-accent">
+                    <span className="text-xs">{promo.description}</span>
+                    <span className="text-sm tabular-nums">
+                      −PKR {formatPrice(promo.discountAmount)}
+                    </span>
+                  </div>
+                )}
+
+                <div className="mb-4 flex items-center justify-between border-t border-border pt-2">
+                  <span className="font-serif text-sm">Total</span>
+                  <span className="font-serif text-lg tabular-nums">
+                    PKR {formatPrice(cartTotal)}
+                  </span>
+                </div>
+
                 <p className="mb-4 text-xs text-fg-faint">
                   Shipping calculated at checkout.
                 </p>
