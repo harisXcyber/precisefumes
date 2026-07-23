@@ -16,6 +16,7 @@ const NAV_LINKS = [
   { href: "/shop?category=Her", label: "For Her" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
+  { href: "/affiliate/signup", label: "Affiliate" },
 ];
 
 export function Navbar() {
@@ -49,11 +50,22 @@ export function Navbar() {
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-all duration-500",
           scrolled
-            ? "border-b border-border bg-bg/85 backdrop-blur-md"
-            : "border-b border-transparent bg-transparent"
+            ? "border-b border-border bg-bg/90 backdrop-blur-md"
+            : "border-b border-border/50 bg-bg/60 backdrop-blur-sm"
         )}
       >
-        <nav className="container-lux flex h-20 items-center justify-between">
+        {/* Offers bar */}
+        <div className="bg-accent text-on-accent">
+          <p className="container-lux flex h-8 items-center justify-center gap-2 overflow-hidden whitespace-nowrap text-[10px] font-medium uppercase tracking-[0.14em] sm:text-[11px]">
+            <span className="hidden sm:inline">Any 2 Perfumes — PKR 5,000</span>
+            <span className="hidden sm:inline" aria-hidden>·</span>
+            <span>Buy 2 Get 1 Free</span>
+            <span aria-hidden>·</span>
+            <span>Free Delivery in Karachi</span>
+          </p>
+        </div>
+
+        <nav className="container-lux relative flex h-16 items-center justify-between md:h-20">
           {/* Left: mobile menu toggle */}
           <button
             onClick={() => setMobileOpen(true)}
@@ -81,7 +93,7 @@ export function Navbar() {
           <Link
             href="/"
             aria-label="Precise Fumes home"
-            className="absolute left-1/2 -translate-x-1/2"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
           >
             <Image
               src={logoSrc}

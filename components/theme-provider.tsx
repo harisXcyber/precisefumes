@@ -20,9 +20,17 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 const STORAGE_KEY = "pf-theme";
 
+/** Writes the theme to the <html> element. The CSS reads
+ *  [data-pf-theme] (see globals.css); the .dark class is kept
+ *  for any class-based utilities. */
+function writeTheme(t: Theme) {
+  const el = document.documentElement;
+  el.setAttribute("data-pf-theme", t);
+  el.classList.toggle("dark", t === "dark");
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>("light");
-  const [mounted, setMounted] = useState(false);
 
   // On mount: read stored preference or system preference.
   useEffect(() => {
@@ -31,13 +39,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
     const initial: Theme = stored ?? (prefersDark ? "dark" : "light");
     setThemeState(initial);
-    document.documentElement.classList.toggle("dark", initial === "dark");
-    setMounted(true);
+    writeTheme(initial);
   }, []);
 
   const apply = useCallback((t: Theme) => {
     setThemeState(t);
-    document.documentElement.classList.toggle("dark", t === "dark");
+    writeTheme(t);
     localStorage.setItem(STORAGE_KEY, t);
   }, []);
 
@@ -46,13 +53,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [theme, apply]);
 
   return (
-    <ThemeContext.Provider
-      value={{ theme, toggleTheme, setTheme: apply }}
-    >
-      {/* Avoid flashing wrong theme before mount */}
-      <div style={{ visibility: mounted ? "visible" : "visible" }}>
-        {children}
-      </div>
+    <ThemeContext.Provider value={{ theme, toggleTheme, setTheme: apply }}>
+      {children}
     </ThemeContext.Provider>
   );
 }

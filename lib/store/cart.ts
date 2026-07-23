@@ -91,35 +91,41 @@ export const useCart = create<CartState>()(
           return { type: null, discountAmount: 0, description: "" };
         }
 
-        const uniqueProducts = new Set(items.map((i) => i.slug)).size;
-        const totalQuantity = items.reduce((sum, i) => sum + i.quantity, 0);
-        const subtotal = get().subtotal();
+        // Expand cart lines into individual bottle prices.
+        const unitPrices = items
+          .flatMap((i) => Array(i.quantity).fill(i.price) as number[])
+          .sort((a, b) => a - b);
+        const totalQuantity = unitPrices.length;
 
-        // Buy 2 Get 1 Free: 3 different items/scents
-        if (uniqueProducts >= 3) {
-          // Find the cheapest item across all items
-          const cheapestPrice = Math.min(...items.map((i) => i.price));
-          const freeItemSavings = cheapestPrice;
+        const BASE_PRICE = 3000;
+        const BUNDLE_TOTAL = 5000;
 
+        // Buy 2 Get 1 Free: for every 3 bottles, the cheapest is free.
+        if (totalQuantity >= 3) {
+          const freeCount = Math.floor(totalQuantity / 3);
+          const discount = unitPrices
+            .slice(0, freeCount)
+            .reduce((sum, p) => sum + p, 0);
           return {
             type: "free-item",
-            discountAmount: freeItemSavings,
-            description: "Buy 2 Get 1 Free applied",
+            discountAmount: discount,
+            description:
+              freeCount === 1
+                ? "Buy 2 Get 1 Free — 1 bottle free"
+                : `Buy 2 Get 1 Free — ${freeCount} bottles free`,
           };
         }
 
-        // Bundle of 2 for PKR 5,000: exactly 2 items of different scents
-        if (uniqueProducts === 2 && totalQuantity >= 2) {
-          const bundlePrice = 5000;
-          const discount = Math.max(0, subtotal - bundlePrice);
-
-          if (discount > 0) {
-            return {
-              type: "bundle",
-              discountAmount: discount,
-              description: "Bundle of 2 for PKR 5,000 applied",
-            };
-          }
+        // Bundle: exactly 2 standard (PKR 3,000) bottles for PKR 5,000.
+        if (
+          totalQuantity === 2 &&
+          unitPrices.every((p) => p === BASE_PRICE)
+        ) {
+          return {
+            type: "bundle",
+            discountAmount: BASE_PRICE * 2 - BUNDLE_TOTAL,
+            description: "Bundle — any 2 for PKR 5,000",
+          };
         }
 
         return { type: null, discountAmount: 0, description: "" };

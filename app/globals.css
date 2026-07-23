@@ -36,6 +36,10 @@
   --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   --ease-lux: cubic-bezier(0.22, 1, 0.36, 1);
 
+  /* Aliases used by components */
+  --pf-overlay: var(--overlay);
+  --pf-shadow-lg: var(--shadow-lg);
+
   /* Fonts (loaded via next/font/google in layout.tsx) */
   --font-serif: var(--font-cormorant);
   --font-sans: var(--font-inter);
@@ -94,11 +98,9 @@
   --color-invert-fg: var(--invert-fg);
   --color-on-accent: var(--on-accent);
 
-  --spacing: 0.25rem, 0.5rem, 0.75rem, 1rem, 1.5rem, 2rem, 2.5rem, 3rem, 3.5rem, 4rem;
-  --radius: var(--radius);
-  --radius-lg: var(--radius-lg);
-  --font-serif: var(--font-serif);
-  --font-sans: var(--font-sans);
+  --spacing: 0.25rem;
+  --font-serif: var(--font-cormorant), Georgia, serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
 }
 
 * {

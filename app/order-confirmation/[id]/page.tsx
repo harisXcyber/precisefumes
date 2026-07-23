@@ -7,17 +7,17 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
-export default function OrderConfirmation({
+export default async function OrderConfirmation({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   // TODO: Fetch actual order data from Supabase when configured
   // For now, show a success message with the order reference
-  const orderId = params.id;
+  const { id: orderId } = await params;
 
   return (
-    <div className="min-h-screen bg-bg text-fg flex items-center justify-center py-12">
+    <div className="min-h-screen bg-bg text-fg flex items-center justify-center pb-16 pt-36">
       <div className="container-lux max-w-xl text-center">
         {/* Success Icon */}
         <div className="mb-8">

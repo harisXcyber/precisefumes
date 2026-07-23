@@ -6,13 +6,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-/** Format a number as PKR currency. */
-export function formatPrice(amount: number, currency = "PKR"): string {
-  return new Intl.NumberFormat("en-PK", {
-    style: "currency",
-    currency,
+/** Format a number as PKR currency — always "PKR 3,000" style. */
+export function formatPrice(amount: number): string {
+  return `PKR ${new Intl.NumberFormat("en-PK", {
     maximumFractionDigits: 0,
-  }).format(amount);
+  }).format(amount)}`;
 }
 
 /** Slugify a string for URLs. */

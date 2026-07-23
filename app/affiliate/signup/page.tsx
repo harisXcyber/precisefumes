@@ -11,7 +11,7 @@ export default function AffiliateSignup() {
   return (
     <div className="min-h-screen bg-bg text-fg">
       {/* Hero */}
-      <section className="bg-invert-bg text-invert-fg py-20 md:py-24">
+      <section className="bg-invert-bg text-invert-fg pt-40 pb-16 md:pt-44 md:pb-20">
         <div className="container-lux text-center max-w-2xl mx-auto">
           <h1 className="font-serif text-5xl md:text-6xl font-light mb-6">
             Become an Affiliate

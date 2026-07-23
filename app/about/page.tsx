@@ -11,7 +11,7 @@ export default function About() {
   return (
     <div className="min-h-screen bg-bg text-fg">
       {/* Hero */}
-      <section className="bg-invert-bg text-invert-fg py-24 md:py-32">
+      <section className="bg-invert-bg text-invert-fg pt-40 pb-20 md:pt-48 md:pb-28">
         <div className="container-lux text-center">
           <h1 className="font-serif text-5xl md:text-6xl font-light mb-6">
             Our Story

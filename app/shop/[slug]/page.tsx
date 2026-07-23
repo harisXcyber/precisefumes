@@ -38,7 +38,7 @@ export default async function ProductPage({ params }: PageProps) {
   const related = await getRelatedProducts(product);
 
   return (
-    <div className="pt-28">
+    <div className="pt-32 md:pt-36">
       {/* Breadcrumb */}
       <div className="container-lux">
         <nav className="flex items-center gap-2 text-xs uppercase tracking-wider text-fg-faint">

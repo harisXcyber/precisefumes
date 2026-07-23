@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -106,6 +107,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Set theme before first paint to avoid a flash of wrong theme */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("pf-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");var d=document.documentElement;d.setAttribute("data-pf-theme",t);if(t==="dark")d.classList.add("dark");}catch(e){}})();`,
+          }}
+        />
         {/* JSON-LD Structured Data */}
         <script
           type="application/ld+json"
@@ -129,6 +136,20 @@ export default function RootLayout({
           <Footer />
           <CartDrawer />
         </ThemeProvider>
+
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-PVF8HGRXF8"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-PVF8HGRXF8');
+          `}
+        </Script>
       </body>
     </html>
   );

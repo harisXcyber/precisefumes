@@ -13,6 +13,7 @@ export function VerifyContent() {
   >("loading");
   const [referralCode, setReferralCode] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -120,7 +121,7 @@ export function VerifyContent() {
   }
 
   return (
-    <div className="min-h-screen bg-bg text-fg flex items-center justify-center py-12">
+    <div className="min-h-screen bg-bg text-fg flex items-center justify-center pb-16 pt-32">
       <div className="container-lux max-w-xl text-center">
         <div className="mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-50 text-green-600 mb-6">
@@ -148,12 +149,13 @@ export function VerifyContent() {
             onClick={() => {
               if (referralCode) {
                 navigator.clipboard.writeText(referralCode);
-                alert("Code copied to clipboard!");
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
               }
             }}
             className="text-sm text-accent hover:underline font-medium"
           >
-            Copy to Clipboard
+            {copied ? "✓ Copied!" : "Copy to Clipboard"}
           </button>
         </div>
 

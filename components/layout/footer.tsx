@@ -13,8 +13,10 @@ const SHOP_LINKS = [
 const INFO_LINKS = [
   { href: "/about", label: "Our Story" },
   { href: "/contact", label: "Contact" },
-  { href: "/shipping", label: "Shipping & Returns" },
   { href: "/faq", label: "FAQ" },
+  { href: "/shipping", label: "Shipping Policy" },
+  { href: "/returns", label: "Returns & Refunds" },
+  { href: "/affiliate/signup", label: "Affiliate Program" },
 ];
 
 export function Footer() {
@@ -33,7 +35,7 @@ export function Footer() {
             </p>
             <div className="mt-6 flex items-center gap-4">
               <a
-                href="https://instagram.com"
+                href="https://instagram.com/precisefumes"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
@@ -42,7 +44,7 @@ export function Footer() {
                 <Instagram className="h-5 w-5" strokeWidth={1.5} />
               </a>
               <a
-                href="https://wa.me/"
+                href="https://wa.me/923000000000"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
@@ -51,7 +53,7 @@ export function Footer() {
                 <MessageCircle className="h-5 w-5" strokeWidth={1.5} />
               </a>
               <a
-                href="mailto:hello@precisefumes.com"
+                href="mailto:contact@precisefumes.com"
                 aria-label="Email"
                 className="text-fg-soft transition-colors hover:text-accent"
               >
@@ -110,10 +112,10 @@ export function Footer() {
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 shrink-0" strokeWidth={1.5} />
                 <a
-                  href="mailto:hello@precisefumes.com"
+                  href="mailto:contact@precisefumes.com"
                   className="transition-colors hover:text-fg"
                 >
-                  hello@precisefumes.com
+                  contact@precisefumes.com
                 </a>
               </li>
             </ul>

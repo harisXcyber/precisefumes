@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 
 // Mock affiliate data (TODO: fetch from Supabase based on session)
@@ -16,9 +17,11 @@ const mockAffiliate = {
 };
 
 export default function AffiliateDashboard() {
+  const [copied, setCopied] = useState(false);
+
   return (
     <div className="min-h-screen bg-bg text-fg">
-      <div className="container-lux py-12 md:py-20">
+      <div className="container-lux pt-32 pb-16 md:pt-36 md:pb-24">
         <div className="max-w-4xl">
           {/* Header */}
           <div className="mb-12">
@@ -90,11 +93,12 @@ export default function AffiliateDashboard() {
                   <button
                     onClick={() => {
                       navigator.clipboard.writeText(mockAffiliate.referralCode);
-                      alert("Code copied!");
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000);
                     }}
                     className="flex-1 btn-primary justify-center"
                   >
-                    Copy Code
+                    {copied ? "✓ Copied!" : "Copy Code"}
                   </button>
                   <button
                     className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 border border-fg/20 rounded-[var(--radius)] hover:bg-bg-soft transition-colors"

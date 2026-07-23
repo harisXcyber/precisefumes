@@ -13,7 +13,7 @@ export default async function ShopPage() {
   const products = await getProducts();
 
   return (
-    <div className="pt-20">
+    <div className="pt-24 md:pt-28">
       {/* Page header */}
       <section className="border-b border-border bg-bg-soft py-16 md:py-20">
         <div className="container-lux text-center">

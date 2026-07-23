@@ -230,7 +230,7 @@ export function CartDrawer() {
                 <div className="mb-2 flex items-center justify-between">
                   <span className="text-sm text-fg-soft">Subtotal</span>
                   <span className="font-serif text-lg tabular-nums">
-                    PKR {formatPrice(subtotalAmount)}
+                    {formatPrice(subtotalAmount)}
                   </span>
                 </div>
 
@@ -238,7 +238,7 @@ export function CartDrawer() {
                   <div className="mb-2 flex items-center justify-between text-accent">
                     <span className="text-xs">{promo.description}</span>
                     <span className="text-sm tabular-nums">
-                      −PKR {formatPrice(promo.discountAmount)}
+                      −{formatPrice(promo.discountAmount)}
                     </span>
                   </div>
                 )}
@@ -246,7 +246,7 @@ export function CartDrawer() {
                 <div className="mb-4 flex items-center justify-between border-t border-border pt-2">
                   <span className="font-serif text-sm">Total</span>
                   <span className="font-serif text-lg tabular-nums">
-                    PKR {formatPrice(cartTotal)}
+                    {formatPrice(cartTotal)}
                   </span>
                 </div>
 
