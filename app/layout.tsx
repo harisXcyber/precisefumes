@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -57,6 +56,9 @@ export const metadata: Metadata = {
     icon: "/favicon.png",
     apple: "/apple-icon.png",
   },
+  verification: {
+    google: "iwxBtefqafjy1n6eWU0uh70CSWYuKagMlfdC0jOk_WQ",
+  },
 };
 
 export default function RootLayout({
@@ -109,6 +111,20 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Google tag (gtag.js) — plain script tags in <head> so
+            Google's tag detection finds the snippet in the HTML */}
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-PVF8HGRXF8"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-PVF8HGRXF8');`,
+          }}
+        />
         {/* Set theme before first paint to avoid a flash of wrong theme */}
         <script
           dangerouslySetInnerHTML={{
@@ -138,20 +154,6 @@ export default function RootLayout({
           <Footer />
           <CartDrawer />
         </ThemeProvider>
-
-        {/* Google Analytics */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-PVF8HGRXF8"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-PVF8HGRXF8');
-          `}
-        </Script>
       </body>
     </html>
   );
