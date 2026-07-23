@@ -12,17 +12,24 @@ export function Hero() {
       {/* Ambient animated gradient orbs — transform-only for smoothness */}
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute -left-40 top-1/4 h-[30rem] w-[30rem] rounded-full bg-accent/20 blur-[90px]"
+        className="pointer-events-none absolute -left-40 top-1/4 h-[30rem] w-[30rem] rounded-full bg-accent/25 blur-[90px]"
         style={{ willChange: "transform" }}
         animate={{ x: [0, 60, 0], y: [0, 40, 0] }}
         transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute -right-40 bottom-1/4 h-[26rem] w-[26rem] rounded-full bg-accent/10 blur-[90px]"
+        className="pointer-events-none absolute -right-40 bottom-1/4 h-[26rem] w-[26rem] rounded-full bg-accent-rose/20 blur-[90px]"
         style={{ willChange: "transform" }}
         animate={{ x: [0, -50, 0], y: [0, -30, 0] }}
         transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-0 h-[22rem] w-[22rem] -translate-x-1/2 rounded-full bg-accent-violet/15 blur-[100px]"
+        style={{ willChange: "transform" }}
+        animate={{ y: [0, 50, 0] }}
+        transition={{ duration: 26, repeat: Infinity, ease: "easeInOut" }}
       />
 
       <div className="container-lux relative z-10 flex flex-col items-center pt-24 pb-16 text-center">
@@ -43,7 +50,7 @@ export function Hero() {
         >
           Scent, Composed
           <br />
-          <span className="italic text-accent">with Precision</span>
+          <span className="pf-gradient-text italic">with Precision</span>
         </motion.h1>
 
         <motion.p

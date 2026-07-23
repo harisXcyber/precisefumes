@@ -3,14 +3,19 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { getProduct, getRelatedProducts } from "@/lib/products";
+import { MOCK_PRODUCTS } from "@/lib/mock-data";
 import { ProductDetail } from "@/components/shop/product-detail";
 import { ProductCard } from "@/components/shop/product-card";
 import { Reveal } from "@/components/ui/reveal";
 
-export const dynamic = "force-dynamic";
-
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+/** Pre-render every catalog product at build time — instant loads.
+ *  Uses the static catalog directly so no request-scoped APIs run. */
+export function generateStaticParams() {
+  return MOCK_PRODUCTS.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({

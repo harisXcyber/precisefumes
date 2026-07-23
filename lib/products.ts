@@ -36,60 +36,59 @@ function rowToProduct(row: any): Product {
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
-/** Fetch products with optional filters. Falls back to mock data when Supabase
- *  isn't configured yet, so the site is browsable during development. */
+function mockList(filters?: { featured?: boolean }): Product[] {
+  let results = MOCK_PRODUCTS.filter((p) => p.active);
+  if (filters?.featured) {
+    results = results.filter((p) => p.featured);
+  }
+  return results;
+}
+
+/** Fetch products with optional filters. Falls back to the built-in
+ *  catalog whenever Supabase is missing OR unreachable (including at
+ *  build time, where request APIs like cookies() are unavailable —
+ *  the try/catch keeps static generation safe). */
 export async function getProducts(filters?: {
   featured?: boolean;
 }): Promise<Product[]> {
-  if (!supabaseConfigured()) {
-    let results = MOCK_PRODUCTS.filter((p) => p.active);
-    if (filters?.featured) {
-      results = results.filter((p) => p.featured);
-    }
-    return results;
+  if (!supabaseConfigured()) return mockList(filters);
+
+  try {
+    const { createClient } = await import("@/lib/supabase/server");
+    const supabase = await createClient();
+    let query = supabase.from("products").select("*").eq("active", true);
+    if (filters?.featured) query = query.eq("featured", true);
+
+    const { data, error } = await query.order("created_at", {
+      ascending: false,
+    });
+
+    if (error || !data || data.length === 0) return mockList(filters);
+    return data.map(rowToProduct);
+  } catch {
+    return mockList(filters);
   }
-
-  const { createClient } = await import("@/lib/supabase/server");
-  const supabase = await createClient();
-  let query = supabase.from("products").select("*").eq("active", true);
-
-  if (filters?.featured) {
-    query = query.eq("featured", true);
-  }
-
-  const { data, error } = await query.order("created_at", {
-    ascending: false,
-  });
-
-  if (error || !data) {
-    console.error("getProducts error:", error?.message);
-    let fallback = MOCK_PRODUCTS.filter((p) => p.active);
-    if (filters?.featured) {
-      fallback = fallback.filter((p) => p.featured);
-    }
-    return fallback;
-  }
-  return data.map(rowToProduct);
 }
 
-/** Fetch a single product by slug. */
+/** Fetch a single product by slug. Build-safe like getProducts. */
 export async function getProduct(slug: string): Promise<Product | null> {
-  if (!supabaseConfigured()) {
-    return MOCK_PRODUCTS.find((p) => p.slug === slug) ?? null;
-  }
+  const mock = MOCK_PRODUCTS.find((p) => p.slug === slug) ?? null;
+  if (!supabaseConfigured()) return mock;
 
-  const { createClient } = await import("@/lib/supabase/server");
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("products")
-    .select("*")
-    .eq("slug", slug)
-    .single();
+  try {
+    const { createClient } = await import("@/lib/supabase/server");
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("slug", slug)
+      .single();
 
-  if (error || !data) {
-    return MOCK_PRODUCTS.find((p) => p.slug === slug) ?? null;
+    if (error || !data) return mock;
+    return rowToProduct(data);
+  } catch {
+    return mock;
   }
-  return rowToProduct(data);
 }
 
 /** Related products in the same category (excluding the current one). */

@@ -21,7 +21,7 @@ export function Story() {
   return (
     <>
       {/* Brand statement with image */}
-      <section className="bg-bg-soft py-24 md:py-32">
+      <section className="pf-tint bg-bg-soft py-24 md:py-32">
         <div className="container-lux grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
           <Reveal>
             <div className="img-zoom relative aspect-[4/5] overflow-hidden rounded-[var(--radius-lg)] bg-invert-bg">
@@ -62,7 +62,7 @@ export function Story() {
       </section>
 
       {/* Three pillars */}
-      <section className="container-lux py-24 md:py-28">
+      <section className="pf-tint-cool pf-tint container-lux py-24 md:py-28">
         <div className="grid gap-px overflow-hidden rounded-[var(--radius-lg)] border border-border bg-border md:grid-cols-3">
           {PILLARS.map((pillar, i) => (
             <Reveal
@@ -70,7 +70,7 @@ export function Story() {
               delay={i * 0.12}
               className="bg-bg p-10 text-center md:p-12"
             >
-              <span className="font-serif text-5xl text-accent/30">
+              <span className="pf-gradient-text font-serif text-5xl">
                 0{i + 1}
               </span>
               <h3 className="mt-4 font-serif text-2xl">{pillar.title}</h3>

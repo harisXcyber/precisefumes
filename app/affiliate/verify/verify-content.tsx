@@ -34,6 +34,13 @@ export function VerifyContent() {
           setReferralCode(data.referralCode);
           setEmail(data.email);
           setStatus("success");
+          // Auto sign-in so the dashboard opens without re-entering details.
+          try {
+            localStorage.setItem(
+              "pf-affiliate-session",
+              JSON.stringify({ email: data.email, code: data.referralCode })
+            );
+          } catch {}
         } else {
           setStatus("error");
         }

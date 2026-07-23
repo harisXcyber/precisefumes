@@ -7,6 +7,7 @@ import { Minus, Plus, ShoppingBag, Check } from "lucide-react";
 import type { Product } from "@/types";
 import { formatPrice } from "@/lib/utils";
 import { useCart } from "@/lib/store/cart";
+import { getScentTone } from "@/lib/tones";
 
 export function ProductDetail({ product }: { product: Product }) {
   const addItem = useCart((s) => s.addItem);
@@ -22,6 +23,7 @@ export function ProductDetail({ product }: { product: Product }) {
     stock: product.stock,
   };
   const images = product.images?.length ? product.images : ["/logo-light.png"];
+  const tone = getScentTone(product.slug);
   const inStock = selectedSize.stock > 0;
   const onSale =
     product.compareAtPrice && product.compareAtPrice > selectedSize.price;
@@ -45,7 +47,10 @@ export function ProductDetail({ product }: { product: Product }) {
     <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
       {/* Gallery */}
       <div className="flex flex-col gap-4">
-        <div className="relative aspect-square overflow-hidden rounded-[var(--radius-lg)] bg-bg-soft">
+        <div
+          className="relative aspect-square overflow-hidden rounded-[var(--radius-lg)]"
+          style={{ background: tone.gradient }}
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={activeImage}
@@ -95,7 +100,13 @@ export function ProductDetail({ product }: { product: Product }) {
 
       {/* Info */}
       <div className="flex flex-col">
-        <p className="tracking-luxe text-xs text-accent">{product.category}</p>
+        <p className="tracking-luxe text-xs text-accent">
+          {product.category === "Him"
+            ? "For Him"
+            : product.category === "Her"
+              ? "For Her"
+              : product.category}
+        </p>
         <h1 className="mt-3 font-serif text-4xl font-light md:text-5xl">
           {product.name}
         </h1>
@@ -134,7 +145,7 @@ export function ProductDetail({ product }: { product: Product }) {
                   key={size.label}
                   onClick={() => setSizeIdx(i)}
                   disabled={size.stock === 0}
-                  className={`min-w-20 border px-5 py-3 text-sm transition-all ${
+                  className={`min-w-20 rounded-full border px-5 py-3 text-sm transition-all ${
                     sizeIdx === i
                       ? "border-fg bg-fg text-bg"
                       : "border-border text-fg hover:border-fg-soft"
@@ -153,7 +164,7 @@ export function ProductDetail({ product }: { product: Product }) {
 
         {/* Quantity + Add */}
         <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-stretch">
-          <div className="flex items-center border border-border">
+          <div className="flex items-center overflow-hidden rounded-full border border-border">
             <button
               onClick={() => setQty((q) => Math.max(1, q - 1))}
               aria-label="Decrease quantity"
@@ -208,6 +219,27 @@ export function ProductDetail({ product }: { product: Product }) {
             Only {selectedSize.stock} left in stock — order soon.
           </p>
         )}
+
+        {/* Offers — always crystal clear */}
+        <div className="mt-8 space-y-2 rounded-[var(--radius-lg)] border border-border bg-bg-soft p-5 text-sm">
+          <p className="pf-eyebrow">Offers on this fragrance</p>
+          <p className="text-fg-soft">
+            <strong className="text-fg">Any 2 for PKR 5,000</strong> — pair it
+            with any other scent and save PKR 1,000.
+          </p>
+          <p className="text-fg-soft">
+            <strong className="text-fg">Buy 2 Get 1 Free</strong> — add three
+            bottles, the cheapest is free.
+          </p>
+          <p className="text-fg-soft">
+            <strong className="text-fg">Bonus code?</strong> Single perfumes
+            drop to PKR 2,500 at checkout.
+          </p>
+          <p className="pt-1 text-xs text-fg-faint">
+            Free delivery in Karachi (2–5 days) · Nationwide PKR 300 (5–7
+            days) · Cash on Delivery available
+          </p>
+        </div>
 
         {/* Notes pyramid */}
         {product.notes && (

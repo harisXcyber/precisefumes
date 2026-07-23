@@ -6,7 +6,7 @@ import { Reveal, StaggerReveal, StaggerItem } from "@/components/ui/reveal";
 
 export function Featured({ products }: { products: Product[] }) {
   return (
-    <section className="container-lux py-24 md:py-32">
+    <section className="pf-tint"><div className="container-lux py-24 md:py-32">
       <Reveal className="mb-14 flex flex-col items-center text-center">
         <p className="tracking-luxe text-xs text-accent">Curated Selection</p>
         <h2 className="mt-4 font-serif text-4xl font-light md:text-5xl">
@@ -38,6 +38,7 @@ export function Featured({ products }: { products: Product[] }) {
           />
         </Link>
       </Reveal>
+      </div>
     </section>
   );
 }

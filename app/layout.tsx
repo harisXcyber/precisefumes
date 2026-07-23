@@ -10,14 +10,15 @@ import { CartDrawer } from "@/components/cart/cart-drawer";
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300", "400", "500"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["300", "400", "500"],
   display: "swap",
 });
 
@@ -53,7 +54,8 @@ export const metadata: Metadata = {
     images: ["/logo-dark.png"],
   },
   icons: {
-    icon: "/logo-dark.png",
+    icon: "/favicon.png",
+    apple: "/apple-icon.png",
   },
 };
 
