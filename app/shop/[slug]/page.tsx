@@ -2,18 +2,15 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { getProduct, getRelatedProducts, getProducts } from "@/lib/products";
+import { getProduct, getRelatedProducts } from "@/lib/products";
 import { ProductDetail } from "@/components/shop/product-detail";
 import { ProductCard } from "@/components/shop/product-card";
 import { Reveal } from "@/components/ui/reveal";
 
+export const dynamic = "force-dynamic";
+
 interface PageProps {
   params: Promise<{ slug: string }>;
-}
-
-export async function generateStaticParams() {
-  const products = await getProducts();
-  return products.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -58,22 +55,17 @@ export default async function ProductPage({ params }: PageProps) {
       </div>
 
       {/* Detail */}
-      <section className="container-lux py-10 md:py-14">
+      <Reveal className="mt-8">
         <ProductDetail product={product} />
-      </section>
+      </Reveal>
 
       {/* Related */}
       {related.length > 0 && (
-        <section className="container-lux py-20 md:py-28">
-          <Reveal className="mb-12 text-center">
-            <p className="tracking-luxe text-xs text-accent">
-              You May Also Like
-            </p>
-            <h2 className="mt-4 font-serif text-3xl font-light md:text-4xl">
-              Complete the Collection
-            </h2>
-          </Reveal>
-          <div className="grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-4">
+        <section className="container-lux mt-24 border-t border-border pt-16">
+          <h2 className="font-serif text-3xl font-light mb-12">
+            You May Also Like
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {related.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
