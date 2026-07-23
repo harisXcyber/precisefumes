@@ -48,19 +48,17 @@ export function Navbar() {
     <>
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-50 transition-all duration-500",
-          scrolled
-            ? "border-b border-border bg-bg/90 backdrop-blur-md"
-            : "border-b border-border/50 bg-bg/60 backdrop-blur-sm"
+          "fixed inset-x-0 top-0 z-50 border-b border-border bg-bg/95 backdrop-blur-md transition-shadow duration-500",
+          scrolled && "shadow-[0_8px_30px_-12px_rgba(26,23,20,0.12)]"
         )}
       >
         {/* Offers bar */}
-        <div className="bg-accent text-on-accent">
-          <p className="container-lux flex h-8 items-center justify-center gap-2 overflow-hidden whitespace-nowrap text-[10px] font-medium uppercase tracking-[0.14em] sm:text-[11px]">
+        <div className="bg-invert-bg text-invert-fg">
+          <p className="container-lux flex h-8 items-center justify-center gap-2 overflow-hidden whitespace-nowrap text-[10px] uppercase tracking-[0.16em] text-invert-fg/85 sm:text-[11px]">
             <span className="hidden sm:inline">Any 2 Perfumes — PKR 5,000</span>
-            <span className="hidden sm:inline" aria-hidden>·</span>
+            <span className="hidden sm:inline text-accent" aria-hidden>·</span>
             <span>Buy 2 Get 1 Free</span>
-            <span aria-hidden>·</span>
+            <span className="text-accent" aria-hidden>·</span>
             <span>Free Delivery in Karachi</span>
           </p>
         </div>

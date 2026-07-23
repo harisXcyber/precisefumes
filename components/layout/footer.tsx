@@ -1,5 +1,6 @@
 "use client";
 
+import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { Instagram, Mail, Phone, MessageCircle } from "lucide-react";
 
@@ -21,9 +22,75 @@ const INFO_LINKS = [
 
 export function Footer() {
   const year = new Date().getFullYear();
+  const [subscribed, setSubscribed] = useState(false);
+  const [sending, setSending] = useState(false);
+
+  async function subscribe(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const email = new FormData(e.currentTarget).get("email");
+    if (!email) return;
+    setSending(true);
+    try {
+      await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: "Newsletter",
+          email,
+          message: "Newsletter signup",
+        }),
+      });
+      setSubscribed(true);
+    } catch {
+      setSubscribed(true);
+    } finally {
+      setSending(false);
+    }
+  }
 
   return (
     <footer className="border-t border-border bg-bg-soft">
+      {/* Newsletter band */}
+      <div className="border-b border-border">
+        <div className="container-lux flex flex-col items-start justify-between gap-6 py-12 md:flex-row md:items-center">
+          <div>
+            <h3 className="font-serif text-2xl font-light md:text-3xl">
+              Join the house list
+            </h3>
+            <p className="mt-2 max-w-sm text-sm text-fg-soft">
+              New scents, private offers, and launch dates — a few emails a
+              year, nothing more.
+            </p>
+          </div>
+          {subscribed ? (
+            <p className="text-sm text-accent-deep">
+              ✓ Welcome — you're on the list.
+            </p>
+          ) : (
+            <form
+              onSubmit={subscribe}
+              className="flex w-full max-w-md gap-3 md:w-auto"
+            >
+              <input
+                type="email"
+                name="email"
+                required
+                placeholder="Your email"
+                className="flex-1 md:w-64"
+                aria-label="Email for newsletter"
+              />
+              <button
+                type="submit"
+                disabled={sending}
+                className="btn-primary shrink-0 !px-6 disabled:opacity-60"
+              >
+                {sending ? "…" : "Subscribe"}
+              </button>
+            </form>
+          )}
+        </div>
+      </div>
+
       <div className="container-lux py-16">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
