@@ -5,8 +5,6 @@ import Link from "next/link";
 import { useCart } from "@/lib/store/cart";
 import { formatPrice } from "@/lib/utils";
 
-type PaymentMethod = "cod" | "transfer";
-
 const BASE_PRICE = 3000;
 const AFFILIATE_PRICE = 2500;
 const CITIES = [
@@ -31,7 +29,6 @@ export function CheckoutClient() {
   useEffect(() => setMounted(true), []);
 
   const [city, setCity] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState<{
     type: "success" | "error";
@@ -160,7 +157,7 @@ export function CheckoutClient() {
         zone: isKarachi ? "karachi" : "nationwide",
         fee: shippingFee,
       },
-      payment: { method: paymentMethod },
+      payment: { method: "cod" },
       promo: affiliateWins
         ? null
         : promo.type
@@ -280,9 +277,8 @@ export function CheckoutClient() {
           )}
 
           <p className="mt-4 text-xs text-fg-faint">
-            {paymentMethod === "cod"
-              ? "You pay in cash when your order arrives."
-              : "We'll email you the account details right after you order — your parcel ships once the transfer is confirmed."}
+            Cash on Delivery — you pay when your order arrives. No advance
+            payment needed.
           </p>
         </div>
       </div>
@@ -389,55 +385,17 @@ export function CheckoutClient() {
         {/* Payment */}
         <fieldset>
           <legend className="mb-6 font-serif text-xl font-normal">
-            2 · Payment Method
+            2 · Payment
           </legend>
-          <div className="space-y-3">
-            <label
-              className={`flex cursor-pointer items-start gap-3 rounded-[var(--radius)] border p-4 transition-colors ${
-                paymentMethod === "cod"
-                  ? "border-accent bg-bg-soft"
-                  : "border-border hover:border-fg-faint"
-              }`}
-            >
-              <input
-                type="radio"
-                name="payment"
-                value="cod"
-                checked={paymentMethod === "cod"}
-                onChange={() => setPaymentMethod("cod")}
-                className="mt-1"
-              />
-              <span>
-                <span className="block font-medium">Cash on Delivery</span>
-                <span className="mt-0.5 block text-xs text-fg-soft">
-                  Pay in cash when your order arrives. No advance payment.
-                </span>
+          <div className="flex items-start gap-3 rounded-[var(--radius)] border border-accent bg-bg-soft p-4">
+            <span className="mt-0.5 text-accent-deep" aria-hidden>✓</span>
+            <span>
+              <span className="block font-medium">Cash on Delivery</span>
+              <span className="mt-0.5 block text-xs text-fg-soft">
+                Pay in cash when your parcel arrives — anywhere in Pakistan.
+                No advance payment. Online payments are coming soon.
               </span>
-            </label>
-
-            <label
-              className={`flex cursor-pointer items-start gap-3 rounded-[var(--radius)] border p-4 transition-colors ${
-                paymentMethod === "transfer"
-                  ? "border-accent bg-bg-soft"
-                  : "border-border hover:border-fg-faint"
-              }`}
-            >
-              <input
-                type="radio"
-                name="payment"
-                value="transfer"
-                checked={paymentMethod === "transfer"}
-                onChange={() => setPaymentMethod("transfer")}
-                className="mt-1"
-              />
-              <span>
-                <span className="block font-medium">Bank Transfer</span>
-                <span className="mt-0.5 block text-xs text-fg-soft">
-                  EasyPaisa / JazzCash / bank. We email the account details
-                  after you place the order.
-                </span>
-              </span>
-            </label>
+            </span>
           </div>
         </fieldset>
 

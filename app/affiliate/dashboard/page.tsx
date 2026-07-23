@@ -9,6 +9,17 @@ interface AffiliateSession {
   code: string;
 }
 
+interface AffiliateStats {
+  totals: { earned: number; pending: number; sales: number };
+  orders: {
+    order_ref: string;
+    commission: number;
+    status: string;
+    created_at: string;
+  }[];
+  note?: string;
+}
+
 const SESSION_KEY = "pf-affiliate-session";
 
 export default function AffiliateDashboard() {
@@ -63,23 +74,19 @@ function SignIn({ onSignIn }: { onSignIn: (s: AffiliateSession) => void }) {
 
     const formData = new FormData(e.currentTarget);
     const email = String(formData.get("email") ?? "").trim();
-    const code = String(formData.get("code") ?? "")
-      .trim()
-      .toUpperCase();
+    const password = String(formData.get("password") ?? "");
 
     try {
-      const res = await fetch("/api/affiliate/validate", {
+      const res = await fetch("/api/affiliate/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
-      if (res.ok && data.valid) {
-        onSignIn({ email, code });
+      if (res.ok) {
+        onSignIn({ email: data.email, code: data.code, name: data.name });
       } else {
-        setError(
-          "That code doesn't match our records. Use the bonus code from your verification email."
-        );
+        setError(data.error ?? "Incorrect email or password.");
       }
     } catch {
       setError("Could not sign you in. Please try again.");
@@ -97,8 +104,8 @@ function SignIn({ onSignIn }: { onSignIn: (s: AffiliateSession) => void }) {
             Sign In
           </h1>
           <p className="mx-auto mt-4 max-w-sm text-center text-sm leading-relaxed text-fg-soft">
-            Enter the email you signed up with and your bonus code — it was
-            shown when you verified your email.
+            Sign in with the email and password you used when joining the
+            affiliate program.
           </p>
 
           <form
@@ -120,17 +127,17 @@ function SignIn({ onSignIn }: { onSignIn: (s: AffiliateSession) => void }) {
               />
             </div>
             <div>
-              <label htmlFor="code" className="pf-label mb-2 block">
-                Your Bonus Code
+              <label htmlFor="password" className="pf-label mb-2 block">
+                Password
               </label>
               <input
-                type="text"
-                id="code"
-                name="code"
+                type="password"
+                id="password"
+                name="password"
                 required
-                className="w-full uppercase"
-                placeholder="e.g. ROGUE4X"
-                autoCapitalize="characters"
+                autoComplete="current-password"
+                className="w-full"
+                placeholder="Your password"
               />
             </div>
 
@@ -171,11 +178,36 @@ function Dashboard({
   onSignOut: () => void;
 }) {
   const [copied, setCopied] = useState(false);
+  const [live, setLive] = useState<AffiliateStats | null>(null);
 
+  useEffect(() => {
+    fetch("/api/affiliate/stats", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: session.email, code: session.code }),
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => d && setLive(d))
+      .catch(() => {});
+  }, [session.email, session.code]);
+
+  const totals = live?.totals ?? { earned: 0, pending: 0, sales: 0 };
   const stats = [
-    { label: "Total Earned", value: "PKR 0", hint: "All-time commissions" },
-    { label: "Pending Payout", value: "PKR 0", hint: "Available to withdraw" },
-    { label: "Sales", value: "0", hint: "Orders with your code" },
+    {
+      label: "Total Earned",
+      value: `PKR ${totals.earned.toLocaleString()}`,
+      hint: "Paid-out commissions",
+    },
+    {
+      label: "Pending Payout",
+      value: `PKR ${totals.pending.toLocaleString()}`,
+      hint: "Awaiting payout",
+    },
+    {
+      label: "Sales",
+      value: String(totals.sales),
+      hint: "Orders with your code",
+    },
     { label: "Per Sale", value: "PKR 300", hint: "Your commission rate" },
   ];
 
@@ -256,14 +288,48 @@ function Dashboard({
 
             <section className="rounded-[var(--radius-lg)] border border-border p-6 md:p-8">
               <h2 className="font-serif text-2xl font-normal">Your Sales</h2>
-              <div className="mt-6 rounded-[var(--radius)] bg-bg-soft p-8 text-center">
-                <p className="font-serif text-xl">No sales yet</p>
-                <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-fg-soft">
-                  Every order placed with code{" "}
-                  <strong className="text-fg">{session.code}</strong> will
-                  appear here with its PKR 300 commission.
-                </p>
-              </div>
+              {live && live.orders.length > 0 ? (
+                <div className="mt-6 overflow-x-auto">
+                  <table className="w-full min-w-[26rem] text-sm">
+                    <thead>
+                      <tr className="border-b border-border text-left">
+                        <th className="pf-label py-3">Date</th>
+                        <th className="pf-label py-3">Order</th>
+                        <th className="pf-label py-3 text-right">Commission</th>
+                        <th className="pf-label py-3 text-right">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {live.orders.map((o) => (
+                        <tr
+                          key={o.order_ref}
+                          className="border-b border-border text-fg-soft"
+                        >
+                          <td className="py-3">
+                            {new Date(o.created_at).toLocaleDateString()}
+                          </td>
+                          <td className="py-3">{o.order_ref}</td>
+                          <td className="py-3 text-right">
+                            PKR {o.commission}
+                          </td>
+                          <td className="py-3 text-right capitalize">
+                            {o.status}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="mt-6 rounded-[var(--radius)] bg-bg-soft p-8 text-center">
+                  <p className="font-serif text-xl">No sales yet</p>
+                  <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-fg-soft">
+                    Every order placed with code{" "}
+                    <strong className="text-fg">{session.code}</strong> will
+                    appear here with its PKR 300 commission.
+                  </p>
+                </div>
+              )}
             </section>
           </div>
 

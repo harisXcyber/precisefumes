@@ -52,7 +52,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "How can I pay?",
-    a: "Cash on Delivery — pay the rider when your parcel arrives — or bank transfer via EasyPaisa, JazzCash, or bank account. For transfers, we email you the account details right after you place the order, and ship once the payment is confirmed.",
+    a: "Cash on Delivery, anywhere in Pakistan — pay the rider in cash when your parcel arrives. No advance payment is needed. Online payment options are coming soon.",
   },
   {
     q: "Can I return a perfume?",

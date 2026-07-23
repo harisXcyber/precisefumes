@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { Product } from "@/types";
 import { ProductCard } from "@/components/shop/product-card";
 
-const CATEGORIES = ["All", "Him", "Her", "Unisex"] as const;
+const CATEGORIES = ["All", "Him", "Her"] as const;
 type SortKey = "featured" | "price-asc" | "price-desc" | "name";
 
 const SORTS: { key: SortKey; label: string }[] = [

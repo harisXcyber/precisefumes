@@ -11,6 +11,7 @@ export function AffiliateSignupForm() {
     type: "success" | "error";
     text: string;
   } | null>(null);
+  const [verifyUrl, setVerifyUrl] = useState<string | null>(null);
   const [bankMethod, setBankMethod] = useState<BankMethod>("easypaisa");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -19,9 +20,25 @@ export function AffiliateSignupForm() {
     setMessage(null);
 
     const formData = new FormData(e.currentTarget);
+    const password = String(formData.get("password") ?? "");
+    const confirm = String(formData.get("confirmPassword") ?? "");
+    if (password.length < 8) {
+      setMessage({
+        type: "error",
+        text: "Password must be at least 8 characters.",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+    if (password !== confirm) {
+      setMessage({ type: "error", text: "Passwords don't match." });
+      setIsSubmitting(false);
+      return;
+    }
     const data = {
       email: formData.get("email"),
       name: formData.get("name"),
+      password,
       bankMethod: bankMethod,
       bankPhone: formData.get("bankPhone"),
       bankAccountName: formData.get("bankAccountName"),
@@ -35,10 +52,19 @@ export function AffiliateSignupForm() {
       });
 
       if (res.ok) {
-        setMessage({
-          type: "success",
-          text: "Signup successful! Check your email for verification link.",
-        });
+        const data = await res.json();
+        if (data.verifyUrl) {
+          setVerifyUrl(data.verifyUrl);
+          setMessage({
+            type: "success",
+            text: "Signup successful! Click the button below to verify and get your code.",
+          });
+        } else {
+          setMessage({
+            type: "success",
+            text: "Signup successful! Check your email (and spam folder) for the verification link.",
+          });
+        }
         (e.target as HTMLFormElement).reset();
       } else {
         const errorData = await res.json();
@@ -94,6 +120,39 @@ export function AffiliateSignupForm() {
           <p className="text-xs text-fg-soft mt-2">
             You'll receive a verification link here. Check spam if needed.
           </p>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label htmlFor="password" className="block pf-label mb-2">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              minLength={8}
+              autoComplete="new-password"
+              className="w-full"
+              placeholder="Min. 8 characters"
+            />
+          </div>
+          <div>
+            <label htmlFor="confirmPassword" className="block pf-label mb-2">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              required
+              minLength={8}
+              autoComplete="new-password"
+              className="w-full"
+              placeholder="Repeat password"
+            />
+          </div>
         </div>
       </fieldset>
 
@@ -194,6 +253,12 @@ export function AffiliateSignupForm() {
         >
           {message.text}
         </div>
+      )}
+
+      {verifyUrl && (
+        <a href={verifyUrl} className="btn-primary w-full justify-center">
+          Verify & Get My Code →
+        </a>
       )}
 
       <button

@@ -8,7 +8,6 @@ const SHOP_LINKS = [
   { href: "/shop", label: "All Fragrances" },
   { href: "/shop?category=Him", label: "For Him" },
   { href: "/shop?category=Her", label: "For Her" },
-  { href: "/shop?category=Unisex", label: "Unisex" },
 ];
 
 const INFO_LINKS = [

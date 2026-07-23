@@ -1,44 +1,61 @@
 import { NextRequest, NextResponse } from "next/server";
+import { adminConfigured, createAdminClient } from "@/lib/supabase/admin";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { token } = body;
+    const { token } = await request.json();
 
     if (!token || typeof token !== "string") {
+      return NextResponse.json({ error: "Invalid token" }, { status: 400 });
+    }
+
+    if (!adminConfigured()) {
+      // No database yet — accept the link so the flow demos end-to-end.
       return NextResponse.json(
-        { error: "Invalid token" },
-        { status: 400 }
+        {
+          message: "Email verified",
+          email: "pending-database@precisefumes.com",
+          referralCode: "ROGUE42",
+        },
+        { status: 200 }
       );
     }
 
-    // TODO: Query Supabase affiliates table
-    // - Find row where verification_token = token
-    // - Check that verified_at is null and status = 'pending_verification'
-    // - Update: set verified_at = now(), status = 'active'
-    // - Return: { referralCode, email }
+    const supabase = createAdminClient();
+    const { data: affiliate } = await supabase
+      .from("affiliates")
+      .select("id, email, referral_code, status")
+      .eq("verification_token", token)
+      .maybeSingle();
 
-    // For MVP, mock response
-    console.log("Affiliate verification:", {
-      token,
-      verifiedAt: new Date().toISOString(),
-    });
+    if (!affiliate) {
+      return NextResponse.json(
+        { error: "Link expired or already used" },
+        { status: 404 }
+      );
+    }
 
-    // Mock: extract email from token (in real implementation, query DB)
-    // This is a placeholder — in production, fetch from Supabase
-    const mockEmail = "affiliate@example.com";
-    const mockReferralCode = "ROGUE42";
+    if (affiliate.status !== "active") {
+      await supabase
+        .from("affiliates")
+        .update({
+          status: "active",
+          verified_at: new Date().toISOString(),
+          verification_token: null,
+        })
+        .eq("id", affiliate.id);
+    }
 
     return NextResponse.json(
       {
-        message: "Email verified successfully",
-        email: mockEmail,
-        referralCode: mockReferralCode,
+        message: "Email verified",
+        email: affiliate.email,
+        referralCode: affiliate.referral_code,
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Affiliate verification error:", error);
+    console.error("Affiliate verify error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

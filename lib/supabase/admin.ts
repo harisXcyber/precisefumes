@@ -1,0 +1,20 @@
+import "server-only";
+import { createClient } from "@supabase/supabase-js";
+
+/** True when the server-side Supabase credentials are present. */
+export function adminConfigured(): boolean {
+  return (
+    !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    !!process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
+}
+
+/** Service-role client — bypasses RLS. Server code only, never
+ *  import from a client component. */
+export function createAdminClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { persistSession: false, autoRefreshToken: false } }
+  );
+}

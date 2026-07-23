@@ -6,7 +6,7 @@ import { ShopGrid } from "@/components/shop/shop-grid";
 export const metadata: Metadata = {
   title: "Shop All Fragrances",
   description:
-    "Browse the complete Precise Fumes collection — luxury perfumes for him, her, and unisex.",
+    "Browse the complete Precise Fumes collection — luxury perfumes for him and for her.",
 };
 
 export default async function ShopPage() {

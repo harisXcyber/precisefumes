@@ -19,7 +19,7 @@ function rowToProduct(row: any): Product {
     slug: row.slug,
     tagline: row.tagline ?? undefined,
     description: row.description ?? "",
-    category: row.category ?? "Unisex",
+    category: row.category ?? "Him",
     price: Number(row.price),
     compareAtPrice: row.compare_at_price
       ? Number(row.compare_at_price)
