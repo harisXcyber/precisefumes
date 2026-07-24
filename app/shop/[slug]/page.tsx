@@ -2,8 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { getProduct, getRelatedProducts } from "@/lib/products";
-import { MOCK_PRODUCTS } from "@/lib/mock-data";
+import { getProduct, getRelatedProducts, getProductSlugs } from "@/lib/products";
 import { ProductDetail } from "@/components/shop/product-detail";
 import { ProductCard } from "@/components/shop/product-card";
 import { Reveal } from "@/components/ui/reveal";
@@ -12,10 +11,14 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-/** Pre-render every catalog product at build time — instant loads.
- *  Uses the static catalog directly so no request-scoped APIs run. */
-export function generateStaticParams() {
-  return MOCK_PRODUCTS.map((p) => ({ slug: p.slug }));
+/** Revalidate hourly so admin edits reach the storefront without
+ *  a redeploy, while pages stay static and instant. */
+export const revalidate = 3600;
+
+/** Pre-render every catalog product at build time. */
+export async function generateStaticParams() {
+  const slugs = await getProductSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({

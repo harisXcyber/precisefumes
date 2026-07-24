@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { getProducts } from "@/lib/products";
 import { ShopGrid } from "@/components/shop/shop-grid";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "Shop All Fragrances",
   description:

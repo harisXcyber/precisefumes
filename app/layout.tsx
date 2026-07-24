@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
-import { CartDrawer } from "@/components/cart/cart-drawer";
+import { SiteChrome } from "@/components/layout/site-chrome";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -149,10 +147,7 @@ gtag('config', 'G-PVF8HGRXF8');`,
         className={`${cormorant.variable} ${inter.variable} antialiased bg-bg text-fg`}
       >
         <ThemeProvider>
-          <Navbar />
-          <main className="min-h-screen">{children}</main>
-          <Footer />
-          <CartDrawer />
+          <SiteChrome>{children}</SiteChrome>
         </ThemeProvider>
       </body>
     </html>

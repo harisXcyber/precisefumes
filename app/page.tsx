@@ -8,6 +8,8 @@ import { Story } from "@/components/home/story";
 import { CTA } from "@/components/home/cta";
 import { getProducts } from "@/lib/products";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "Precise Fumes — Luxury Perfumes for Pakistan",
   description:

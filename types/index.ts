@@ -22,7 +22,7 @@ export interface Product {
   slug: string;
   tagline?: string; // short evocative line
   description: string;
-  category: string; // e.g. "Him", "Her", "Unisex"
+  category: string; // "Him" | "Her"
   /** Base price shown when no size selected (usually cheapest size). */
   price: number;
   /** Optional compare-at price for showing discounts. */
@@ -34,6 +34,11 @@ export interface Product {
   stock: number; // aggregate stock fallback
   featured: boolean;
   active: boolean; // hidden from storefront when false
+  /** e.g. "Eau de Parfum" */
+  concentration?: string;
+  /** e.g. "8-12 hours" */
+  longevity?: string;
+  sortOrder?: number;
   createdAt?: string;
   updatedAt?: string;
 }
