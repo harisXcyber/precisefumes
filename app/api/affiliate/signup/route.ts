@@ -17,9 +17,9 @@ export function sanitizeCodeWord(raw: string): string {
     .slice(0, 12);
 }
 
-/** Bonus code = PRECISE + chosen word + one random digit, e.g. PRECISEHARIS7 */
+/** Bonus code = chosen word + two random digits, e.g. HARIS47 */
 function buildReferralCode(word: string): string {
-  return `PRECISE${word}${crypto.randomInt(0, 10)}`;
+  return `${word}${String(crypto.randomInt(0, 100)).padStart(2, "0")}`;
 }
 
 function isValidEmail(email: string): boolean {

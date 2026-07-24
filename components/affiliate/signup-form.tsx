@@ -188,8 +188,7 @@ export function AffiliateSignupForm() {
         </legend>
         <p className="text-xs leading-relaxed text-fg-soft">
           Choose a word — your name or brand works great. Your bonus code
-          becomes <strong className="text-fg">PRECISE</strong> + your word + a
-          number. Share it to earn PKR 300 per sale.
+          becomes your word + 2 numbers. Share it to earn PKR 300 per sale.
         </p>
         <div>
           <label htmlFor="codeWord" className="block pf-label mb-2">
@@ -209,8 +208,8 @@ export function AffiliateSignupForm() {
             <p className="mt-2 text-sm text-fg-soft">
               Your code will look like:{" "}
               <span className="font-medium tracking-wider text-accent-deep">
-                PRECISE{cleanWord(codeWord)}
-                <span className="opacity-60">#</span>
+                {cleanWord(codeWord)}
+                <span className="opacity-60">##</span>
               </span>
             </p>
           )}
