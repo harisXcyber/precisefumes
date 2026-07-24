@@ -8,21 +8,21 @@ export function GiftBag() {
       <div className="container-lux grid items-center gap-10 md:grid-cols-2 md:gap-16">
         <Reveal>
           <div className="flex gap-4">
-            <div className="relative aspect-square flex-1 overflow-hidden rounded-[var(--radius-lg)] border border-white/10">
+            <div className="relative aspect-[3/4] flex-1 overflow-hidden rounded-[var(--radius-lg)] border border-white/10 bg-white">
               <Image
                 src="/gift-bag-black.jpg"
-                alt="Precise Fumes premium black gift bag"
+                alt="Precise Fumes premium black gift bag with gold logo"
                 fill
-                sizes="(max-width: 768px) 50vw, 25vw"
+                sizes="(max-width: 768px) 45vw, 22vw"
                 className="object-cover"
               />
             </div>
-            <div className="relative aspect-square flex-1 overflow-hidden rounded-[var(--radius-lg)] border border-white/10">
+            <div className="relative aspect-[3/4] flex-1 overflow-hidden rounded-[var(--radius-lg)] border border-white/10 bg-white">
               <Image
                 src="/gift-bag-cream.jpg"
-                alt="Precise Fumes premium cream gift bag"
+                alt="Precise Fumes premium white gift bag with gold logo"
                 fill
-                sizes="(max-width: 768px) 50vw, 25vw"
+                sizes="(max-width: 768px) 45vw, 22vw"
                 className="object-cover"
               />
             </div>
