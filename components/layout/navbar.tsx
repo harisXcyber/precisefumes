@@ -58,7 +58,7 @@ export function Navbar() {
           <p className="container-lux flex h-8 items-center justify-center gap-2 overflow-hidden whitespace-nowrap text-[10px] uppercase tracking-[0.16em] text-invert-fg/85 sm:text-[11px]">
             <span className="hidden sm:inline">Any 2 Perfumes — PKR 5,000</span>
             <span className="hidden sm:inline text-accent" aria-hidden>·</span>
-            <span>Buy 2 Get 1 Free</span>
+            <span>Buy 3 Get 1 Free</span>
             <span className="text-accent" aria-hidden>·</span>
             <span>Free Delivery in Karachi</span>
           </p>

@@ -24,7 +24,7 @@ export function SeoContent() {
             with a <strong className="text-fg">free 5ml tester</strong> of
             another scent. Take advantage of our standing offers —{" "}
             <Link href="/shop" className="link-underline text-fg">
-              buy 2 get 1 free
+              buy 3 get 1 free
             </Link>
             , or any two perfumes for PKR 5,000 — applied automatically at
             checkout, with a full money-back guarantee on anything that&apos;s

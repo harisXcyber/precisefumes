@@ -36,7 +36,7 @@ export async function generateMetadata({
 
   const gender = product.category === "Her" ? "Women's" : "Men's";
   const title = `${product.name} Perfume — ${gender} Extrait de Parfum, PKR ${product.price.toLocaleString()}`;
-  const description = `Buy ${product.name}, a premium ${gender.toLowerCase()} perfume by Precise Fumes. ${product.tagline ?? ""} 50ml Extrait de Parfum, 12–14 hour wear, PKR ${product.price.toLocaleString()}. Free 5ml tester, buy 2 get 1 free, free delivery in Karachi, cash on delivery across Pakistan.`.trim();
+  const description = `Buy ${product.name}, a premium ${gender.toLowerCase()} perfume by Precise Fumes. ${product.tagline ?? ""} 50ml Extrait de Parfum, 12–14 hour wear, PKR ${product.price.toLocaleString()}. Free 5ml tester, buy 3 get 1 free, free delivery in Karachi, cash on delivery across Pakistan.`.trim();
 
   return {
     title,

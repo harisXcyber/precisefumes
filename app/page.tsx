@@ -18,12 +18,12 @@ export const metadata: Metadata = {
   title:
     "Buy Premium Perfumes Online in Pakistan | Free Delivery in Karachi — Precise Fumes",
   description:
-    "Order premium long-lasting perfumes online in Pakistan. 5 signature Extrait de Parfum scents, 12–14 hour wear, PKR 3,000 each. Buy 2 get 1 free · 2 for PKR 5,000 · free 5ml tester · free delivery in Karachi · cash on delivery nationwide.",
+    "Order premium long-lasting perfumes online in Pakistan. 5 signature Extrait de Parfum scents, 12–14 hour wear, PKR 3,000 each. Buy 3 get 1 free · 2 for PKR 5,000 · free 5ml tester · free delivery in Karachi · cash on delivery nationwide.",
   alternates: { canonical: "/" },
   openGraph: {
     title: "Precise Fumes — Premium Perfumes Online in Pakistan",
     description:
-      "Premium long-lasting perfumes. Buy 2 get 1 free, free delivery in Karachi, cash on delivery nationwide.",
+      "Premium long-lasting perfumes. Buy 3 get 1 free, free delivery in Karachi, cash on delivery nationwide.",
     type: "website",
     url: "https://precisefumes.com",
     siteName: "Precise Fumes",

@@ -60,7 +60,7 @@ export function TesterPicker({
           <p className="mt-2 text-sm leading-relaxed text-fg-soft">
             Every perfume you buy comes with{" "}
             <strong className="text-fg">one free 5ml tester</strong> of a
-            different scent — so a Buy 2 Get 1 Free order (3 perfumes) earns 3
+            different scent — so a Buy 3 Get 1 Free order (4 perfumes) earns 4
             free testers. Extra testers are {formatPrice(TESTER_PRICE)} each,
             including one of the perfume you&apos;re buying.
           </p>

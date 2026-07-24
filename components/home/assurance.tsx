@@ -11,7 +11,7 @@ const POINTS = [
   },
   {
     title: "Free 5ml Tester",
-    body: "One free tester per perfume — buy 2 get 1 free means 3 free testers.",
+    body: "One free tester per perfume — buy 3 get 1 free means 4 free testers.",
   },
   {
     title: "Money-Back Guarantee",

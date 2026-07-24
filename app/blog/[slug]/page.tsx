@@ -134,7 +134,7 @@ export default async function ArticlePage({ params }: PageProps) {
           </h2>
           <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-fg-soft">
             12–14 hour Extrait de Parfum · free 5ml tester with every perfume ·
-            buy 2 get 1 free · free delivery in Karachi · cash on delivery
+            buy 3 get 1 free · free delivery in Karachi · cash on delivery
             nationwide.
           </p>
           <Link href="/shop" className="btn-primary mt-6">

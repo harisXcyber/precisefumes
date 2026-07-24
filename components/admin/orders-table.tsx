@@ -201,8 +201,8 @@ export function OrdersTable({ orders }: { orders: AdminOrder[] }) {
                                   <span>
                                     {o.promo_type === "bundle"
                                       ? "Bundle offer"
-                                      : o.promo_type === "free-item"
-                                        ? "Buy 2 get 1 free"
+                                      : o.promo_type === "pack4"
+                                        ? "Buy 3 Get 1 Free"
                                         : o.affiliate_code
                                           ? `Code ${o.affiliate_code}`
                                           : "Discount"}

@@ -8,12 +8,12 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Shop Perfumes Online in Pakistan — Free Karachi Delivery",
   description:
-    "Browse premium perfumes for men and women — Rogue, Royal Oud, Legacy, Bloom & Blossom. Extrait de Parfum, 12–14 hour wear, PKR 3,000. Buy 2 get 1 free, free 5ml tester, free delivery in Karachi, cash on delivery nationwide.",
+    "Browse premium perfumes for men and women — Rogue, Royal Oud, Legacy, Bloom & Blossom. Extrait de Parfum, 12–14 hour wear, PKR 3,000. Buy 3 get 1 free, free 5ml tester, free delivery in Karachi, cash on delivery nationwide.",
   alternates: { canonical: "/shop" },
   openGraph: {
     title: "Shop Perfumes Online in Pakistan — Precise Fumes",
     description:
-      "Premium perfumes for men and women. Buy 2 get 1 free, free delivery in Karachi, cash on delivery.",
+      "Premium perfumes for men and women. Buy 3 get 1 free, free delivery in Karachi, cash on delivery.",
     url: "https://precisefumes.com/shop",
     type: "website",
   },
@@ -34,7 +34,7 @@ export default async function ShopPage() {
           <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-fg-soft">
             Five premium Extrait de Parfum signatures for men and women — 50ml,
             12–14 hour wear, PKR 3,000 each. Free 5ml tester in every order,
-            buy 2 get 1 free, free delivery in Karachi and cash on delivery
+            buy 3 get 1 free, free delivery in Karachi and cash on delivery
             across Pakistan.
           </p>
         </div>
@@ -81,13 +81,14 @@ export default async function ShopPage() {
 
           <div>
             <h2 className="mb-3 font-serif text-2xl font-normal text-fg">
-              Buy 2 Get 1 Free &amp; 2 for PKR 5,000
+              Buy 3 Get 1 Free &amp; 2 for PKR 5,000
             </h2>
             <p>
               Our promotions apply automatically at checkout. Add any two
-              perfumes and the total drops to{" "}
-              <strong>PKR 5,000 (save PKR 1,000)</strong>; add three and the{" "}
-              <strong>cheapest is free</strong>. Backed by a full money-back
+              perfumes for{" "}
+              <strong>PKR 5,000 (save PKR 1,000)</strong>, or take the{" "}
+              <strong>Buy 3 Get 1 Free</strong> deal — four perfumes for just{" "}
+              <strong>PKR 8,000</strong> instead of PKR 9,000. Backed by a full money-back
               guarantee — if anything is wrong on our side, we refund you in
               full or replace it free.
             </p>

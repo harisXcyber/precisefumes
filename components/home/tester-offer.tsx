@@ -32,8 +32,8 @@ export function TesterOffer() {
             Buy one perfume, choose a free 5ml tester of a scent you
             haven&apos;t tried. And because testers come with{" "}
             <strong className="text-fg">every</strong> perfume, our offers stack:
-            a <strong className="text-fg">Buy 2 Get 1 Free</strong> order means
-            three perfumes <em>and</em> three free testers. Want more? Extra
+            a <strong className="text-fg">Buy 3 Get 1 Free</strong> order means
+            four perfumes <em>and</em> four free testers. Want more? Extra
             testers are just PKR 200 each.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">

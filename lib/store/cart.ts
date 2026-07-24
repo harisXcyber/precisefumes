@@ -6,10 +6,12 @@ import type { CartItem } from "@/types";
 
 export const TESTER_PRICE = 200;
 const BASE_PRICE = 3000;
-const BUNDLE_TOTAL = 5000;
+const BUNDLE_2_TOTAL = 5000; // any 2 for PKR 5,000
+const PACK_4_TOTAL = 8000; // Buy 3 Get 1 Free — 4 perfumes for PKR 8,000
+export const PACK_4_COMPARE = 9000; // struck-through anchor shown in marketing
 
 interface PromoInfo {
-  type: "bundle" | "free-item" | null;
+  type: "bundle" | "pack4" | null;
   discountAmount: number;
   description: string;
 }
@@ -109,44 +111,49 @@ export const useCart = create<CartState>()(
       perfumeItems: () => get().items.filter((i) => !isTester(i)),
       testerItems: () => get().items.filter(isTester),
 
-      /** Bottle offers. Testers never count toward these. */
+      /** Bottle offers (all perfumes are PKR 3,000). Testers never count.
+       *  Ladder: any 2 → PKR 5,000; Buy 3 Get 1 Free → 4 perfumes for
+       *  PKR 8,000. Larger carts stack whole 4-packs, then apply the
+       *  best remainder pricing. */
       getPromoInfo: () => {
         const perfumes = get().perfumeItems();
-        if (perfumes.length === 0) {
+        const qty = perfumes.reduce((sum, i) => sum + i.quantity, 0);
+        if (qty === 0) {
+          return { type: null, discountAmount: 0, description: "" };
+        }
+        const subtotal = perfumes.reduce(
+          (sum, i) => sum + i.price * i.quantity,
+          0
+        );
+
+        const packs = Math.floor(qty / 4);
+        const rem = qty % 4;
+
+        // Best price for the leftover 1–3 bottles.
+        let remPrice = 0;
+        if (rem === 1) remPrice = BASE_PRICE;
+        else if (rem === 2) remPrice = BUNDLE_2_TOTAL;
+        else if (rem === 3) remPrice = BUNDLE_2_TOTAL + BASE_PRICE; // 8,000
+
+        const promoTotal = packs * PACK_4_TOTAL + remPrice;
+        const discount = Math.max(0, subtotal - promoTotal);
+        if (discount <= 0) {
           return { type: null, discountAmount: 0, description: "" };
         }
 
-        const unitPrices = perfumes
-          .flatMap((i) => Array(i.quantity).fill(i.price) as number[])
-          .sort((a, b) => a - b);
-        const totalQuantity = unitPrices.length;
-
-        // Buy 2 Get 1 Free: for every 3 bottles, the cheapest is free.
-        if (totalQuantity >= 3) {
-          const freeCount = Math.floor(totalQuantity / 3);
-          const discount = unitPrices
-            .slice(0, freeCount)
-            .reduce((sum, p) => sum + p, 0);
-          return {
-            type: "free-item",
-            discountAmount: discount,
-            description:
-              freeCount === 1
-                ? "Buy 2 Get 1 Free — 1 bottle free"
-                : `Buy 2 Get 1 Free — ${freeCount} bottles free`,
-          };
+        let type: PromoInfo["type"] = "bundle";
+        let description = "Bundle savings applied";
+        if (packs >= 1) {
+          type = "pack4";
+          description =
+            packs === 1
+              ? "Buy 3 Get 1 Free — 4 perfumes for PKR 8,000"
+              : `Buy 3 Get 1 Free ×${packs}`;
+        } else if (rem === 2) {
+          description = "Bundle — any 2 for PKR 5,000";
         }
 
-        // Bundle: exactly 2 standard (PKR 3,000) bottles for PKR 5,000.
-        if (totalQuantity === 2 && unitPrices.every((p) => p === BASE_PRICE)) {
-          return {
-            type: "bundle",
-            discountAmount: BASE_PRICE * 2 - BUNDLE_TOTAL,
-            description: "Bundle — any 2 for PKR 5,000",
-          };
-        }
-
-        return { type: null, discountAmount: 0, description: "" };
+        return { type, discountAmount: discount, description };
       },
 
       /** Every bottle earns one free 5ml tester, and it has to be a scent

@@ -5,7 +5,7 @@ import { faqLd } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "Perfume FAQ — Delivery, Prices & Offers in Pakistan",
   description:
-    "How much perfumes cost, how buy 2 get 1 free and the 2-for-PKR-5,000 bundle work, free delivery in Karachi, cash on delivery, free 5ml testers, and our money-back guarantee — answered clearly.",
+    "How much perfumes cost, how buy 3 get 1 free and the 2-for-PKR-5,000 bundle work, free delivery in Karachi, cash on delivery, free 5ml testers, and our money-back guarantee — answered clearly.",
   alternates: { canonical: "/faq" },
 };
 
@@ -23,10 +23,10 @@ const FAQS: { q: string; a: React.ReactNode; plain?: string }[] = [
       "Add any two standard PKR 3,000 perfumes to your cart, any scents, and the total automatically drops to PKR 5,000. You save PKR 1,000. No code needed; it applies by itself at checkout.",
   },
   {
-    q: "How does Buy 2 Get 1 Free work?",
-    a: "Add three perfumes to your cart and the cheapest one becomes free — automatically. For every three bottles in your order, one is free. No code needed.",
+    q: "How does Buy 3 Get 1 Free work?",
+    a: "Buy 3 Get 1 Free: add four perfumes to your cart and the price drops to just PKR 8,000 instead of PKR 9,000 — that's four premium perfumes plus four free 5ml testers. Applied automatically, no code needed.",
     plain:
-      "Add three perfumes to your cart and the cheapest one becomes free, automatically. For every three bottles in your order, one is free. No code needed.",
+      "Buy 3 Get 1 Free: add four perfumes to your cart and the price drops to just PKR 8,000 instead of PKR 9,000 — four premium perfumes plus four free 5ml testers. Applied automatically, no code needed.",
   },
   {
     q: "What is a bonus code and how do I use one?",
@@ -40,7 +40,7 @@ const FAQS: { q: string; a: React.ReactNode; plain?: string }[] = [
       </>
     ),
     plain:
-      "Bonus codes come from our affiliates. Enter one at checkout and single perfumes drop from PKR 3,000 to PKR 2,500 each. Bonus codes apply to single perfumes only and don't combine with the bundle or Buy 2 Get 1 Free offers. If both could apply, we automatically give you whichever saves you more.",
+      "Bonus codes come from our affiliates. Enter one at checkout and single perfumes drop from PKR 3,000 to PKR 2,500 each. Bonus codes apply to single perfumes only and don't combine with the bundle or Buy 3 Get 1 Free offers. If both could apply, we automatically give you whichever saves you more.",
   },
   {
     q: "How do I become an affiliate and earn?",

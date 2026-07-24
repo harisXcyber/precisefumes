@@ -13,7 +13,7 @@ const COLLECTION_IMAGE =
 
 const OFFERS = [
   "Any 2 for PKR 5,000",
-  "Buy 2 Get 1 Free",
+  "Buy 3 Get 1 Free",
   "Free 5ml Tester",
   "Free Gift Bag",
   "Free Karachi Delivery",

@@ -83,8 +83,8 @@ export const ARTICLES: Article[] = [
         list: [
           "Every 50ml bottle is PKR 3,000.",
           "Any 2 perfumes for PKR 5,000 — save PKR 1,000.",
-          "Buy 2 Get 1 Free — add three, the cheapest is on us.",
-          "A free 5ml tester with every perfume (so Buy 2 Get 1 Free earns 3 free testers).",
+          "Buy 3 Get 1 Free — 4 perfumes for PKR 8,000 (was PKR 9,000).",
+          "A free 5ml tester with every perfume — so Buy 3 Get 1 Free earns 4 free testers.",
           "Free delivery in Karachi, cash on delivery across Pakistan.",
         ],
       },
@@ -134,7 +134,7 @@ export const ARTICLES: Article[] = [
           "Want one bottle for everything? Go with Rogue.",
           "Love rich, oud-forward, traditional scents? Royal Oud.",
           "Prefer bold, fruity and modern? Legacy.",
-          "Still deciding? Order any two — you'll get a free tester of the third to try.",
+          "Still deciding? Order any two for PKR 5,000 — with free testers to explore more.",
         ],
       },
       {
@@ -307,11 +307,11 @@ export const ARTICLES: Article[] = [
       { products: ["rogue", "royal-oud", "legacy", "bloom", "blossom"] },
       { h2: "An honest price" },
       {
-        p: "Every 50ml bottle is **PKR 3,000** — premium quality without the premium markup. And our offers are real, not gimmicks: **any two perfumes for PKR 5,000**, or **Buy 2 Get 1 Free** when you take three.",
+        p: "Every 50ml bottle is **PKR 3,000** — premium quality without the premium markup. And our offers are real, not gimmicks: **any two perfumes for PKR 5,000**, or **Buy 3 Get 1 Free** when you take three.",
       },
       { h2: "Try before you commit" },
       {
-        p: "Fragrance is personal, so we take the guesswork out of it. **Every perfume comes with a free 5ml tester** of a different scent — and because that applies to every bottle, a Buy 2 Get 1 Free order (three perfumes) earns you **three free testers**. Explore the whole house before deciding on your signature. Want more testers? They are just PKR 200 each.",
+        p: "Fragrance is personal, so we take the guesswork out of it. **Every perfume comes with a free 5ml tester** of a different scent — and because that applies to every bottle, a Buy 3 Get 1 Free order (three perfumes) earns you **three free testers**. Explore the whole house before deciding on your signature. Want more testers? They are just PKR 200 each.",
       },
       { h2: "Delivered to your door" },
       {

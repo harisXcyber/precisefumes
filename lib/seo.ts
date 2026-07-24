@@ -32,7 +32,7 @@ export const KEYWORDS = [
   "perfume home delivery Pakistan",
   "perfume delivery Karachi",
   // promotion intent
-  "buy 2 get 1 free perfume",
+  "buy 3 get 1 free perfume",
   "perfume deals Pakistan",
   "perfume offers Pakistan",
   "perfume sale Pakistan",
@@ -49,7 +49,7 @@ export const KEYWORDS = [
 
 /** One-line selling proposition reused across descriptions. */
 export const USP =
-  "Premium Extrait de Parfum, 12–14 hour wear, free 5ml tester in every order. Buy 2 for PKR 5,000 or buy 2 get 1 free. Free delivery in Karachi, cash on delivery across Pakistan.";
+  "Premium Extrait de Parfum, 12–14 hour wear, free 5ml tester in every order. Buy 2 for PKR 5,000 or Buy 3 Get 1 Free — 4 perfumes for PKR 8,000. Free delivery in Karachi, cash on delivery across Pakistan.";
 
 /* ── JSON-LD builders ─────────────────────────────────────── */
 
@@ -82,7 +82,7 @@ export function storeLd() {
     image: `${SITE_URL}/logo-dark.png`,
     url: SITE_URL,
     description:
-      "Buy premium perfumes online in Pakistan. Free delivery in Karachi, cash on delivery nationwide, buy 2 get 1 free.",
+      "Buy premium perfumes online in Pakistan. Free delivery in Karachi, cash on delivery nationwide, buy 3 get 1 free.",
     email: "contact@precisefumes.com",
     priceRange: "PKR 3,000",
     currenciesAccepted: "PKR",
