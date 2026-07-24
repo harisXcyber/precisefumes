@@ -1,18 +1,24 @@
 import "server-only";
 import nodemailer from "nodemailer";
 
-/** SMTP via the DirectAdmin mail server (contact@precisefumes.com).
- *  Vercel env vars:
- *    SMTP_HOST  e.g. mail.precisefumes.com
- *    SMTP_PORT  465 (SSL) or 587 (STARTTLS)
- *    SMTP_USER  contact@precisefumes.com
- *    SMTP_PASS  mailbox password
- *    SMTP_FROM  optional display-from, defaults to SMTP_USER
- *  When unset, sends become console logs so flows never break. */
+/** Transactional email. Prefers Resend's HTTP API (reliable from
+ *  serverless) when RESEND_API_KEY is set; otherwise falls back to
+ *  DirectAdmin SMTP; otherwise logs. Env:
+ *    RESEND_API_KEY   Resend key (re_…) — preferred
+ *    EMAIL_FROM       "Precise Fumes <contact@precisefumes.com>"
+ *    SMTP_HOST/PORT/USER/PASS/FROM  legacy SMTP fallback */
+
+const FROM =
+  process.env.EMAIL_FROM ??
+  process.env.SMTP_FROM ??
+  "Precise Fumes <contact@precisefumes.com>";
 
 export function emailConfigured(): boolean {
   return (
-    !!process.env.SMTP_HOST && !!process.env.SMTP_USER && !!process.env.SMTP_PASS
+    !!process.env.RESEND_API_KEY ||
+    (!!process.env.SMTP_HOST &&
+      !!process.env.SMTP_USER &&
+      !!process.env.SMTP_PASS)
   );
 }
 
@@ -29,16 +35,41 @@ function transport(): nodemailer.Transporter {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
     },
-    // Fail fast so a serverless function never hangs on an unreachable
-    // mail host — the caller falls back gracefully.
     connectionTimeout: 8000,
     greetingTimeout: 8000,
     socketTimeout: 8000,
-    // Shared-hosting mail servers often present a cert for a different
-    // hostname; don't reject on that.
     tls: { rejectUnauthorized: false },
   });
   return cached;
+}
+
+/** Send via Resend's HTTP API. */
+async function sendViaResend(opts: {
+  to: string;
+  subject: string;
+  html: string;
+}): Promise<boolean> {
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: FROM,
+        to: [opts.to],
+        subject: opts.subject,
+        html: opts.html,
+      }),
+    });
+    if (res.ok) return true;
+    console.error("[resend failed]", res.status, await res.text());
+    return false;
+  } catch (err) {
+    console.error("[resend error]", err);
+    return false;
+  }
 }
 
 export async function sendEmail(opts: {
@@ -46,18 +77,30 @@ export async function sendEmail(opts: {
   subject: string;
   html: string;
 }): Promise<{ sent: boolean }> {
-  if (!emailConfigured()) {
-    console.log("[email skipped — SMTP not configured]", {
-      to: opts.to,
-      subject: opts.subject,
-    });
+  // Prefer Resend.
+  if (process.env.RESEND_API_KEY) {
+    const ok = await sendViaResend(opts);
+    if (ok) return { sent: true };
+    // fall through to SMTP if Resend failed and SMTP is available
+  }
+
+  const smtpReady =
+    !!process.env.SMTP_HOST &&
+    !!process.env.SMTP_USER &&
+    !!process.env.SMTP_PASS;
+  if (!smtpReady) {
+    if (!process.env.RESEND_API_KEY) {
+      console.log("[email skipped — no provider configured]", {
+        to: opts.to,
+        subject: opts.subject,
+      });
+    }
     return { sent: false };
   }
+
   try {
     await transport().sendMail({
-      from:
-        process.env.SMTP_FROM ??
-        `Precise Fumes <${process.env.SMTP_USER}>`,
+      from: FROM,
       to: opts.to,
       subject: opts.subject,
       html: opts.html,
