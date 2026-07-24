@@ -258,9 +258,14 @@ export function ProductDetail({
             <strong className="text-fg">Free 5ml tester</strong> — every bottle
             comes with a tester of another scent. Extra testers PKR 200.
           </p>
+          <p className="text-fg-soft">
+            <strong className="text-fg">Full money-back guarantee</strong> — if
+            anything's wrong on our side, we refund you in full or replace it
+            free.
+          </p>
           <p className="pt-1 text-xs text-fg-faint">
-            Free delivery in Karachi (2–5 days) · Nationwide PKR 300 (5–7
-            days) · Cash on Delivery available
+            Premium Extrait de Parfum · 12–14 hours · Free delivery in Karachi
+            (2–5 days) · Nationwide PKR 300 (5–7 days) · Cash on Delivery
           </p>
         </div>
 

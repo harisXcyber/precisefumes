@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { Hero } from "@/components/home/hero";
 import { Marquee } from "@/components/home/marquee";
+import { Assurance } from "@/components/home/assurance";
 import { Featured } from "@/components/home/featured";
 import { Categories } from "@/components/home/categories";
 import { Atelier } from "@/components/home/atelier";
@@ -38,6 +39,7 @@ export default async function Home() {
   return (
     <>
       <Hero scents={scents} />
+      <Assurance />
       <Featured products={products} />
       <Categories />
       <Atelier />

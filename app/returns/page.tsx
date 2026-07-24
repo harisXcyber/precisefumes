@@ -15,30 +15,46 @@ export default function Returns() {
 
         <div className="prose prose-invert max-w-none space-y-8 text-base leading-relaxed">
           <section>
+            <div className="rounded-[var(--radius-lg)] border-2 border-accent bg-bg-soft p-6">
+              <h2 className="font-serif text-2xl font-normal mb-3">
+                Our Money-Back Guarantee
+              </h2>
+              <p className="text-fg-soft">
+                If anything is wrong on our side — a defective bottle, a leak, a
+                faulty sprayer, the wrong item, or any valid quality claim — you
+                get a <strong className="text-fg">full refund</strong>, including
+                delivery, or a free replacement. No arguments. Your satisfaction
+                with a Precise Fumes purchase is our responsibility.
+              </p>
+            </div>
+          </section>
+
+          <section>
             <h2 className="font-serif text-2xl font-normal mb-4">
               Return Eligibility
             </h2>
             <p className="text-fg-soft">
-              At Precise Fumes, we stand behind the quality of our fragrances.
-              If you're not completely satisfied with your purchase, we're happy
-              to help. Here's what you need to know about returns.
+              At Precise Fumes, we stand behind the quality of every fragrance.
+              Here's what qualifies for a return or refund.
             </p>
 
             <div className="bg-bg-soft p-6 rounded-[var(--radius)] mt-4 space-y-3 text-fg-soft">
               <p>
+                <strong>Full refund (our fault):</strong> Defective, damaged,
+                leaking, or incorrect items — refunded in full including
+                delivery, or replaced free of charge
+              </p>
+              <p>
                 <strong>Return Window:</strong> 14 days from the date of delivery
               </p>
               <p>
-                <strong>Condition Required:</strong> Products must be unopened
-                and in original packaging
+                <strong>Unopened items:</strong> Sealed bottles in original
+                packaging can be returned within 14 days
               </p>
               <p>
-                <strong>Eligibility:</strong> Returns are accepted for defective,
-                damaged, or incorrect items
-              </p>
-              <p>
-                <strong>Note:</strong> Opened or used fragrances cannot be
-                returned for hygiene reasons
+                <strong>Note:</strong> Opened or used fragrances can't be
+                returned for hygiene reasons — unless the issue is a defect or
+                fault on our side, which is always covered
               </p>
             </div>
           </section>

@@ -9,7 +9,7 @@ const PILLARS = [
   },
   {
     title: "Longevity",
-    body: "High concentration of fine oils for a scent that lingers from morning to midnight.",
+    body: "Extrait de Parfum strength — premium oils that carry a scent 12–14 hours, from morning to midnight.",
   },
   {
     title: "Character",

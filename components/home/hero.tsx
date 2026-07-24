@@ -72,9 +72,9 @@ export function Hero({ scents = [] }: { scents?: HeroScent[] }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.16, ease: EASE_LUX }}
           >
-            Five Extrait de Parfum signatures in 50ml — PKR 3,000 each, with a
-            free 5ml tester in every order. Cash on delivery anywhere in
-            Pakistan.
+            Five premium Extrait de Parfum signatures in 50ml — PKR 3,000 each,
+            12–14 hours of wear, with a free 5ml tester in every order. Cash on
+            delivery anywhere in Pakistan.
           </motion.p>
 
           <motion.div

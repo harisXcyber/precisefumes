@@ -36,7 +36,7 @@ export const EMPTY_PRODUCT: ProductFormValues = {
   notes: { top: [], heart: [], base: [] },
   images: [],
   concentration: "Eau de Parfum",
-  longevity: "8-12 hours",
+  longevity: "12-14 hours",
   stock: 999,
   featured: false,
   active: true,
@@ -473,7 +473,7 @@ export function ProductForm({
               value={v.longevity}
               onChange={(e) => set("longevity", e.target.value)}
               className="w-full"
-              placeholder="8-12 hours"
+              placeholder="12-14 hours"
             />
           </div>
         </div>

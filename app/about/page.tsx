@@ -72,12 +72,19 @@ export default function About() {
 
           <div className="border-t border-border pt-12">
             <h2 className="font-serif text-3xl font-normal mb-6">
-              Available in Pakistan
+              Premium, and Guaranteed
             </h2>
+            <p className="text-lg leading-relaxed text-fg-soft mb-6">
+              Every Precise Fumes scent is an Extrait de Parfum — the most
+              concentrated form of fragrance — built to last 12 to 14 hours on
+              the skin. We're so confident in each piece that we back it with a
+              full money-back guarantee: if anything is ever wrong on our side,
+              we refund you completely or replace it free.
+            </p>
             <p className="text-lg leading-relaxed text-fg-soft mb-6">
               We're proud to serve fragrance enthusiasts across Pakistan, with
               free delivery in Karachi (2–5 working days) and nationwide
-              shipping options available.
+              shipping available.
             </p>
             <Link
               href="/shop"

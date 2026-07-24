@@ -59,12 +59,13 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     a: "Cash on Delivery, anywhere in Pakistan — pay the rider in cash when your parcel arrives. No advance payment is needed. Online payment options are coming soon.",
   },
   {
-    q: "Can I return a perfume?",
+    q: "What if my perfume arrives damaged or wrong?",
     a: (
       <>
-        Yes — unopened bottles in original packaging can be returned within 14
-        days of delivery. Damaged or incorrect items are replaced or refunded
-        in full. See the{" "}
+        We offer a <strong>full money-back guarantee</strong> on anything that's
+        our fault — a defective piece, a leak, the wrong item, or a valid claim.
+        Report it within 14 days with a photo and we'll replace it or refund you
+        in full, including delivery. See the{" "}
         <Link href="/returns" className="link-underline text-fg">
           returns policy
         </Link>{" "}
@@ -74,7 +75,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Are the fragrances long-lasting?",
-    a: "Yes. Our compositions use a high concentration of fine fragrance oils for 8–12 hours of wear, depending on the scent and your skin.",
+    a: "Very. Each is an Extrait de Parfum — the most concentrated form — built on premium fragrance oils for 12–14 hours of wear, depending on the scent and your skin.",
   },
   {
     q: "How do I contact you?",
