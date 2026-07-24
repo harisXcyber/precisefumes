@@ -15,6 +15,7 @@ const NAV_LINKS = [
   { href: "/shop?category=Him", label: "For Him" },
   { href: "/shop?category=Her", label: "For Her" },
   { href: "/about", label: "About" },
+  { href: "/blog", label: "Journal" },
   { href: "/contact", label: "Contact" },
   { href: "/affiliate/signup", label: "Affiliate" },
 ];

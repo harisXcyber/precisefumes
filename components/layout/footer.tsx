@@ -12,6 +12,7 @@ const SHOP_LINKS = [
 
 const INFO_LINKS = [
   { href: "/about", label: "Our Story" },
+  { href: "/blog", label: "Journal" },
   { href: "/contact", label: "Contact" },
   { href: "/faq", label: "FAQ" },
   { href: "/shipping", label: "Shipping Policy" },
@@ -208,18 +209,25 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 text-xs text-fg-faint sm:flex-row">
-          <p>© {year} Precise Fumes. All rights reserved.</p>
+          <div className="flex flex-col items-center gap-1 sm:items-start">
+            <p>© {year} Precise Fumes. All rights reserved.</p>
+            <p>
+              Powered by{" "}
+              <a
+                href="https://harishere.com"
+                target="_blank"
+                rel="noopener"
+                className="text-fg-soft underline-offset-2 transition-colors hover:text-accent hover:underline"
+              >
+                harishere.com
+              </a>
+            </p>
+          </div>
           <div className="flex items-center gap-6">
-            <Link
-              href="/privacy"
-              className="transition-colors hover:text-fg"
-            >
+            <Link href="/privacy" className="transition-colors hover:text-fg">
               Privacy Policy
             </Link>
-            <Link
-              href="/terms"
-              className="transition-colors hover:text-fg"
-            >
+            <Link href="/terms" className="transition-colors hover:text-fg">
               Terms of Service
             </Link>
           </div>

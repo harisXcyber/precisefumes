@@ -1,37 +1,40 @@
 import type { Product } from "@/types";
 
-/** Placeholder catalog used until Supabase is connected.
- *  The shop/product pages read from here as a fallback so the
- *  site is fully browsable during development. */
+/** Precise Fumes catalog: 5 luxury fragrances.
+ *  Offline fallback — the live catalog lives in the Supabase
+ *  `products` table and is managed from the admin panel. Keep this
+ *  in sync so the storefront still renders if the DB is unreachable. */
 export const MOCK_PRODUCTS: Product[] = [
   {
     id: "1",
     name: "Rogue",
     slug: "rogue",
-    tagline: "Bold. Daring. Unmistakable.",
+    tagline: "Fresh. Spicy. Magnetic.",
     description:
-      "A masterful composition of spiced notes and dark woods, Rogue is the signature of a man who refuses to be confined. Leather, cardamom, and a whisper of oud create a trail that lingers long after you've left the room.",
+      "A radiant, spicy-fresh signature — bright bergamot and cracked pepper settling into warm amber woods. Rogue is effortlessly versatile: clean enough for the office, magnetic enough for the night. A bold, modern crowd-pleaser that turns heads without ever trying too hard.",
     category: "Him",
     price: 3000,
     compareAtPrice: undefined,
     sizes: [{ label: "50ml", price: 3000, stock: 999 }],
     notes: {
-      top: ["Cardamom", "Black Pepper"],
-      heart: ["Leather", "Geranium", "Oud"],
-      base: ["Cedarwood", "Vetiver", "Musk"],
+      top: ["Bergamot", "Sichuan Pepper"],
+      heart: ["Lavender", "Geranium", "Star Anise"],
+      base: ["Amberwood", "Cedar", "Ambergris"],
     },
     images: ["/rogue.jpg"],
     stock: 999,
     featured: true,
     active: true,
+    concentration: "Extrait de Parfum",
+    longevity: "12-14 hours",
   },
   {
     id: "2",
     name: "Royal Oud",
     slug: "royal-oud",
-    tagline: "Ancient. Regal. Timeless.",
+    tagline: "Rich. Smoky. Regal.",
     description:
-      "A luxurious oriental built on the foundation of aged oud, Royal Oud speaks the language of tradition and sophistication. Notes of warm spices, honeyed amber, and precious resins create a symphony of warmth that evolves throughout the day.",
+      "An opulent Arabian-style oriental built on aged oud, warmed by saffron, rose and sweet resins. Royal Oud is deep, smoky and unmistakably luxurious — a commanding, long-lasting scent for those who want to be remembered. Endlessly rich and sophisticated.",
     category: "Him",
     price: 3000,
     compareAtPrice: undefined,
@@ -45,69 +48,77 @@ export const MOCK_PRODUCTS: Product[] = [
     stock: 999,
     featured: true,
     active: true,
+    concentration: "Extrait de Parfum",
+    longevity: "12-14 hours",
   },
   {
     id: "3",
     name: "Bloom",
     slug: "bloom",
-    tagline: "Fresh. Luminous. Alive.",
+    tagline: "Soft. Fresh. Feminine.",
     description:
-      "Like stepping into a garden in full bloom, this fragrance captures the delicate beauty of spring florals touched by morning dew. A fleeting blend of peony, jasmine, and green notes that feels both timeless and undeniably modern.",
+      "A soft, fresh feminine floral — delicate jasmine and freesia lifted by a dewy green brightness. Bloom is pretty without ever feeling heavy, the kind of gentle, elegant scent that feels effortless every single day. Clean, romantic and quietly captivating.",
     category: "Her",
     price: 3000,
     compareAtPrice: undefined,
     sizes: [{ label: "50ml", price: 3000, stock: 999 }],
     notes: {
-      top: ["Lemon Verbena", "Pink Pepper"],
-      heart: ["Peony", "Jasmine", "Lily of the Valley"],
-      base: ["White Musk", "Cedarwood"],
+      top: ["Bergamot", "Green Notes"],
+      heart: ["Jasmine", "Freesia", "Rose"],
+      base: ["White Musk", "Soft Woods"],
     },
     images: ["/bloom.jpg"],
     stock: 999,
     featured: true,
     active: true,
+    concentration: "Extrait de Parfum",
+    longevity: "12-14 hours",
   },
   {
     id: "4",
     name: "Blossom",
     slug: "blossom",
-    tagline: "Soft. Sensual. Unforgettable.",
+    tagline: "Romantic. Floral. Radiant.",
     description:
-      "Blossom is an interpretation of romance in fragrance form. Creamy florals meet soft vanillic notes to create a tender, enveloping scent that whispers rather than shouts. It's the fragrance equivalent of silk against skin.",
+      "A radiant rose-and-peony bouquet — a bright, romantic floral that blooms on the skin. Blossom is feminine and joyful, a fresh garden of petals wrapped in soft musk. Elegant, uplifting and made to be noticed, morning to night.",
     category: "Her",
     price: 3000,
     compareAtPrice: undefined,
     sizes: [{ label: "50ml", price: 3000, stock: 999 }],
     notes: {
-      top: ["Bergamot", "Neroli"],
-      heart: ["Magnolia", "Red Rose", "Orchid"],
-      base: ["Vanilla", "Tonka Bean", "Musk"],
+      top: ["Citrus", "Pink Pepper"],
+      heart: ["Rose", "Peony", "Osmanthus"],
+      base: ["White Musk", "Sandalwood"],
     },
     images: ["/blossom.jpg"],
     stock: 999,
     featured: true,
     active: true,
+    concentration: "Extrait de Parfum",
+    longevity: "12-14 hours",
   },
   {
     id: "5",
     name: "Legacy",
     slug: "legacy",
-    tagline: "Timeless. Distinguished. Enduring.",
+    tagline: "Bold. Fruity. Iconic.",
     description:
-      "A refined aromatic that stands the test of time, Legacy is inspired by the classics while remaining distinctly contemporary. Crisp spices and clean woods form the backbone of a scent that is equally at home in the boardroom or on an evening out.",
+      "A bold, fruity-smoky powerhouse — juicy pineapple and blackcurrant over a signature smoky birch and musk. Legacy is confident and prestigious, the scent of someone who owns the room. Rich, fresh and unmistakably premium.",
     category: "Him",
     price: 3000,
     compareAtPrice: undefined,
     sizes: [{ label: "50ml", price: 3000, stock: 999 }],
     notes: {
-      top: ["Grapefruit", "Coriander"],
-      heart: ["Sage", "Lavender", "Cedar"],
-      base: ["Vetiver", "Oakmoss", "White Musk"],
+      top: ["Pineapple", "Bergamot", "Blackcurrant"],
+      heart: ["Birch", "Patchouli", "Rose"],
+      base: ["Musk", "Oakmoss", "Ambergris"],
     },
     images: ["/legacy.jpg"],
     stock: 999,
     featured: false,
     active: true,
+    concentration: "Extrait de Parfum",
+    longevity: "12-14 hours",
   },
 ];
 

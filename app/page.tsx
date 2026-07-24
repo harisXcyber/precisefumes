@@ -5,6 +5,8 @@ import { Assurance } from "@/components/home/assurance";
 import { Featured } from "@/components/home/featured";
 import { Categories } from "@/components/home/categories";
 import { Atelier } from "@/components/home/atelier";
+import { TesterOffer } from "@/components/home/tester-offer";
+import { GiftBag } from "@/components/home/gift-bag";
 import { Story } from "@/components/home/story";
 import { SeoContent } from "@/components/home/seo-content";
 import { CTA } from "@/components/home/cta";
@@ -44,6 +46,8 @@ export default async function Home() {
       <Assurance />
       <Featured products={products} />
       <Categories />
+      <TesterOffer />
+      <GiftBag />
       <Atelier />
       <Story />
       <Marquee />

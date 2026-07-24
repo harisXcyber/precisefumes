@@ -263,6 +263,10 @@ export function ProductDetail({
             anything's wrong on our side, we refund you in full or replace it
             free.
           </p>
+          <p className="text-fg-soft">
+            <strong className="text-fg">Free premium gift bag</strong> — every
+            bottle arrives gift-wrapped, ready to give.
+          </p>
           <p className="pt-1 text-xs text-fg-faint">
             Premium Extrait de Parfum · 12–14 hours · Free delivery in Karachi
             (2–5 days) · Nationwide PKR 300 (5–7 days) · Cash on Delivery
