@@ -75,7 +75,7 @@ export default function RootLayout({
     sameAs: [
       "https://instagram.com/precisefumes",
       "https://facebook.com/precisefumes",
-      "https://twitter.com/precisefumes",
+      "https://linkedin.com/company/precisefumes",
     ],
     areaServed: {
       "@type": "Country",

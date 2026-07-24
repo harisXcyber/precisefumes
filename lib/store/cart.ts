@@ -4,8 +4,23 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { CartItem } from "@/types";
 
+export const TESTER_PRICE = 200;
+const BASE_PRICE = 3000;
+const BUNDLE_TOTAL = 5000;
+
 interface PromoInfo {
   type: "bundle" | "free-item" | null;
+  discountAmount: number;
+  description: string;
+}
+
+interface TesterInfo {
+  /** How many free testers the cart has earned (1 per perfume). */
+  allowance: number;
+  /** How many of those are actually being used right now. */
+  freeApplied: number;
+  /** Free testers still unclaimed — drives the "pick your free tester" nudge. */
+  unused: number;
   discountAmount: number;
   description: string;
 }
@@ -28,13 +43,19 @@ interface CartState {
   // derived
   itemCount: () => number;
   subtotal: () => number;
+  perfumeItems: () => CartItem[];
+  testerItems: () => CartItem[];
   getPromoInfo: () => PromoInfo;
+  getTesterInfo: () => TesterInfo;
   total: () => number;
 }
 
-/** A cart line is uniquely identified by productId + size. */
+/** A cart line is uniquely identified by productId + size, so a scent's
+ *  50ml bottle and its 5ml tester are separate lines. */
 const sameLine = (a: CartItem, productId: string, size: string) =>
   a.productId === productId && a.size === size;
+
+const isTester = (i: CartItem) => i.kind === "tester";
 
 export const useCart = create<CartState>()(
   persist(
@@ -81,24 +102,24 @@ export const useCart = create<CartState>()(
       closeCart: () => set({ isOpen: false }),
       toggleCart: () => set((state) => ({ isOpen: !state.isOpen })),
 
-      itemCount: () =>
-        get().items.reduce((sum, i) => sum + i.quantity, 0),
+      itemCount: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
       subtotal: () =>
         get().items.reduce((sum, i) => sum + i.price * i.quantity, 0),
+
+      perfumeItems: () => get().items.filter((i) => !isTester(i)),
+      testerItems: () => get().items.filter(isTester),
+
+      /** Bottle offers. Testers never count toward these. */
       getPromoInfo: () => {
-        const items = get().items;
-        if (items.length === 0) {
+        const perfumes = get().perfumeItems();
+        if (perfumes.length === 0) {
           return { type: null, discountAmount: 0, description: "" };
         }
 
-        // Expand cart lines into individual bottle prices.
-        const unitPrices = items
+        const unitPrices = perfumes
           .flatMap((i) => Array(i.quantity).fill(i.price) as number[])
           .sort((a, b) => a - b);
         const totalQuantity = unitPrices.length;
-
-        const BASE_PRICE = 3000;
-        const BUNDLE_TOTAL = 5000;
 
         // Buy 2 Get 1 Free: for every 3 bottles, the cheapest is free.
         if (totalQuantity >= 3) {
@@ -117,10 +138,7 @@ export const useCart = create<CartState>()(
         }
 
         // Bundle: exactly 2 standard (PKR 3,000) bottles for PKR 5,000.
-        if (
-          totalQuantity === 2 &&
-          unitPrices.every((p) => p === BASE_PRICE)
-        ) {
+        if (totalQuantity === 2 && unitPrices.every((p) => p === BASE_PRICE)) {
           return {
             type: "bundle",
             discountAmount: BASE_PRICE * 2 - BUNDLE_TOTAL,
@@ -130,14 +148,49 @@ export const useCart = create<CartState>()(
 
         return { type: null, discountAmount: 0, description: "" };
       },
+
+      /** Every bottle earns one free 5ml tester, and it has to be a scent
+       *  you didn't just buy. Extra testers — including of the scent you
+       *  bought — stay at PKR 200 each. */
+      getTesterInfo: () => {
+        const perfumes = get().perfumeItems();
+        const testers = get().testerItems();
+
+        const allowance = perfumes.reduce((sum, i) => sum + i.quantity, 0);
+        const purchasedSlugs = new Set(perfumes.map((i) => i.slug));
+
+        const eligibleUnits = testers
+          .filter((t) => !purchasedSlugs.has(t.slug))
+          .reduce((sum, t) => sum + t.quantity, 0);
+
+        const freeApplied = Math.min(allowance, eligibleUnits);
+        const unused = Math.max(0, allowance - freeApplied);
+
+        return {
+          allowance,
+          freeApplied,
+          unused,
+          discountAmount: freeApplied * TESTER_PRICE,
+          description:
+            freeApplied === 1
+              ? "Free tester with your perfume"
+              : `${freeApplied} free testers with your perfumes`,
+        };
+      },
+
       total: () => {
         const subtotal = get().subtotal();
         const promo = get().getPromoInfo();
-        return Math.max(0, subtotal - promo.discountAmount);
+        const testers = get().getTesterInfo();
+        return Math.max(
+          0,
+          subtotal - promo.discountAmount - testers.discountAmount
+        );
       },
     }),
     {
       name: "pf-cart",
+      version: 2,
       partialize: (state) => ({ items: state.items }),
     }
   )

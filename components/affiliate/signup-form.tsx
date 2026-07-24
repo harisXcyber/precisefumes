@@ -158,9 +158,13 @@ export function AffiliateSignupForm() {
 
       {/* Banking Info */}
       <fieldset className="space-y-4 pt-6 border-t border-border">
-        <legend className="font-serif text-xl font-normal mb-6">
+        <legend className="font-serif text-xl font-normal mb-2">
           Payment Details
         </legend>
+        <p className="mb-6 text-xs leading-relaxed text-fg-soft">
+          This is the account we'll transfer your PKR 300 commission to for
+          every sale made with your coupon code.
+        </p>
 
         <div>
           <label className="block pf-label mb-4">Preferred Payment Method</label>

@@ -26,11 +26,18 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const products = await getProducts({ featured: true });
+  const all = await getProducts();
+  const products = all.filter((p) => p.featured);
+  const scents = all.map((p) => ({
+    name: p.name,
+    slug: p.slug,
+    category: p.category,
+    image: p.images?.[0] ?? "",
+  }));
 
   return (
     <>
-      <Hero />
+      <Hero scents={scents} />
       <Featured products={products} />
       <Categories />
       <Atelier />

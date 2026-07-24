@@ -30,6 +30,7 @@ export function ProductCard({ product }: { product: Product }) {
       size: size?.label ?? "One size",
       price: size?.price ?? product.price,
       quantity: 1,
+      kind: "perfume",
     });
   };
 
@@ -53,7 +54,7 @@ export function ProductCard({ product }: { product: Product }) {
           alt={product.name}
           fill
           sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
-          className="object-contain p-6"
+          className="object-cover"
         />
 
         {/* Badges */}

@@ -2,7 +2,12 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { getProduct, getRelatedProducts, getProductSlugs } from "@/lib/products";
+import {
+  getProduct,
+  getRelatedProducts,
+  getProductSlugs,
+  getProducts,
+} from "@/lib/products";
 import { ProductDetail } from "@/components/shop/product-detail";
 import { ProductCard } from "@/components/shop/product-card";
 import { Reveal } from "@/components/ui/reveal";
@@ -44,6 +49,13 @@ export default async function ProductPage({ params }: PageProps) {
   if (!product) notFound();
 
   const related = await getRelatedProducts(product);
+  const all = await getProducts();
+  const testerOptions = all.map((p) => ({
+    id: p.id,
+    name: p.name,
+    slug: p.slug,
+    image: p.images?.[0] ?? "",
+  }));
 
   return (
     <div className="pt-32 md:pt-36">
@@ -64,7 +76,7 @@ export default async function ProductPage({ params }: PageProps) {
 
       {/* Detail */}
       <Reveal className="mt-8">
-        <ProductDetail product={product} />
+        <ProductDetail product={product} testerOptions={testerOptions} />
       </Reveal>
 
       {/* Related */}

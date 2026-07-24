@@ -21,7 +21,7 @@ const CITIES = [
 ];
 
 export function CheckoutClient() {
-  const { items, subtotal, getPromoInfo } = useCart();
+  const { items, subtotal, getPromoInfo, getTesterInfo } = useCart();
 
   // Persisted cart loads on the client only — render after mount
   // to avoid a server/client hydration mismatch.
@@ -63,10 +63,11 @@ export function CheckoutClient() {
 
   const subtotalAmount = subtotal();
   const promo = getPromoInfo();
+  const tester = getTesterInfo();
 
   // Affiliate savings: each standard PKR 3,000 bottle drops to PKR 2,500.
   const standardUnits = items
-    .filter((i) => i.price === BASE_PRICE)
+    .filter((i) => i.kind !== "tester" && i.price === BASE_PRICE)
     .reduce((sum, i) => sum + i.quantity, 0);
   const affiliateSavings = appliedCode
     ? standardUnits * (BASE_PRICE - AFFILIATE_PRICE)
@@ -83,7 +84,10 @@ export function CheckoutClient() {
     ? `Bonus code ${appliedCode} — PKR 2,500 per perfume`
     : promo.description;
 
-  const cartTotal = Math.max(0, subtotalAmount - activeDiscount);
+  const cartTotal = Math.max(
+    0,
+    subtotalAmount - activeDiscount - tester.discountAmount
+  );
   const isKarachi = city === "Karachi";
   const shippingFee = city === "" ? 0 : isKarachi ? 0 : 300;
   const shippingLabel =
@@ -168,7 +172,8 @@ export function CheckoutClient() {
         : null,
       items,
       subtotal: subtotalAmount,
-      discount: activeDiscount,
+      discount: activeDiscount + tester.discountAmount,
+      freeTesters: tester.freeApplied,
       total: finalTotal,
     };
 
@@ -249,6 +254,15 @@ export function CheckoutClient() {
               </div>
             )}
 
+            {tester.discountAmount > 0 && (
+              <div className="flex justify-between gap-4 text-accent-deep">
+                <span>{tester.description}</span>
+                <span className="tabular-nums">
+                  −{formatPrice(tester.discountAmount)}
+                </span>
+              </div>
+            )}
+
             <div className="flex justify-between">
               <span className="text-fg-soft">Delivery</span>
               <span className="text-right">{shippingLabel}</span>
@@ -261,6 +275,13 @@ export function CheckoutClient() {
           </div>
 
           {/* Offer hint — crystal clear */}
+          {tester.unused > 0 && (
+            <p className="mt-5 rounded-[var(--radius)] bg-accent/15 p-3.5 text-xs leading-relaxed text-accent-deep">
+              You have {tester.unused} free 5ml tester
+              {tester.unused === 1 ? "" : "s"} unclaimed. Add one from any
+              product page before you order.
+            </p>
+          )}
           {promo.type === null && !appliedCode && (
             <p className="mt-5 rounded-[var(--radius)] bg-bg p-3.5 text-xs leading-relaxed text-fg-soft">
               💡 Add a second perfume for the{" "}

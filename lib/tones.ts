@@ -1,8 +1,8 @@
-/** Per-scent colour identities — used for product card backdrops,
- *  detail-page glows, and hover shadows. Chosen to read well on
- *  both light and dark themes. */
+/** Per-scent colour identities, taken from the actual bottle glass:
+ *  Rogue emerald, Royal Oud black-gold, Bloom violet, Blossom crimson,
+ *  Legacy sapphire. Used for hover glows, hero tiles and accents. */
 export interface ScentTone {
-  /** CSS gradient for card/detail backdrops */
+  /** CSS gradient for tiles and fallback backdrops */
   gradient: string;
   /** Glow shadow colour (rgba) */
   glow: string;
@@ -13,39 +13,39 @@ export interface ScentTone {
 const TONES: Record<string, ScentTone> = {
   rogue: {
     gradient:
-      "linear-gradient(150deg, rgba(160,82,45,0.28), rgba(80,42,28,0.42))",
-    glow: "rgba(160, 82, 45, 0.35)",
-    solid: "#a0522d",
+      "linear-gradient(155deg, rgba(16,74,54,0.92), rgba(9,38,29,0.96))",
+    glow: "rgba(22, 122, 88, 0.45)",
+    solid: "#167a58",
   },
   "royal-oud": {
     gradient:
-      "linear-gradient(150deg, rgba(138,111,184,0.26), rgba(64,48,96,0.42))",
-    glow: "rgba(138, 111, 184, 0.35)",
-    solid: "#8a6fb8",
+      "linear-gradient(155deg, rgba(32,26,18,0.95), rgba(12,10,8,0.97))",
+    glow: "rgba(201, 154, 78, 0.45)",
+    solid: "#c99a4e",
   },
   bloom: {
     gradient:
-      "linear-gradient(150deg, rgba(196,106,114,0.26), rgba(140,62,80,0.38))",
-    glow: "rgba(196, 106, 114, 0.35)",
-    solid: "#c46a72",
+      "linear-gradient(155deg, rgba(74,32,102,0.92), rgba(34,14,48,0.96))",
+    glow: "rgba(138, 79, 176, 0.45)",
+    solid: "#8a4fb0",
   },
   blossom: {
     gradient:
-      "linear-gradient(150deg, rgba(233,150,122,0.28), rgba(160,80,70,0.4))",
-    glow: "rgba(233, 150, 122, 0.35)",
-    solid: "#e9967a",
+      "linear-gradient(155deg, rgba(120,18,44,0.92), rgba(56,10,24,0.96))",
+    glow: "rgba(186, 40, 70, 0.45)",
+    solid: "#ba2846",
   },
   legacy: {
     gradient:
-      "linear-gradient(150deg, rgba(78,143,134,0.26), rgba(38,78,72,0.42))",
-    glow: "rgba(78, 143, 134, 0.35)",
-    solid: "#4e8f86",
+      "linear-gradient(155deg, rgba(18,48,110,0.92), rgba(9,20,48,0.96))",
+    glow: "rgba(38, 92, 190, 0.45)",
+    solid: "#265cbe",
   },
 };
 
 const FALLBACK: ScentTone = {
   gradient:
-    "linear-gradient(150deg, rgba(201,154,78,0.24), rgba(110,80,40,0.4))",
+    "linear-gradient(155deg, rgba(201,154,78,0.24), rgba(110,80,40,0.4))",
   glow: "rgba(201, 154, 78, 0.35)",
   solid: "#c99a4e",
 };

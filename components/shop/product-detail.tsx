@@ -8,8 +8,15 @@ import type { Product } from "@/types";
 import { formatPrice } from "@/lib/utils";
 import { useCart } from "@/lib/store/cart";
 import { getScentTone } from "@/lib/tones";
+import { TesterPicker, type TesterOption } from "@/components/shop/tester-picker";
 
-export function ProductDetail({ product }: { product: Product }) {
+export function ProductDetail({
+  product,
+  testerOptions = [],
+}: {
+  product: Product;
+  testerOptions?: TesterOption[];
+}) {
   const addItem = useCart((s) => s.addItem);
 
   const [activeImage, setActiveImage] = useState(0);
@@ -38,6 +45,7 @@ export function ProductDetail({ product }: { product: Product }) {
       size: selectedSize.label,
       price: selectedSize.price,
       quantity: qty,
+      kind: "perfume",
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
@@ -66,7 +74,7 @@ export function ProductDetail({ product }: { product: Product }) {
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-contain p-10"
+                className="object-cover"
               />
             </motion.div>
           </AnimatePresence>
@@ -90,7 +98,7 @@ export function ProductDetail({ product }: { product: Product }) {
                   alt={`${product.name} ${i + 1}`}
                   fill
                   sizes="80px"
-                  className="object-contain p-2"
+                  className="object-cover"
                 />
               </button>
             ))}
@@ -220,6 +228,16 @@ export function ProductDetail({ product }: { product: Product }) {
           </p>
         )}
 
+        {/* Testers */}
+        {testerOptions.length > 0 && (
+          <div className="mt-8 rounded-[var(--radius-lg)] border border-border bg-bg-soft p-5">
+            <TesterPicker
+              options={testerOptions}
+              currentSlug={product.slug}
+            />
+          </div>
+        )}
+
         {/* Offers — always crystal clear */}
         <div className="mt-8 space-y-2 rounded-[var(--radius-lg)] border border-border bg-bg-soft p-5 text-sm">
           <p className="pf-eyebrow">Offers on this fragrance</p>
@@ -235,6 +253,10 @@ export function ProductDetail({ product }: { product: Product }) {
             <strong className="text-fg">Launch bonus — save up to PKR 500</strong>{" "}
             — apply an affiliate bonus code at checkout and single perfumes
             drop to PKR 2,500.
+          </p>
+          <p className="text-fg-soft">
+            <strong className="text-fg">Free 5ml tester</strong> — every bottle
+            comes with a tester of another scent. Extra testers PKR 200.
           </p>
           <p className="pt-1 text-xs text-fg-faint">
             Free delivery in Karachi (2–5 days) · Nationwide PKR 300 (5–7

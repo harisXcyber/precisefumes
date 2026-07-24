@@ -43,7 +43,9 @@ export interface Product {
   updatedAt?: string;
 }
 
-/** A line in the cart. */
+/** A line in the cart. A "tester" is a 5ml sample of a scent. */
+export type CartItemKind = "perfume" | "tester";
+
 export interface CartItem {
   productId: string;
   name: string;
@@ -52,6 +54,8 @@ export interface CartItem {
   size: string; // size label
   price: number; // unit price for chosen size
   quantity: number;
+  /** Absent on older persisted carts — treat as "perfume". */
+  kind?: CartItemKind;
 }
 
 export type PaymentMethod = "cod" | "bank_transfer";

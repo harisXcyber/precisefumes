@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const FAQS: { q: string; a: React.ReactNode }[] = [
   {
     q: "How much do the perfumes cost?",
-    a: "Every Precise Fumes fragrance comes in a 50ml bottle for PKR 3,000. Five scents are in stock now — and a special edition perfume is currently in the making.",
+    a: "Every Precise Fumes fragrance is an Extrait de Parfum in a 50ml bottle for PKR 3,000. Five scents are in stock now — and a special edition perfume is currently in the making.",
   },
   {
     q: "How does the 2-for-PKR-5,000 bundle work?",
@@ -45,6 +45,10 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
         JazzCash account.
       </>
     ),
+  },
+  {
+    q: "What are the free 5ml testers?",
+    a: "Every perfume you buy comes with one free 5ml tester of a different scent — so if you order Blossom, you can pick a free tester of Rogue, Royal Oud, Bloom or Legacy. Want more? Extra testers are PKR 200 each, and those can be any scent, including the one you bought. Add them from any product page.",
   },
   {
     q: "How long does delivery take and what does it cost?",

@@ -17,6 +17,7 @@ export function CartDrawer() {
     updateQuantity,
     subtotal,
     getPromoInfo,
+    getTesterInfo,
     total: getTotal,
   } = useCart();
 
@@ -45,6 +46,9 @@ export function CartDrawer() {
 
   const subtotalAmount = mounted ? subtotal() : 0;
   const promo = mounted ? getPromoInfo() : { type: null, discountAmount: 0, description: "" };
+  const tester = mounted
+    ? getTesterInfo()
+    : { allowance: 0, freeApplied: 0, unused: 0, discountAmount: 0, description: "" };
   const cartTotal = mounted ? getTotal() : 0;
   const lines = mounted ? items : [];
 
@@ -235,12 +239,29 @@ export function CartDrawer() {
                 </div>
 
                 {promo.discountAmount > 0 && (
-                  <div className="mb-2 flex items-center justify-between text-accent">
+                  <div className="mb-2 flex items-center justify-between text-accent-deep">
                     <span className="text-xs">{promo.description}</span>
                     <span className="text-sm tabular-nums">
                       −{formatPrice(promo.discountAmount)}
                     </span>
                   </div>
+                )}
+
+                {tester.discountAmount > 0 && (
+                  <div className="mb-2 flex items-center justify-between text-accent-deep">
+                    <span className="text-xs">{tester.description}</span>
+                    <span className="text-sm tabular-nums">
+                      −{formatPrice(tester.discountAmount)}
+                    </span>
+                  </div>
+                )}
+
+                {tester.unused > 0 && (
+                  <p className="mb-3 rounded-[var(--radius)] bg-accent/15 px-3 py-2 text-xs leading-relaxed text-accent-deep">
+                    You have {tester.unused} free 5ml tester
+                    {tester.unused === 1 ? "" : "s"} to claim — add one of a
+                    scent you haven&apos;t bought from any product page.
+                  </p>
                 )}
 
                 <div className="mb-4 flex items-center justify-between border-t border-border pt-2">

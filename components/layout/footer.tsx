@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
-import { Instagram, Mail, Phone, MessageCircle } from "lucide-react";
+import { Instagram, Mail, Phone, MessageCircle, Facebook, Linkedin } from "lucide-react";
 
 const SHOP_LINKS = [
   { href: "/shop", label: "All Fragrances" },
@@ -108,6 +108,24 @@ export function Footer() {
                 className="text-fg-soft transition-colors hover:text-accent"
               >
                 <Instagram className="h-5 w-5" strokeWidth={1.5} />
+              </a>
+              <a
+                href="https://facebook.com/precisefumes"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="text-fg-soft transition-colors hover:text-accent"
+              >
+                <Facebook className="h-5 w-5" strokeWidth={1.5} />
+              </a>
+              <a
+                href="https://linkedin.com/company/precisefumes"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="text-fg-soft transition-colors hover:text-accent"
+              >
+                <Linkedin className="h-5 w-5" strokeWidth={1.5} />
               </a>
               <a
                 href="https://wa.me/923000000000"
