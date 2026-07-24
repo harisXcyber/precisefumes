@@ -247,7 +247,7 @@ export function ProductDetail({
 
         {/* Testers */}
         {testerOptions.length > 0 && (
-          <div className="mt-8 rounded-[var(--radius-lg)] border border-border bg-bg-soft p-5">
+          <div className="mt-10 rounded-[var(--radius-lg)] border border-border bg-bg-soft p-6 md:p-7">
             <TesterPicker
               options={testerOptions}
               currentSlug={product.slug}
@@ -256,7 +256,7 @@ export function ProductDetail({
         )}
 
         {/* Offers — always crystal clear */}
-        <div className="mt-8 space-y-2 rounded-[var(--radius-lg)] border border-border bg-bg-soft p-5 text-sm">
+        <div className="mt-10 space-y-2.5 rounded-[var(--radius-lg)] border border-border bg-bg-soft p-6 md:p-7 text-sm">
           <p className="pf-eyebrow">Offers on this fragrance</p>
           <p className="text-fg-soft">
             <strong className="text-fg">Any 2 for PKR 5,000</strong> — pair it

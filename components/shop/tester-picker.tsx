@@ -76,7 +76,7 @@ export function TesterPicker({
       )}
 
       <ul
-        className={`mt-4 grid gap-2 ${
+        className={`mt-5 grid gap-3 ${
           compact ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2"
         }`}
       >
@@ -89,7 +89,7 @@ export function TesterPicker({
           return (
             <li
               key={o.slug}
-              className="flex items-center gap-3 rounded-[var(--radius)] border border-border p-2.5"
+              className="flex items-center gap-3.5 rounded-[var(--radius)] border border-border bg-bg p-3"
             >
               <span
                 className="relative h-12 w-12 shrink-0 overflow-hidden rounded-[var(--radius)]"

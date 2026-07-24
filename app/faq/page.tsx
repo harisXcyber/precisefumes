@@ -35,7 +35,7 @@ const FAQS: { q: string; a: React.ReactNode; plain?: string }[] = [
         Bonus codes come from our affiliates. Enter one at checkout and single
         perfumes drop from PKR 3,000 to PKR 2,500 each. Bonus codes apply to
         single perfumes only — they don't combine with the bundle or
-        Buy&nbsp;2&nbsp;Get&nbsp;1&nbsp;Free offers. If both could apply, we
+        Buy&nbsp;3&nbsp;Get&nbsp;1&nbsp;Free offers. If both could apply, we
         automatically give you whichever saves you more.
       </>
     ),
