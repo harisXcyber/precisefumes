@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { CartDrawer } from "@/components/cart/cart-drawer";
+import { WhatsAppButton } from "@/components/layout/whatsapp-button";
 
 /** The storefront header, footer and cart. Hidden inside /admin,
  *  which has its own chrome. */
@@ -20,6 +21,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
       <main className="min-h-screen">{children}</main>
       <Footer />
       <CartDrawer />
+      <WhatsAppButton />
     </>
   );
 }

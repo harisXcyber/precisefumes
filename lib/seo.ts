@@ -84,9 +84,17 @@ export function storeLd() {
     description:
       "Buy premium perfumes online in Pakistan. Free delivery in Karachi, cash on delivery nationwide, buy 3 get 1 free.",
     email: "contact@precisefumes.com",
+    telephone: "+92 317 2388450",
     priceRange: "PKR 3,000",
     currenciesAccepted: "PKR",
     paymentAccepted: "Cash on Delivery",
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: "+92 317 2388450",
+      contactType: "customer service",
+      contactOption: "TollFree",
+      availableLanguage: ["Urdu", "English"],
+    },
     address: {
       "@type": "PostalAddress",
       addressLocality: "Karachi",

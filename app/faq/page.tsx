@@ -95,22 +95,17 @@ const FAQS: { q: string; a: React.ReactNode; plain?: string }[] = [
     q: "How do I contact you?",
     a: (
       <>
-        Email{" "}
-        <a
-          href="mailto:contact@precisefumes.com"
-          className="link-underline text-fg"
-        >
-          contact@precisefumes.com
-        </a>{" "}
-        or use the{" "}
+        The fastest way is <strong>WhatsApp: 0317 2388450</strong> — message us
+        to order, ask about a scent, or check your delivery, and we reply within
+        minutes during business hours (Mon–Sat, 10:00–19:00 PKT). You can also{" "}
         <Link href="/contact" className="link-underline text-fg">
-          contact form
-        </Link>
-        . We reply within 24 hours, Monday–Saturday, 10:00–19:00 PKT.
+          use the contact form
+        </Link>{" "}
+        or email contact@precisefumes.com, though WhatsApp is always quickest.
       </>
     ),
     plain:
-      "Email contact@precisefumes.com or use the contact form. We reply within 24 hours, Monday to Saturday, 10:00 to 19:00 PKT.",
+      "The fastest way to reach us is WhatsApp at 0317 2388450 — message us to order, ask about a scent, or check your delivery, and we reply within minutes during business hours (Mon–Sat, 10:00–19:00 PKT). You can also use the contact form or email contact@precisefumes.com.",
   },
 ];
 

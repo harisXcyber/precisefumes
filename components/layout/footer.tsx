@@ -2,7 +2,9 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
-import { Instagram, Mail, Phone, MessageCircle, Facebook, Linkedin } from "lucide-react";
+import { Instagram, Mail, Facebook, Linkedin } from "lucide-react";
+import { WhatsAppIcon } from "@/components/ui/whatsapp-icon";
+import { waLink, WHATSAPP_DISPLAY, CONTACT_EMAIL } from "@/lib/contact";
 
 const SHOP_LINKS = [
   { href: "/shop", label: "All Fragrances" },
@@ -129,13 +131,13 @@ export function Footer() {
                 <Linkedin className="h-5 w-5" strokeWidth={1.5} />
               </a>
               <a
-                href="https://wa.me/923000000000"
+                href={waLink()}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
-                className="text-fg-soft transition-colors hover:text-accent"
+                className="text-fg-soft transition-colors hover:text-[#25D366]"
               >
-                <MessageCircle className="h-5 w-5" strokeWidth={1.5} />
+                <WhatsAppIcon className="h-5 w-5" />
               </a>
               <a
                 href="mailto:contact@precisefumes.com"
@@ -184,26 +186,29 @@ export function Footer() {
           {/* Contact */}
           <div>
             <h4 className="tracking-luxe text-xs text-fg-faint">Get in Touch</h4>
-            <ul className="mt-5 flex flex-col gap-3 text-sm text-fg-soft">
-              <li className="flex items-center gap-2">
-                <Phone className="h-4 w-4 shrink-0" strokeWidth={1.5} />
-                <a
-                  href="tel:+92"
-                  className="transition-colors hover:text-fg"
-                >
-                  +92 300 0000000
-                </a>
-              </li>
-              <li className="flex items-center gap-2">
-                <Mail className="h-4 w-4 shrink-0" strokeWidth={1.5} />
-                <a
-                  href="mailto:contact@precisefumes.com"
-                  className="transition-colors hover:text-fg"
-                >
-                  contact@precisefumes.com
-                </a>
-              </li>
-            </ul>
+            <p className="mt-5 text-sm text-fg-soft">
+              WhatsApp is the fastest way to reach us.
+            </p>
+            <a
+              href={waLink(
+                "Hi Precise Fumes! I'd like to ask about your perfumes."
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2.5 text-sm font-medium text-white transition-transform hover:scale-[1.02]"
+            >
+              <WhatsAppIcon className="h-4 w-4" />
+              {WHATSAPP_DISPLAY}
+            </a>
+            <p className="mt-4 flex items-center gap-2 text-xs text-fg-soft">
+              <Mail className="h-4 w-4 shrink-0" strokeWidth={1.5} />
+              <a
+                href={`mailto:${CONTACT_EMAIL}`}
+                className="transition-colors hover:text-fg"
+              >
+                {CONTACT_EMAIL}
+              </a>
+            </p>
           </div>
         </div>
 

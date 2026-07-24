@@ -1,9 +1,18 @@
 import { Metadata } from "next";
 import { ContactForm } from "@/components/contact/contact-form";
+import { WhatsAppIcon } from "@/components/ui/whatsapp-icon";
+import {
+  waLink,
+  WHATSAPP_DISPLAY,
+  CONTACT_EMAIL,
+  HOURS,
+} from "@/lib/contact";
 
 export const metadata: Metadata = {
-  title: "Contact",
-  description: "Get in touch with Precise Fumes. We'd love to hear from you.",
+  title: "Contact — WhatsApp Us",
+  description:
+    "Chat with Precise Fumes on WhatsApp for the fastest reply — orders, scents, delivery and more. WhatsApp 0317 2388450.",
+  alternates: { canonical: "/contact" },
 };
 
 export default function Contact() {
@@ -16,56 +25,72 @@ export default function Contact() {
             Get in Touch
           </h1>
           <p className="mt-4 text-invert-fg/80">
-            Questions or feedback? We're here to help.
+            The fastest way to reach us is WhatsApp — we reply in minutes.
           </p>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section className="container-lux py-24 md:py-32">
+      <section className="container-lux py-20 md:py-28">
         <div className="grid md:grid-cols-2 gap-16 max-w-4xl mx-auto">
-          {/* Info */}
+          {/* WhatsApp-first info */}
           <div>
-            <h2 className="font-serif text-3xl font-normal mb-12">
-              Contact Details
-            </h2>
+            {/* Primary: WhatsApp */}
+            <div className="rounded-[var(--radius-lg)] border-2 border-[#25D366]/40 bg-[#25D366]/5 p-6">
+              <p className="pf-eyebrow !text-[#1a8a4a]">
+                Preferred · Fastest reply
+              </p>
+              <h2 className="mt-2 font-serif text-2xl font-normal">
+                Chat on WhatsApp
+              </h2>
+              <p className="mt-2 text-sm text-fg-soft">
+                Message us to order, ask about a scent, or check your delivery.
+                We&apos;re quickest here.
+              </p>
+              <a
+                href={waLink(
+                  "Hi Precise Fumes! I'd like to ask about your perfumes."
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-medium text-white transition-transform hover:scale-[1.02]"
+              >
+                <WhatsAppIcon className="h-5 w-5" />
+                WhatsApp {WHATSAPP_DISPLAY}
+              </a>
+            </div>
 
-            <div className="space-y-8">
-              <div>
-                <h3 className="pf-eyebrow mb-2">Email</h3>
-                <a
-                  href="mailto:contact@precisefumes.com"
-                  className="text-lg link-underline"
-                >
-                  contact@precisefumes.com
-                </a>
-              </div>
-
+            {/* Secondary: hours, location, email */}
+            <div className="mt-8 space-y-6">
               <div>
                 <h3 className="pf-eyebrow mb-2">Hours</h3>
-                <p className="text-fg-soft">
-                  Monday – Saturday
-                  <br />
-                  10:00 – 19:00 PKT
-                </p>
+                <p className="text-fg-soft">{HOURS}</p>
               </div>
-
               <div>
                 <h3 className="pf-eyebrow mb-2">Location</h3>
-                <p className="text-fg-soft">
-                  Karachi
-                  <br />
-                  Pakistan
-                </p>
+                <p className="text-fg-soft">Karachi, Pakistan</p>
+              </div>
+              <div>
+                <h3 className="pf-eyebrow mb-2">Email (slower)</h3>
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="text-sm text-fg-soft link-underline"
+                >
+                  {CONTACT_EMAIL}
+                </a>
               </div>
             </div>
           </div>
 
-          {/* Form */}
+          {/* Form — secondary */}
           <div>
-            <h2 className="font-serif text-3xl font-normal mb-8">
-              Send us a Message
+            <h2 className="font-serif text-2xl font-normal mb-2">
+              Prefer to write?
             </h2>
+            <p className="mb-6 text-sm text-fg-soft">
+              Leave a message and we&apos;ll get back to you — though WhatsApp is
+              always faster.
+            </p>
             <ContactForm />
           </div>
         </div>

@@ -155,14 +155,19 @@ export default async function OrderConfirmation({
             <div className="border-t border-border pt-5">
               <p className="pf-eyebrow mb-2">Questions</p>
               <p className="text-sm text-fg-soft">
-                Email{" "}
+                WhatsApp us at{" "}
                 <a
-                  href="mailto:contact@precisefumes.com"
-                  className="link-underline font-medium"
+                  href={`https://wa.me/923172388450?text=${encodeURIComponent(
+                    `Hi Precise Fumes, about my order ${orderId}:`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link-underline font-medium text-[#1a8a4a]"
                 >
-                  contact@precisefumes.com
+                  0317 2388450
                 </a>{" "}
-                with your order reference.
+                with your order reference — it&apos;s the fastest way to reach
+                us.
               </p>
             </div>
           </div>

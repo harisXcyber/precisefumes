@@ -9,6 +9,8 @@ import { formatPrice } from "@/lib/utils";
 import { useCart } from "@/lib/store/cart";
 import { getScentTone } from "@/lib/tones";
 import { TesterPicker, type TesterOption } from "@/components/shop/tester-picker";
+import { WhatsAppIcon } from "@/components/ui/whatsapp-icon";
+import { waLink } from "@/lib/contact";
 
 export function ProductDetail({
   product,
@@ -221,6 +223,21 @@ export function ProductDetail({
             </AnimatePresence>
           </button>
         </div>
+
+        {/* Order on WhatsApp — primary contact channel */}
+        <a
+          href={waLink(
+            `Hi Precise Fumes! I'd like to order ${product.name} (${selectedSize.label}, ${formatPrice(
+              selectedSize.price
+            )}).`
+          )}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-[#25D366] py-3.5 text-sm font-medium text-[#1a8a4a] transition-colors hover:bg-[#25D366] hover:text-white"
+        >
+          <WhatsAppIcon className="h-5 w-5" />
+          Order on WhatsApp
+        </a>
 
         {inStock && selectedSize.stock <= 5 && (
           <p className="mt-3 text-xs text-accent">
