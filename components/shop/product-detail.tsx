@@ -242,6 +242,24 @@ export function ProductDetail({ product }: { product: Product }) {
           </p>
         </div>
 
+        {/* Craft detail */}
+        {(product.concentration || product.longevity) && (
+          <dl className="mt-8 flex flex-wrap gap-x-10 gap-y-3 text-sm">
+            {product.concentration && (
+              <div>
+                <dt className="pf-eyebrow">Concentration</dt>
+                <dd className="mt-1 text-fg-soft">{product.concentration}</dd>
+              </div>
+            )}
+            {product.longevity && (
+              <div>
+                <dt className="pf-eyebrow">Longevity</dt>
+                <dd className="mt-1 text-fg-soft">{product.longevity}</dd>
+              </div>
+            )}
+          </dl>
+        )}
+
         {/* Notes pyramid */}
         {product.notes && (
           <div className="mt-12">
