@@ -3,6 +3,7 @@ import crypto from "crypto";
 import { adminConfigured, createAdminClient } from "@/lib/supabase/admin";
 import { hashPassword } from "@/lib/password";
 import { sendEmail, affiliateVerifyEmail, emailConfigured } from "@/lib/email";
+import { normalizePkMobile } from "@/lib/contact";
 
 function generateToken(): string {
   return crypto.randomBytes(32).toString("hex");
@@ -44,6 +45,18 @@ export async function POST(request: NextRequest) {
     if (String(password).length < 8) {
       return NextResponse.json(
         { error: "Password must be at least 8 characters." },
+        { status: 400 }
+      );
+    }
+    // A valid Pakistani mobile is required — it's where the commission
+    // is paid, so blank/junk numbers are rejected.
+    const normalizedPhone = normalizePkMobile(bankPhone);
+    if (!normalizedPhone) {
+      return NextResponse.json(
+        {
+          error:
+            "Enter a valid Pakistani mobile number for payouts (e.g. 03001234567).",
+        },
         { status: 400 }
       );
     }
@@ -99,7 +112,7 @@ export async function POST(request: NextRequest) {
       name,
       password_hash: hashPassword(String(password)),
       bank_method: bankMethod,
-      bank_phone: bankPhone,
+      bank_phone: normalizedPhone,
       bank_account_name: bankAccountName,
       referral_code: referralCode,
       verification_token: token,

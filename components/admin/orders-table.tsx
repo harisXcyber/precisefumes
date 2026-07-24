@@ -2,7 +2,32 @@
 
 import { useState } from "react";
 import { formatPrice } from "@/lib/utils";
+import { toWaNumber } from "@/lib/contact";
 import type { AdminOrder } from "@/lib/admin-data";
+
+/** Pre-written WhatsApp order-confirmation message. */
+function confirmationMessage(o: AdminOrder): string {
+  const total = o.subtotal - o.discount + o.shipping_fee;
+  const items = o.items
+    .map((it) => `• ${it.name} (${it.size}) × ${it.quantity}`)
+    .join("\n");
+  const delivery =
+    o.shipping_fee === 0
+      ? "Free delivery (2–5 days)"
+      : `Delivery PKR ${o.shipping_fee} (5–7 days)`;
+  return `Assalam-o-Alaikum ${o.customer_name}! 🌸
+
+Thank you for your order with *Precise Fumes*.
+
+*Order ${o.ref}*
+${items}
+
+Total: *PKR ${total.toLocaleString("en-PK")}* (Cash on Delivery)
+Deliver to: ${o.address}, ${o.city}
+${delivery}
+
+Please reply *YES* to confirm your order and we'll dispatch it right away. JazakAllah! 🖤`;
+}
 
 const STATUSES = [
   "new",
@@ -24,6 +49,9 @@ export function OrdersTable({ orders }: { orders: AdminOrder[] }) {
   const [rows, setRows] = useState(orders);
   const [openId, setOpenId] = useState<string | null>(null);
   const [filter, setFilter] = useState<string>("all");
+  const [confFilter, setConfFilter] = useState<"all" | "sent" | "unsent">(
+    "all"
+  );
   const [saving, setSaving] = useState<string | null>(null);
 
   async function updateStatus(id: string, status: string) {
@@ -57,8 +85,42 @@ export function OrdersTable({ orders }: { orders: AdminOrder[] }) {
     }
   }
 
-  const visible =
-    filter === "all" ? rows : rows.filter((o) => o.status === filter);
+  /** Open WhatsApp to the customer with the pre-written confirmation,
+   *  and mark the order as confirmation-sent (→ status "confirmed"). */
+  async function sendConfirmation(o: AdminOrder) {
+    const wa = toWaNumber(o.customer_phone);
+    if (wa) {
+      window.open(
+        `https://wa.me/${wa}?text=${encodeURIComponent(confirmationMessage(o))}`,
+        "_blank",
+        "noopener"
+      );
+    }
+    // Record it even if the number was odd — the admin still acted.
+    try {
+      await fetch(`/api/admin/orders/${o.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ confirmationSent: true }),
+      });
+      setRows((prev) =>
+        prev.map((r) =>
+          r.id === o.id
+            ? { ...r, confirmation_sent: true, status: "confirmed" }
+            : r
+        )
+      );
+    } catch {
+      /* opening WhatsApp is the important part */
+    }
+  }
+
+  const visible = rows.filter((o) => {
+    if (filter !== "all" && o.status !== filter) return false;
+    if (confFilter === "sent" && !o.confirmation_sent) return false;
+    if (confFilter === "unsent" && o.confirmation_sent) return false;
+    return true;
+  });
 
   if (rows.length === 0) {
     return (
@@ -91,6 +153,40 @@ export function OrdersTable({ orders }: { orders: AdminOrder[] }) {
         })}
       </div>
 
+      {/* Confirmation filter */}
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-xs uppercase tracking-[0.12em] text-fg-faint">
+          Confirmation:
+        </span>
+        {(
+          [
+            ["all", "All"],
+            ["unsent", "To confirm"],
+            ["sent", "Confirmed ✓"],
+          ] as const
+        ).map(([key, label]) => {
+          const count =
+            key === "all"
+              ? rows.length
+              : key === "sent"
+                ? rows.filter((o) => o.confirmation_sent).length
+                : rows.filter((o) => !o.confirmation_sent).length;
+          return (
+            <button
+              key={key}
+              onClick={() => setConfFilter(key)}
+              className={`rounded-full border px-4 py-1.5 text-xs uppercase tracking-[0.12em] transition-colors ${
+                confFilter === key
+                  ? "border-accent-teal bg-accent-teal/15 text-accent-teal"
+                  : "border-border text-fg-soft hover:border-fg-faint"
+              }`}
+            >
+              {label} ({count})
+            </button>
+          );
+        })}
+      </div>
+
       <div className="overflow-x-auto rounded-[var(--radius-lg)] border border-border">
         <table className="w-full min-w-[52rem] text-sm">
           <thead className="bg-bg-soft">
@@ -114,7 +210,19 @@ export function OrdersTable({ orders }: { orders: AdminOrder[] }) {
                     onClick={() => setOpenId(isOpen ? null : o.id)}
                     className="cursor-pointer border-t border-border transition-colors hover:bg-bg-soft"
                   >
-                    <td className="p-3 font-medium">{o.ref}</td>
+                    <td className="p-3 font-medium">
+                      <span className="flex items-center gap-1.5">
+                        <span
+                          className={`text-fg-faint transition-transform ${
+                            isOpen ? "rotate-90" : ""
+                          }`}
+                          aria-hidden
+                        >
+                          ›
+                        </span>
+                        {o.ref}
+                      </span>
+                    </td>
                     <td className="p-3 text-fg-soft">
                       {new Date(o.created_at).toLocaleDateString()}
                     </td>
@@ -143,6 +251,15 @@ export function OrdersTable({ orders }: { orders: AdminOrder[] }) {
                       >
                         {o.status}
                       </span>
+                      {o.confirmation_sent ? (
+                        <span className="mt-1 block text-[11px] text-[#1a8a4a]">
+                          ✓ Confirmation sent
+                        </span>
+                      ) : (
+                        <span className="mt-1 block text-[11px] text-accent-deep">
+                          ⧗ Not confirmed
+                        </span>
+                      )}
                     </td>
                   </tr>
 
@@ -151,27 +268,50 @@ export function OrdersTable({ orders }: { orders: AdminOrder[] }) {
                       <td colSpan={6} className="p-5">
                         <div className="grid gap-6 md:grid-cols-3">
                           {/* Delivery */}
-                          <div>
-                            <p className="pf-eyebrow mb-2">Deliver to</p>
-                            <p className="text-sm">{o.customer_name}</p>
-                            <p className="text-sm text-fg-soft">{o.address}</p>
-                            <p className="text-sm text-fg-soft">{o.city}</p>
-                            <p className="mt-2 text-sm">
-                              <a
-                                href={`tel:${o.customer_phone}`}
-                                className="text-accent-deep hover:underline"
-                              >
-                                {o.customer_phone}
-                              </a>
-                            </p>
-                            <p className="text-sm">
+                          <div className="space-y-3">
+                            <div>
+                              <p className="pf-eyebrow mb-1">Deliver to</p>
+                              <p className="text-sm font-medium">
+                                {o.customer_name}
+                              </p>
+                              <p className="text-sm leading-relaxed text-fg-soft">
+                                {o.address}
+                                <br />
+                                {o.city}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="pf-eyebrow mb-1">Phone</p>
+                              <p className="text-sm">
+                                <a
+                                  href={`tel:${o.customer_phone}`}
+                                  className="font-medium text-accent-deep hover:underline"
+                                >
+                                  {o.customer_phone}
+                                </a>
+                                {toWaNumber(o.customer_phone) && (
+                                  <a
+                                    href={`https://wa.me/${toWaNumber(
+                                      o.customer_phone
+                                    )}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="ml-2 text-xs text-[#1a8a4a] hover:underline"
+                                  >
+                                    (WhatsApp)
+                                  </a>
+                                )}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="pf-eyebrow mb-1">Email</p>
                               <a
                                 href={`mailto:${o.customer_email}`}
-                                className="text-accent-deep hover:underline"
+                                className="break-all text-sm text-accent-deep hover:underline"
                               >
                                 {o.customer_email}
                               </a>
-                            </p>
+                            </div>
                           </div>
 
                           {/* Items */}
@@ -237,7 +377,25 @@ export function OrdersTable({ orders }: { orders: AdminOrder[] }) {
 
                           {/* Actions */}
                           <div>
-                            <p className="pf-eyebrow mb-2">Update status</p>
+                            {/* Confirm via WhatsApp */}
+                            <p className="pf-eyebrow mb-2">
+                              Confirm the order
+                            </p>
+                            <button
+                              onClick={() => sendConfirmation(o)}
+                              className="flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-4 py-2.5 text-sm font-medium text-white transition-transform hover:scale-[1.02]"
+                            >
+                              {o.confirmation_sent
+                                ? "Send confirmation again"
+                                : "Send WhatsApp Confirmation"}
+                            </button>
+                            <p className="mt-2 text-xs text-fg-soft">
+                              {o.confirmation_sent
+                                ? "✓ Confirmation already sent."
+                                : "Opens WhatsApp with a ready-to-send message to the customer, and marks this order confirmed."}
+                            </p>
+
+                            <p className="pf-eyebrow mb-2 mt-5">Update status</p>
                             <div className="flex flex-wrap gap-2">
                               {STATUSES.map((s) => (
                                 <button

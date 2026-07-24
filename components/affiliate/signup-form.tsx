@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
+import { normalizePkMobile } from "@/lib/contact";
 
 type BankMethod = "easypaisa" | "jazzcash";
 
@@ -35,12 +36,21 @@ export function AffiliateSignupForm() {
       setIsSubmitting(false);
       return;
     }
+    const bankPhone = String(formData.get("bankPhone") ?? "");
+    if (!normalizePkMobile(bankPhone)) {
+      setMessage({
+        type: "error",
+        text: "Enter a valid Pakistani mobile number for payouts (e.g. 03001234567).",
+      });
+      setIsSubmitting(false);
+      return;
+    }
     const data = {
       email: formData.get("email"),
       name: formData.get("name"),
       password,
       bankMethod: bankMethod,
-      bankPhone: formData.get("bankPhone"),
+      bankPhone,
       bankAccountName: formData.get("bankAccountName"),
     };
 

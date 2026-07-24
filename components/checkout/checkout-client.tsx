@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/lib/store/cart";
 import { formatPrice } from "@/lib/utils";
+import { normalizePkMobile } from "@/lib/contact";
 
 const BASE_PRICE = 3000;
 const AFFILIATE_PRICE = 2500;
@@ -145,15 +146,26 @@ export function CheckoutClient() {
       setSubmitMessage({ type: "error", text: "Please select your city." });
       return;
     }
+
+    const formData = new FormData(e.currentTarget);
+    // A valid mobile is required so we can confirm the order on WhatsApp.
+    const phone = normalizePkMobile(String(formData.get("phone") ?? ""));
+    if (!phone) {
+      setSubmitMessage({
+        type: "error",
+        text: "Please enter a valid mobile number (e.g. 03001234567) so we can confirm your order.",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitMessage(null);
 
-    const formData = new FormData(e.currentTarget);
     const orderData = {
       customer: {
         name: formData.get("name"),
         email: formData.get("email"),
-        phone: formData.get("phone"),
+        phone,
         address: formData.get("address"),
         city,
       },

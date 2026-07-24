@@ -27,6 +27,14 @@ export async function PATCH(request: NextRequest, ctx: Ctx) {
   }
   if (body.paymentStatus !== undefined) patch.payment_status = body.paymentStatus;
   if (body.trackingNote !== undefined) patch.tracking_note = body.trackingNote;
+  if (body.confirmationSent !== undefined) {
+    patch.confirmation_sent = !!body.confirmationSent;
+    patch.confirmation_sent_at = body.confirmationSent
+      ? new Date().toISOString()
+      : null;
+    // Sending the confirmation moves a brand-new order to "confirmed".
+    if (body.confirmationSent) patch.status = "confirmed";
+  }
 
   const supabase = createAdminClient();
   const { error } = await supabase.from("orders").update(patch).eq("id", id);

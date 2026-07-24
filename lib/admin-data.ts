@@ -21,6 +21,7 @@ export interface AdminOrder {
   affiliate_commission: number;
   status: string;
   tracking_note: string | null;
+  confirmation_sent: boolean;
   created_at: string;
 }
 
