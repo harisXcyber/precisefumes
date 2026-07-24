@@ -1,24 +1,32 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import { faqLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "FAQ",
+  title: "Perfume FAQ — Delivery, Prices & Offers in Pakistan",
   description:
-    "Everything about Precise Fumes — pricing, bundle offers, affiliate bonus codes, delivery times, and payment options, answered clearly.",
+    "How much perfumes cost, how buy 2 get 1 free and the 2-for-PKR-5,000 bundle work, free delivery in Karachi, cash on delivery, free 5ml testers, and our money-back guarantee — answered clearly.",
+  alternates: { canonical: "/faq" },
 };
 
-const FAQS: { q: string; a: React.ReactNode }[] = [
+const FAQS: { q: string; a: React.ReactNode; plain?: string }[] = [
   {
     q: "How much do the perfumes cost?",
     a: "Every Precise Fumes fragrance is an Extrait de Parfum in a 50ml bottle for PKR 3,000. Five scents are in stock now — and a special edition perfume is currently in the making.",
+    plain:
+      "Every Precise Fumes fragrance is an Extrait de Parfum in a 50ml bottle for PKR 3,000. Five scents are in stock now, and a special edition perfume is currently in the making.",
   },
   {
     q: "How does the 2-for-PKR-5,000 bundle work?",
     a: "Add any two standard (PKR 3,000) perfumes to your cart — any scents, mix and match — and the total automatically drops to PKR 5,000. You save PKR 1,000. No code needed; it applies by itself at checkout.",
+    plain:
+      "Add any two standard PKR 3,000 perfumes to your cart, any scents, and the total automatically drops to PKR 5,000. You save PKR 1,000. No code needed; it applies by itself at checkout.",
   },
   {
     q: "How does Buy 2 Get 1 Free work?",
     a: "Add three perfumes to your cart and the cheapest one becomes free — automatically. For every three bottles in your order, one is free. No code needed.",
+    plain:
+      "Add three perfumes to your cart and the cheapest one becomes free, automatically. For every three bottles in your order, one is free. No code needed.",
   },
   {
     q: "What is a bonus code and how do I use one?",
@@ -31,6 +39,8 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
         automatically give you whichever saves you more.
       </>
     ),
+    plain:
+      "Bonus codes come from our affiliates. Enter one at checkout and single perfumes drop from PKR 3,000 to PKR 2,500 each. Bonus codes apply to single perfumes only and don't combine with the bundle or Buy 2 Get 1 Free offers. If both could apply, we automatically give you whichever saves you more.",
   },
   {
     q: "How do I become an affiliate and earn?",
@@ -45,6 +55,8 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
         JazzCash account.
       </>
     ),
+    plain:
+      "Sign up on the affiliate page, verify your email, and you'll get your own bonus code. You earn PKR 300 for every sale made with your code, paid to your EasyPaisa or JazzCash account.",
   },
   {
     q: "What are the free 5ml testers?",
@@ -72,6 +84,8 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
         for details.
       </>
     ),
+    plain:
+      "We offer a full money-back guarantee on anything that's our fault: a defective piece, a leak, the wrong item, or a valid claim. Report it within 14 days with a photo and we'll replace it or refund you in full, including delivery.",
   },
   {
     q: "Are the fragrances long-lasting?",
@@ -95,12 +109,25 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
         . We reply within 24 hours, Monday–Saturday, 10:00–19:00 PKT.
       </>
     ),
+    plain:
+      "Email contact@precisefumes.com or use the contact form. We reply within 24 hours, Monday to Saturday, 10:00 to 19:00 PKT.",
   },
 ];
 
 export default function FAQ() {
+  const ld = faqLd(
+    FAQS.map((f) => ({
+      q: f.q,
+      a: f.plain ?? (typeof f.a === "string" ? f.a : ""),
+    }))
+  );
+
   return (
     <div className="min-h-screen bg-bg text-fg">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
+      />
       <div className="container-lux max-w-3xl pt-36 pb-24">
         <p className="tracking-luxe text-xs text-accent">Help Center</p>
         <h1 className="mt-4 font-serif text-5xl font-normal md:text-6xl">

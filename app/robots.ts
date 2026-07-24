@@ -2,11 +2,22 @@ import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-      disallow: ["/api/", "/affiliate/dashboard", "/order-confirmation/"],
-    },
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: [
+          "/api/",
+          "/admin",
+          "/admin/",
+          "/affiliate/dashboard",
+          "/affiliate/verify",
+          "/order-confirmation/",
+          "/checkout",
+        ],
+      },
+    ],
     sitemap: "https://precisefumes.com/sitemap.xml",
+    host: "https://precisefumes.com",
   };
 }

@@ -11,6 +11,7 @@ import {
 import { ProductDetail } from "@/components/shop/product-detail";
 import { ProductCard } from "@/components/shop/product-card";
 import { Reveal } from "@/components/ui/reveal";
+import { productLd, breadcrumbLd } from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -32,13 +33,31 @@ export async function generateMetadata({
   const { slug } = await params;
   const product = await getProduct(slug);
   if (!product) return { title: "Not Found" };
+
+  const gender = product.category === "Her" ? "Women's" : "Men's";
+  const title = `${product.name} Perfume — ${gender} Extrait de Parfum, PKR ${product.price.toLocaleString()}`;
+  const description = `Buy ${product.name}, a premium ${gender.toLowerCase()} perfume by Precise Fumes. ${product.tagline ?? ""} 50ml Extrait de Parfum, 12–14 hour wear, PKR ${product.price.toLocaleString()}. Free 5ml tester, buy 2 get 1 free, free delivery in Karachi, cash on delivery across Pakistan.`.trim();
+
   return {
-    title: product.name,
-    description: product.tagline ?? product.description.slice(0, 150),
+    title,
+    description,
+    keywords: [
+      `${product.name} perfume`,
+      `${product.name} Precise Fumes`,
+      `${gender.toLowerCase()} perfume Pakistan`,
+      "buy perfume online Pakistan",
+      "free delivery Karachi",
+      "cash on delivery perfume",
+    ],
+    alternates: { canonical: `/shop/${product.slug}` },
     openGraph: {
-      title: `${product.name} · Precise Fumes`,
-      description: product.tagline ?? product.description.slice(0, 150),
-      images: product.images?.length ? [product.images[0]] : undefined,
+      title,
+      description,
+      url: `https://precisefumes.com/shop/${product.slug}`,
+      type: "website",
+      images: product.images?.length
+        ? [{ url: product.images[0], width: 1400, height: 1400 }]
+        : undefined,
     },
   };
 }
@@ -57,8 +76,31 @@ export default async function ProductPage({ params }: PageProps) {
     image: p.images?.[0] ?? "",
   }));
 
+  const ld = productLd({
+    name: product.name,
+    slug: product.slug,
+    description: product.description,
+    price: product.price,
+    image: product.images?.[0],
+    category: product.category,
+    inStock: product.stock > 0,
+  });
+  const crumbs = breadcrumbLd([
+    { name: "Home", path: "/" },
+    { name: "Shop", path: "/shop" },
+    { name: product.name, path: `/shop/${product.slug}` },
+  ]);
+
   return (
     <div className="pt-32 md:pt-36">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbs) }}
+      />
       {/* Breadcrumb */}
       <div className="container-lux">
         <nav className="flex items-center gap-2 text-xs uppercase tracking-wider text-fg-faint">

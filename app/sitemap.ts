@@ -71,15 +71,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Dynamic product pages
+  // Dynamic product pages — include product images for Google Images.
   const productPages: MetadataRoute.Sitemap = products.map((product) => ({
     url: `${baseUrl}/shop/${product.slug}`,
     lastModified: product.updatedAt
       ? new Date(product.updatedAt)
       : new Date(),
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
+    changeFrequency: "weekly" as const,
+    priority: 0.9,
+    images: (product.images ?? []).filter((u) => u.startsWith("http")),
   }));
 
-  return [...staticPages, ...productPages];
+  // Category landing views (indexable filtered shop pages)
+  const categoryPages: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/shop?category=Him`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/shop?category=Her`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+  ];
+
+  return [...staticPages, ...categoryPages, ...productPages];
 }

@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
+import {
+  KEYWORDS,
+  organizationLd,
+  storeLd,
+  websiteLd,
+} from "@/lib/seo";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteChrome } from "@/components/layout/site-chrome";
 
@@ -22,37 +28,38 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL("https://precisefumes.com"),
   title: {
-    default: "Precise Fumes — Luxury Fragrances",
+    default:
+      "Precise Fumes — Buy Premium Perfumes Online in Pakistan | Free Karachi Delivery",
     template: "%s · Precise Fumes",
   },
   description:
-    "Precise Fumes — meticulously composed luxury perfumes. Discover signature scents crafted with precision and character.",
-  keywords: [
-    "perfume",
-    "luxury fragrance",
-    "Precise Fumes",
-    "eau de parfum",
-    "signature scent",
-    "Pakistan perfume",
-  ],
+    "Buy premium long-lasting perfumes online in Pakistan. Extrait de Parfum, 12–14 hour wear, free 5ml tester in every order. Buy 2 get 1 free · 2 for PKR 5,000 · free delivery in Karachi · cash on delivery nationwide.",
+  keywords: KEYWORDS,
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Precise Fumes — Luxury Fragrances",
+    title:
+      "Precise Fumes — Premium Perfumes Online in Pakistan | Free Karachi Delivery",
     description:
-      "Meticulously composed luxury perfumes. Discover your signature scent.",
+      "Premium Extrait de Parfum, 12–14 hour wear. Buy 2 get 1 free, 2 for PKR 5,000, free 5ml tester. Free delivery in Karachi, cash on delivery across Pakistan.",
     url: "https://precisefumes.com",
     siteName: "Precise Fumes",
+    locale: "en_PK",
     type: "website",
-    images: [{ url: "/logo-dark.png", width: 1080, height: 1080 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Precise Fumes — Luxury Fragrances",
-    description: "Meticulously composed luxury perfumes.",
-    images: ["/logo-dark.png"],
+    title: "Precise Fumes — Premium Perfumes Online in Pakistan",
+    description:
+      "Premium long-lasting perfumes. Buy 2 get 1 free, free delivery in Karachi, cash on delivery nationwide.",
   },
   icons: {
     icon: "/favicon.png",
     apple: "/apple-icon.png",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
   verification: {
     google: "iwxBtefqafjy1n6eWU0uh70CSWYuKagMlfdC0jOk_WQ",
@@ -64,48 +71,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const organizationSchema = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "Precise Fumes",
-    url: "https://precisefumes.com",
-    logo: "https://precisefumes.com/logo-dark.png",
-    description: "Meticulously composed luxury perfumes for Pakistan",
-    email: "contact@precisefumes.com",
-    sameAs: [
-      "https://instagram.com/precisefumes",
-      "https://facebook.com/precisefumes",
-      "https://linkedin.com/company/precisefumes",
-    ],
-    areaServed: {
-      "@type": "Country",
-      name: "PK",
-    },
-  };
-
-  const localBusinessSchema = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    name: "Precise Fumes",
-    image: "https://precisefumes.com/logo-dark.png",
-    description: "Luxury fragrance store",
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Karachi",
-      addressCountry: "PK",
-    },
-    telephone: "+92 300 1234567",
-    email: "contact@precisefumes.com",
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-        opens: "10:00",
-        closes: "19:00",
-      },
-    ],
-  };
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -129,18 +94,18 @@ gtag('config', 'G-PVF8HGRXF8');`,
             __html: `(function(){try{var t=localStorage.getItem("pf-theme")||"light";var d=document.documentElement;d.setAttribute("data-pf-theme",t);if(t==="dark")d.classList.add("dark");}catch(e){}})();`,
           }}
         />
-        {/* JSON-LD Structured Data */}
+        {/* JSON-LD: Organization + Store + WebSite */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizationSchema),
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd()) }}
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(localBusinessSchema),
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(storeLd()) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteLd()) }}
         />
       </head>
       <body
