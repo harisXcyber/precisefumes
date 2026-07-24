@@ -29,6 +29,14 @@ function transport(): nodemailer.Transporter {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
     },
+    // Fail fast so a serverless function never hangs on an unreachable
+    // mail host — the caller falls back gracefully.
+    connectionTimeout: 8000,
+    greetingTimeout: 8000,
+    socketTimeout: 8000,
+    // Shared-hosting mail servers often present a cert for a different
+    // hostname; don't reject on that.
+    tls: { rejectUnauthorized: false },
   });
   return cached;
 }
