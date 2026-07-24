@@ -9,9 +9,10 @@ import { CartDrawer } from "@/components/cart/cart-drawer";
  *  which has its own chrome. */
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isAdmin = pathname?.startsWith("/admin");
+  const isBare =
+    pathname?.startsWith("/admin") || pathname?.startsWith("/finances");
 
-  if (isAdmin) return <>{children}</>;
+  if (isBare) return <>{children}</>;
 
   return (
     <>
