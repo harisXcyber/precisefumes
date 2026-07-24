@@ -32,12 +32,15 @@ export function Countdown({
     return () => clearInterval(id);
   }, []);
 
+  const left = now === null ? 1 : new Date(endsAt).getTime() - now;
+
+  // Fire onExpire from an effect (never during render).
+  useEffect(() => {
+    if (left <= 0) onExpire?.();
+  }, [left, onExpire]);
+
   if (now === null) return null; // avoid SSR/clock mismatch
-  const left = new Date(endsAt).getTime() - now;
-  if (left <= 0) {
-    onExpire?.();
-    return null;
-  }
+  if (left <= 0) return null;
   const { d, h, m, s } = parts(left);
   const pad = (n: number) => String(n).padStart(2, "0");
 

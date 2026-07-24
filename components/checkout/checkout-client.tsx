@@ -22,7 +22,8 @@ const CITIES = [
 ];
 
 export function CheckoutClient() {
-  const { items, subtotal, getPromoInfo, getTesterInfo } = useCart();
+  const { items, subtotal, getPromoInfo, getTesterInfo, offerFlags } =
+    useCart();
 
   // Persisted cart loads on the client only — render after mount
   // to avoid a server/client hydration mismatch.
@@ -101,12 +102,16 @@ export function CheckoutClient() {
     subtotalAmount - activeDiscount - tester.discountAmount
   );
   const isKarachi = city === "Karachi";
-  const shippingFee = city === "" ? 0 : isKarachi ? 0 : 300;
+  const freeKarachi = offerFlags.freedelivery; // time-limited offer
+  const shippingFee =
+    city === "" ? 0 : isKarachi ? (freeKarachi ? 0 : 300) : 300;
   const shippingLabel =
     city === ""
       ? "Select your city"
       : isKarachi
-        ? "Free — 2–5 working days"
+        ? freeKarachi
+          ? "Free — 2–5 working days"
+          : "PKR 300 — 2–5 working days"
         : "PKR 300 — 5–7 working days";
   const finalTotal = cartTotal + shippingFee;
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { ARTICLES, articleDate } from "@/lib/blog";
+import { ARTICLES } from "@/lib/blog";
 
 export const metadata: Metadata = {
   title: "Fragrance Journal — Perfume Guides & Tips",

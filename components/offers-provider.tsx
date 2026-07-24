@@ -50,6 +50,7 @@ export function OffersProvider({ children }: { children: React.ReactNode }) {
       bundle2: keys.has("bundle2"),
       pack4: keys.has("pack4"),
       tester: keys.has("tester"),
+      freedelivery: keys.has("freedelivery"),
     });
   }, [all, setOfferFlags]);
 

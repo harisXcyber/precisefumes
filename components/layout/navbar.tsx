@@ -51,7 +51,7 @@ export function Navbar() {
   const offerBadges =
     offers.length > 0
       ? offers.map((o) => o.badge || o.title)
-      : ["Any 2 for PKR 5,000", "Buy 3 Get 1 Free"];
+      : ["Any 2 for PKR 5,000", "Buy 3 Get 1 Free", "Free Karachi Delivery"];
 
   return (
     <>
@@ -76,10 +76,6 @@ export function Navbar() {
                 </span>
               </span>
             ))}
-            <span className="text-accent" aria-hidden>
-              ·
-            </span>
-            <span>Free Delivery in Karachi</span>
           </p>
         </div>
 

@@ -34,6 +34,7 @@ interface OfferFlags {
   bundle2: boolean;
   pack4: boolean;
   tester: boolean;
+  freedelivery: boolean;
 }
 
 interface CartState {
@@ -75,7 +76,12 @@ export const useCart = create<CartState>()(
     (set, get) => ({
       items: [],
       isOpen: false,
-      offerFlags: { bundle2: true, pack4: true, tester: true },
+      offerFlags: {
+        bundle2: true,
+        pack4: true,
+        tester: true,
+        freedelivery: true,
+      },
 
       setOfferFlags: (flags) => set({ offerFlags: flags }),
 

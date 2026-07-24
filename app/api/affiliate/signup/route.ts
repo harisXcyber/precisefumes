@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { adminConfigured, createAdminClient } from "@/lib/supabase/admin";
 import { hashPassword } from "@/lib/password";
-import { sendEmail, affiliateVerifyEmail, emailConfigured } from "@/lib/email";
+import { sendEmail, affiliateVerifyEmail } from "@/lib/email";
 import { normalizePkMobile } from "@/lib/contact";
 
 function generateToken(): string {
