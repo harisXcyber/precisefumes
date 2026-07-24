@@ -45,6 +45,16 @@ const STATUS_STYLE: Record<string, string> = {
   cancelled: "bg-accent-rose/20 text-accent-rose",
 };
 
+/** Couriers enabled on the Oshi account. */
+const OSHI_COURIERS = [
+  { id: "1", label: "TCS" },
+  { id: "3", label: "Leopards" },
+];
+
+function courierName(id: string | null): string {
+  return OSHI_COURIERS.find((c) => c.id === id)?.label ?? "Courier";
+}
+
 export function OrdersTable({ orders }: { orders: AdminOrder[] }) {
   const [rows, setRows] = useState(orders);
   const [openId, setOpenId] = useState<string | null>(null);
@@ -115,6 +125,72 @@ export function OrdersTable({ orders }: { orders: AdminOrder[] }) {
     }
   }
 
+  // ── Oshi courier ──────────────────────────────────────
+  const [oshiBusy, setOshiBusy] = useState<string | null>(null);
+  const [courierSel, setCourierSel] = useState<Record<string, string>>({});
+  const [oshiMsg, setOshiMsg] = useState<Record<string, string>>({});
+
+  async function oshiAction(o: AdminOrder, action: "book" | "track" | "cancel") {
+    setOshiBusy(o.id + action);
+    setOshiMsg((m) => ({ ...m, [o.id]: "" }));
+    try {
+      const res = await fetch("/api/admin/oshi", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderId: o.id,
+          action,
+          courier: courierSel[o.id] || "1",
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setOshiMsg((m) => ({ ...m, [o.id]: data.error || "Failed." }));
+        return;
+      }
+      if (action === "book") {
+        setRows((prev) =>
+          prev.map((r) =>
+            r.id === o.id
+              ? {
+                  ...r,
+                  oshi_tracking: data.tracking,
+                  oshi_courier: courierSel[o.id] || "1",
+                  oshi_status: data.status || "Shipment Booked",
+                  status: "shipped",
+                }
+              : r
+          )
+        );
+      } else if (action === "track") {
+        setRows((prev) =>
+          prev.map((r) =>
+            r.id === o.id ? { ...r, oshi_status: data.latest || r.oshi_status } : r
+          )
+        );
+        setOshiMsg((m) => ({ ...m, [o.id]: `Latest: ${data.latest ?? "—"}` }));
+      } else if (action === "cancel") {
+        setRows((prev) =>
+          prev.map((r) =>
+            r.id === o.id
+              ? {
+                  ...r,
+                  oshi_tracking: null,
+                  oshi_courier: null,
+                  oshi_status: null,
+                  status: "confirmed",
+                }
+              : r
+          )
+        );
+      }
+    } catch {
+      setOshiMsg((m) => ({ ...m, [o.id]: "Network error." }));
+    } finally {
+      setOshiBusy(null);
+    }
+  }
+
   const visible = rows.filter((o) => {
     if (filter !== "all" && o.status !== filter) return false;
     if (confFilter === "sent" && !o.confirmation_sent) return false;
@@ -125,7 +201,7 @@ export function OrdersTable({ orders }: { orders: AdminOrder[] }) {
   if (rows.length === 0) {
     return (
       <p className="rounded-[var(--radius-lg)] border border-border bg-bg-soft p-10 text-center text-sm text-fg-soft">
-        No orders yet. They'll appear here the moment a customer checks out.
+        No orders yet. They&apos;ll appear here the moment a customer checks out.
       </p>
     );
   }
@@ -417,6 +493,101 @@ export function OrdersTable({ orders }: { orders: AdminOrder[] }) {
                               the cash as collected and releases any affiliate
                               commission for payout.
                             </p>
+
+                            {/* Courier — Oshi */}
+                            <div className="mt-6 border-t border-border pt-4">
+                              <p className="pf-eyebrow mb-2">Courier — Oshi</p>
+                              {!o.oshi_tracking ? (
+                                <>
+                                  <div className="mb-2 flex gap-2">
+                                    {OSHI_COURIERS.map((c) => {
+                                      const sel =
+                                        (courierSel[o.id] || "1") === c.id;
+                                      return (
+                                        <button
+                                          key={c.id}
+                                          onClick={() =>
+                                            setCourierSel((s) => ({
+                                              ...s,
+                                              [o.id]: c.id,
+                                            }))
+                                          }
+                                          className={`rounded-full border px-3 py-1.5 text-xs transition-colors ${
+                                            sel
+                                              ? "border-accent bg-accent text-on-accent"
+                                              : "border-border text-fg-soft hover:border-accent"
+                                          }`}
+                                        >
+                                          {c.label}
+                                        </button>
+                                      );
+                                    })}
+                                  </div>
+                                  <button
+                                    onClick={() => oshiAction(o, "book")}
+                                    disabled={oshiBusy === o.id + "book"}
+                                    className="w-full rounded-full bg-fg px-4 py-2.5 text-sm font-medium text-bg transition-transform hover:scale-[1.02] disabled:opacity-50"
+                                  >
+                                    {oshiBusy === o.id + "book"
+                                      ? "Booking…"
+                                      : "Book with Oshi"}
+                                  </button>
+                                  <p className="mt-2 text-xs text-fg-soft">
+                                    Creates the consignment and returns a tracking
+                                    number and printable label.
+                                  </p>
+                                </>
+                              ) : (
+                                <>
+                                  <div className="rounded-[var(--radius)] border border-border bg-bg p-3 text-sm">
+                                    <div className="flex items-center justify-between">
+                                      <span className="text-fg-soft">
+                                        {courierName(o.oshi_courier)}
+                                      </span>
+                                      <span className="rounded-full bg-accent-teal/15 px-2 py-0.5 text-xs text-accent-teal">
+                                        {o.oshi_status || "Booked"}
+                                      </span>
+                                    </div>
+                                    <p className="mt-1 font-mono text-xs">
+                                      #{o.oshi_tracking}
+                                    </p>
+                                  </div>
+                                  <div className="mt-2 grid grid-cols-2 gap-2">
+                                    <a
+                                      href={`/api/admin/oshi/label?tracking=${o.oshi_tracking}`}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="rounded-full border border-border px-3 py-2 text-center text-xs transition-colors hover:border-accent"
+                                    >
+                                      Print label
+                                    </a>
+                                    <button
+                                      onClick={() => oshiAction(o, "track")}
+                                      disabled={oshiBusy === o.id + "track"}
+                                      className="rounded-full border border-border px-3 py-2 text-xs transition-colors hover:border-accent disabled:opacity-50"
+                                    >
+                                      {oshiBusy === o.id + "track"
+                                        ? "…"
+                                        : "Refresh tracking"}
+                                    </button>
+                                  </div>
+                                  <button
+                                    onClick={() => oshiAction(o, "cancel")}
+                                    disabled={oshiBusy === o.id + "cancel"}
+                                    className="mt-2 w-full rounded-full border border-accent-rose/40 px-3 py-2 text-xs text-accent-rose transition-colors hover:bg-accent-rose/10 disabled:opacity-50"
+                                  >
+                                    {oshiBusy === o.id + "cancel"
+                                      ? "Cancelling…"
+                                      : "Cancel booking"}
+                                  </button>
+                                </>
+                              )}
+                              {oshiMsg[o.id] && (
+                                <p className="mt-2 text-xs text-fg-soft">
+                                  {oshiMsg[o.id]}
+                                </p>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </td>

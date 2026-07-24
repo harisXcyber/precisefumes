@@ -22,6 +22,11 @@ export interface AdminOrder {
   status: string;
   tracking_note: string | null;
   confirmation_sent: boolean;
+  oshi_id: string | null;
+  oshi_tracking: string | null;
+  oshi_courier: string | null;
+  oshi_status: string | null;
+  oshi_booked_at: string | null;
   created_at: string;
 }
 
