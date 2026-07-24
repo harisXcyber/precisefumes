@@ -9,6 +9,7 @@ import {
 } from "@/lib/seo";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteChrome } from "@/components/layout/site-chrome";
+import { OffersProvider } from "@/components/offers-provider";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -112,7 +113,9 @@ gtag('config', 'G-PVF8HGRXF8');`,
         className={`${cormorant.variable} ${inter.variable} antialiased bg-bg text-fg`}
       >
         <ThemeProvider>
-          <SiteChrome>{children}</SiteChrome>
+          <OffersProvider>
+            <SiteChrome>{children}</SiteChrome>
+          </OffersProvider>
         </ThemeProvider>
       </body>
     </html>

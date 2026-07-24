@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { Hero } from "@/components/home/hero";
 import { Marquee } from "@/components/home/marquee";
 import { Assurance } from "@/components/home/assurance";
+import { OffersCountdown } from "@/components/home/offers-countdown";
 import { Featured } from "@/components/home/featured";
 import { Categories } from "@/components/home/categories";
 import { Atelier } from "@/components/home/atelier";
@@ -44,6 +45,7 @@ export default async function Home() {
     <>
       <Hero scents={scents} />
       <Assurance />
+      <OffersCountdown />
       <Featured products={products} />
       <Categories />
       <TesterOffer />

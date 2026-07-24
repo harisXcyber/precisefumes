@@ -83,6 +83,16 @@ export async function fetchAffiliates() {
   });
 }
 
+export async function fetchAllOffers() {
+  if (!adminConfigured()) return [];
+  const supabase = createAdminClient();
+  const { data } = await supabase
+    .from("offers")
+    .select("*")
+    .order("sort_order", { ascending: true });
+  return data ?? [];
+}
+
 export async function fetchMessages() {
   if (!adminConfigured()) return { messages: [], subscribers: [] };
   const supabase = createAdminClient();

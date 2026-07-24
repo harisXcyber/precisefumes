@@ -27,15 +27,25 @@ interface TesterInfo {
   description: string;
 }
 
+/** Which time-limited pricing offers are currently live. Set by
+ *  OffersProvider from the DB; default true so pricing works on first
+ *  paint and self-corrects within a second if an offer has expired. */
+interface OfferFlags {
+  bundle2: boolean;
+  pack4: boolean;
+}
+
 interface CartState {
   items: CartItem[];
   isOpen: boolean;
+  offerFlags: OfferFlags;
 
   // mutations
   addItem: (item: CartItem) => void;
   removeItem: (productId: string, size: string) => void;
   updateQuantity: (productId: string, size: string, quantity: number) => void;
   clearCart: () => void;
+  setOfferFlags: (flags: OfferFlags) => void;
 
   // drawer
   openCart: () => void;
@@ -64,6 +74,9 @@ export const useCart = create<CartState>()(
     (set, get) => ({
       items: [],
       isOpen: false,
+      offerFlags: { bundle2: true, pack4: true },
+
+      setOfferFlags: (flags) => set({ offerFlags: flags }),
 
       addItem: (item) =>
         set((state) => {
@@ -111,10 +124,11 @@ export const useCart = create<CartState>()(
       perfumeItems: () => get().items.filter((i) => !isTester(i)),
       testerItems: () => get().items.filter(isTester),
 
-      /** Bottle offers (all perfumes are PKR 3,000). Testers never count.
-       *  Ladder: any 2 → PKR 5,000; Buy 3 Get 1 Free → 4 perfumes for
-       *  PKR 9,000. Larger carts stack whole 4-packs, then apply the
-       *  best remainder pricing. */
+      /** Bottle offers (all perfumes PKR 3,000). Testers never count.
+       *  Each offer only applies while it's live (see offerFlags — set
+       *  from the time-limited offers in the DB). Greedy best-price:
+       *  4-packs (PKR 9,000) first if active, then 2-bundles (PKR 5,000)
+       *  if active, rest at base. Expired offers silently stop applying. */
       getPromoInfo: () => {
         const perfumes = get().perfumeItems();
         const qty = perfumes.reduce((sum, i) => sum + i.quantity, 0);
@@ -125,18 +139,25 @@ export const useCart = create<CartState>()(
           (sum, i) => sum + i.price * i.quantity,
           0
         );
+        const flags = get().offerFlags;
 
-        const packs = Math.floor(qty / 4);
-        const rem = qty % 4;
+        let remaining = qty;
+        let total = 0;
+        let packs = 0;
+        let pairs = 0;
+        if (flags.pack4) {
+          packs = Math.floor(remaining / 4);
+          total += packs * PACK_4_TOTAL;
+          remaining -= packs * 4;
+        }
+        if (flags.bundle2) {
+          pairs = Math.floor(remaining / 2);
+          total += pairs * BUNDLE_2_TOTAL;
+          remaining -= pairs * 2;
+        }
+        total += remaining * BASE_PRICE;
 
-        // Best price for the leftover 1–3 bottles.
-        let remPrice = 0;
-        if (rem === 1) remPrice = BASE_PRICE;
-        else if (rem === 2) remPrice = BUNDLE_2_TOTAL;
-        else if (rem === 3) remPrice = BUNDLE_2_TOTAL + BASE_PRICE; // 8,000
-
-        const promoTotal = packs * PACK_4_TOTAL + remPrice;
-        const discount = Math.max(0, subtotal - promoTotal);
+        const discount = Math.max(0, subtotal - total);
         if (discount <= 0) {
           return { type: null, discountAmount: 0, description: "" };
         }
@@ -149,7 +170,7 @@ export const useCart = create<CartState>()(
             packs === 1
               ? "Buy 3 Get 1 Free — 4 perfumes for PKR 9,000"
               : `Buy 3 Get 1 Free ×${packs}`;
-        } else if (rem === 2) {
+        } else if (pairs >= 1) {
           description = "Bundle — any 2 for PKR 5,000";
         }
 
