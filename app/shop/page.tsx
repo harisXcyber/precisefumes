@@ -88,7 +88,7 @@ export default async function ShopPage() {
               perfumes for{" "}
               <strong>PKR 5,000 (save PKR 1,000)</strong>, or take the{" "}
               <strong>Buy 3 Get 1 Free</strong> deal — four perfumes for just{" "}
-              <strong>PKR 8,000</strong> instead of PKR 9,000. Backed by a full money-back
+              <strong>PKR 9,000</strong> instead of PKR 12,000. Backed by a full money-back
               guarantee — if anything is wrong on our side, we refund you in
               full or replace it free.
             </p>

@@ -49,7 +49,7 @@ export const KEYWORDS = [
 
 /** One-line selling proposition reused across descriptions. */
 export const USP =
-  "Premium Extrait de Parfum, 12–14 hour wear, free 5ml tester in every order. Buy 2 for PKR 5,000 or Buy 3 Get 1 Free — 4 perfumes for PKR 8,000. Free delivery in Karachi, cash on delivery across Pakistan.";
+  "Premium Extrait de Parfum, 12–14 hour wear, free 5ml tester in every order. Buy 2 for PKR 5,000 or Buy 3 Get 1 Free — 4 perfumes for PKR 9,000. Free delivery in Karachi, cash on delivery across Pakistan.";
 
 /* ── JSON-LD builders ─────────────────────────────────────── */
 

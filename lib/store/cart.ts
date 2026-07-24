@@ -7,8 +7,8 @@ import type { CartItem } from "@/types";
 export const TESTER_PRICE = 200;
 const BASE_PRICE = 3000;
 const BUNDLE_2_TOTAL = 5000; // any 2 for PKR 5,000
-const PACK_4_TOTAL = 8000; // Buy 3 Get 1 Free — 4 perfumes for PKR 8,000
-export const PACK_4_COMPARE = 9000; // struck-through anchor shown in marketing
+const PACK_4_TOTAL = 9000; // Buy 3 Get 1 Free — 4 perfumes for PKR 9,000
+export const PACK_4_COMPARE = 12000; // struck-through anchor (4 x 3,000)
 
 interface PromoInfo {
   type: "bundle" | "pack4" | null;
@@ -113,7 +113,7 @@ export const useCart = create<CartState>()(
 
       /** Bottle offers (all perfumes are PKR 3,000). Testers never count.
        *  Ladder: any 2 → PKR 5,000; Buy 3 Get 1 Free → 4 perfumes for
-       *  PKR 8,000. Larger carts stack whole 4-packs, then apply the
+       *  PKR 9,000. Larger carts stack whole 4-packs, then apply the
        *  best remainder pricing. */
       getPromoInfo: () => {
         const perfumes = get().perfumeItems();
@@ -147,7 +147,7 @@ export const useCart = create<CartState>()(
           type = "pack4";
           description =
             packs === 1
-              ? "Buy 3 Get 1 Free — 4 perfumes for PKR 8,000"
+              ? "Buy 3 Get 1 Free — 4 perfumes for PKR 9,000"
               : `Buy 3 Get 1 Free ×${packs}`;
         } else if (rem === 2) {
           description = "Bundle — any 2 for PKR 5,000";

@@ -25,7 +25,7 @@ export function CTA() {
           </h2>
           <p className="mx-auto mt-6 max-w-md leading-relaxed text-invert-fg/70">
             Five signatures. Any two for PKR 5,000 — or Buy 3 Get 1 Free: four
-            perfumes for PKR 8,000.
+            perfumes for PKR 9,000.
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link href="/shop" className="btn-primary">

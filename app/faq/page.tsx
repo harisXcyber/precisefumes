@@ -24,9 +24,9 @@ const FAQS: { q: string; a: React.ReactNode; plain?: string }[] = [
   },
   {
     q: "How does Buy 3 Get 1 Free work?",
-    a: "Buy 3 Get 1 Free: add four perfumes to your cart and the price drops to just PKR 8,000 instead of PKR 9,000 — that's four premium perfumes plus four free 5ml testers. Applied automatically, no code needed.",
+    a: "Buy 3 Get 1 Free: add four perfumes to your cart and the price drops to just PKR 9,000 instead of PKR 12,000 — that's four premium perfumes plus four free 5ml testers. Applied automatically, no code needed.",
     plain:
-      "Buy 3 Get 1 Free: add four perfumes to your cart and the price drops to just PKR 8,000 instead of PKR 9,000 — four premium perfumes plus four free 5ml testers. Applied automatically, no code needed.",
+      "Buy 3 Get 1 Free: add four perfumes to your cart and the price drops to just PKR 9,000 instead of PKR 12,000 — four premium perfumes plus four free 5ml testers. Applied automatically, no code needed.",
   },
   {
     q: "What is a bonus code and how do I use one?",

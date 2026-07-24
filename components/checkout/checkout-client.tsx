@@ -286,7 +286,7 @@ export function CheckoutClient() {
             <p className="mt-5 rounded-[var(--radius)] bg-bg p-3.5 text-xs leading-relaxed text-fg-soft">
               💡 Add a second perfume for the{" "}
               <strong className="text-fg">2-for-PKR-5,000 bundle</strong>, or four
-              for <strong className="text-fg">Buy 3 Get 1 Free — PKR 8,000</strong>.
+              for <strong className="text-fg">Buy 3 Get 1 Free — PKR 9,000</strong>.
             </p>
           )}
           {appliedCode && !affiliateWins && promo.type !== null && (

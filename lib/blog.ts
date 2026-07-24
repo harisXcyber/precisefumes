@@ -83,7 +83,7 @@ export const ARTICLES: Article[] = [
         list: [
           "Every 50ml bottle is PKR 3,000.",
           "Any 2 perfumes for PKR 5,000 — save PKR 1,000.",
-          "Buy 3 Get 1 Free — 4 perfumes for PKR 8,000 (was PKR 9,000).",
+          "Buy 3 Get 1 Free — 4 perfumes for PKR 9,000 (was PKR 12,000).",
           "A free 5ml tester with every perfume — so Buy 3 Get 1 Free earns 4 free testers.",
           "Free delivery in Karachi, cash on delivery across Pakistan.",
         ],

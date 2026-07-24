@@ -265,8 +265,8 @@ export function ProductDetail({
           <p className="text-fg-soft">
             <strong className="text-fg">Buy 3 Get 1 Free</strong> — four perfumes
             for{" "}
-            <span className="text-fg-faint line-through">PKR 9,000</span>{" "}
-            <strong className="text-accent-deep">PKR 8,000</strong>.
+            <span className="text-fg-faint line-through">PKR 12,000</span>{" "}
+            <strong className="text-accent-deep">PKR 9,000</strong>.
           </p>
           <p className="text-fg-soft">
             <strong className="text-fg">Launch bonus — save up to PKR 500</strong>{" "}
