@@ -9,14 +9,17 @@ function generateToken(): string {
   return crypto.randomBytes(32).toString("hex");
 }
 
-function generateReferralCode(): string {
-  const scents = ["ROGUE", "ROYAL", "BLOOM", "BLOSSOM", "LEGACY"];
-  const scent = scents[Math.floor(Math.random() * scents.length)];
-  const chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
-  const suffix =
-    chars[Math.floor(Math.random() * chars.length)] +
-    chars[Math.floor(Math.random() * chars.length)];
-  return `${scent}${suffix}`;
+/** Clean the word the affiliate chose: uppercase A–Z0–9, 2–12 chars. */
+export function sanitizeCodeWord(raw: string): string {
+  return String(raw ?? "")
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, "")
+    .slice(0, 12);
+}
+
+/** Bonus code = PRECISE + chosen word + one random digit, e.g. PRECISEHARIS7 */
+function buildReferralCode(word: string): string {
+  return `PRECISE${word}${crypto.randomInt(0, 10)}`;
 }
 
 function isValidEmail(email: string): boolean {
@@ -26,19 +29,37 @@ function isValidEmail(email: string): boolean {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, name, password, bankMethod, bankPhone, bankAccountName } =
-      body;
+    const {
+      email,
+      name,
+      password,
+      codeWord,
+      bankMethod,
+      bankPhone,
+      bankAccountName,
+    } = body;
 
     if (
       !email ||
       !name ||
       !password ||
+      !codeWord ||
       !bankMethod ||
       !bankPhone ||
       !bankAccountName
     ) {
       return NextResponse.json(
         { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+    const word = sanitizeCodeWord(codeWord);
+    if (word.length < 2) {
+      return NextResponse.json(
+        {
+          error:
+            "Choose a bonus-code word of at least 2 letters/numbers (e.g. your name).",
+        },
         { status: 400 }
       );
     }
@@ -95,16 +116,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate a referral code that isn't taken.
-    let referralCode = generateReferralCode();
-    for (let i = 0; i < 5; i++) {
+    // Bonus code = PRECISE + chosen word + a random digit; retry the
+    // digit until it's unique.
+    let referralCode = buildReferralCode(word);
+    for (let i = 0; i < 12; i++) {
       const { data: clash } = await supabase
         .from("affiliates")
         .select("id")
         .eq("referral_code", referralCode)
         .maybeSingle();
       if (!clash) break;
-      referralCode = generateReferralCode();
+      referralCode = buildReferralCode(word);
     }
 
     const row = {

@@ -36,8 +36,41 @@ export function AffiliatesTable({ affiliates }: { affiliates: any[] }) {
     );
   }
 
+  const activeCodes = rows.filter((a) => a.status === "active");
+
   return (
-    <div className="overflow-x-auto rounded-[var(--radius-lg)] border border-border">
+    <div className="space-y-6">
+      {/* Active bonus codes summary */}
+      <div className="rounded-[var(--radius-lg)] border border-border bg-bg-soft p-5">
+        <p className="pf-eyebrow mb-3">
+          Active bonus codes ({activeCodes.length})
+        </p>
+        {activeCodes.length === 0 ? (
+          <p className="text-sm text-fg-soft">
+            No active codes yet — affiliates appear here once they verify their
+            email.
+          </p>
+        ) : (
+          <div className="flex flex-wrap gap-2">
+            {activeCodes.map((a) => (
+              <span
+                key={a.id}
+                title={`${a.name} · ${a.sales} sales`}
+                className="rounded-full border border-accent bg-accent/10 px-3 py-1.5 text-sm font-medium tracking-wider text-accent-deep"
+              >
+                {a.referral_code}
+              </span>
+            ))}
+          </div>
+        )}
+        <p className="mt-3 text-xs text-fg-faint">
+          These give customers PKR 2,500 single-perfume pricing and earn the
+          affiliate PKR 300 per sale. Unverified codes don&apos;t work until the
+          affiliate confirms their email.
+        </p>
+      </div>
+
+      <div className="overflow-x-auto rounded-[var(--radius-lg)] border border-border">
       <table className="w-full min-w-[48rem] text-sm">
         <thead className="bg-bg-soft">
           <tr className="text-left">
@@ -92,6 +125,7 @@ export function AffiliatesTable({ affiliates }: { affiliates: any[] }) {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

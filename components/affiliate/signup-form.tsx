@@ -6,6 +6,10 @@ import { normalizePkMobile } from "@/lib/contact";
 
 type BankMethod = "easypaisa" | "jazzcash";
 
+function cleanWord(raw: string): string {
+  return raw.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 12);
+}
+
 export function AffiliateSignupForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{
@@ -14,6 +18,7 @@ export function AffiliateSignupForm() {
   } | null>(null);
   const [verifyUrl, setVerifyUrl] = useState<string | null>(null);
   const [bankMethod, setBankMethod] = useState<BankMethod>("easypaisa");
+  const [codeWord, setCodeWord] = useState("");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -45,10 +50,19 @@ export function AffiliateSignupForm() {
       setIsSubmitting(false);
       return;
     }
+    if (cleanWord(codeWord).length < 2) {
+      setMessage({
+        type: "error",
+        text: "Choose a bonus-code word of at least 2 letters (e.g. your name).",
+      });
+      setIsSubmitting(false);
+      return;
+    }
     const data = {
       email: formData.get("email"),
       name: formData.get("name"),
       password,
+      codeWord: cleanWord(codeWord),
       bankMethod: bankMethod,
       bankPhone,
       bankAccountName: formData.get("bankAccountName"),
@@ -72,10 +86,11 @@ export function AffiliateSignupForm() {
         } else {
           setMessage({
             type: "success",
-            text: "Signup successful! Check your email (and spam folder) for the verification link.",
+            text: "Signup successful! We've emailed you a verification link — check your inbox, and your spam/junk folder too (it sometimes lands there). It can take a minute to arrive.",
           });
         }
         (e.target as HTMLFormElement).reset();
+        setCodeWord("");
       } else {
         const errorData = await res.json();
         setMessage({
@@ -163,6 +178,42 @@ export function AffiliateSignupForm() {
               placeholder="Repeat password"
             />
           </div>
+        </div>
+      </fieldset>
+
+      {/* Bonus code */}
+      <fieldset className="space-y-4 pt-6 border-t border-border">
+        <legend className="font-serif text-xl font-normal mb-2">
+          Your Bonus Code
+        </legend>
+        <p className="text-xs leading-relaxed text-fg-soft">
+          Choose a word — your name or brand works great. Your bonus code
+          becomes <strong className="text-fg">PRECISE</strong> + your word + a
+          number. Share it to earn PKR 300 per sale.
+        </p>
+        <div>
+          <label htmlFor="codeWord" className="block pf-label mb-2">
+            Choose your word
+          </label>
+          <input
+            type="text"
+            id="codeWord"
+            value={codeWord}
+            onChange={(e) => setCodeWord(e.target.value)}
+            required
+            maxLength={12}
+            className="w-full"
+            placeholder="e.g. HARIS"
+          />
+          {cleanWord(codeWord).length >= 2 && (
+            <p className="mt-2 text-sm text-fg-soft">
+              Your code will look like:{" "}
+              <span className="font-medium tracking-wider text-accent-deep">
+                PRECISE{cleanWord(codeWord)}
+                <span className="opacity-60">#</span>
+              </span>
+            </p>
+          )}
         </div>
       </fieldset>
 
