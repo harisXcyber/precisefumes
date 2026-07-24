@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { adminConfigured, createAdminClient } from "@/lib/supabase/admin";
 import { sendEmail, orderConfirmationEmail } from "@/lib/email";
+import { consumeOtp } from "@/lib/otp";
 
 function generateOrderRef(): string {
   const ts = Date.now().toString(36).toUpperCase().slice(-5);
   const rand = Math.random().toString(36).toUpperCase().slice(2, 5);
   return `PF-${ts}${rand}`;
+}
+
+/** Email OTP is enforced only when the DB is configured (so it can
+ *  store codes). Set REQUIRE_ORDER_OTP=false to disable if ever needed. */
+function otpRequired(): boolean {
+  return adminConfigured() && process.env.REQUIRE_ORDER_OTP !== "false";
 }
 
 export async function POST(request: NextRequest) {
@@ -20,6 +27,7 @@ export async function POST(request: NextRequest) {
       subtotal,
       discount,
       total,
+      otp,
     } = body;
 
     if (
@@ -36,6 +44,17 @@ export async function POST(request: NextRequest) {
     }
     if (!items || items.length === 0) {
       return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
+    }
+
+    // Verify the email with the OTP the customer entered (and consume it).
+    if (otpRequired()) {
+      const ok = otp && (await consumeOtp(customer.email, String(otp)));
+      if (!ok) {
+        return NextResponse.json(
+          { error: "Please verify your email with the code we sent you." },
+          { status: 401 }
+        );
+      }
     }
 
     const ref = generateOrderRef();

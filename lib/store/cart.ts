@@ -33,6 +33,7 @@ interface TesterInfo {
 interface OfferFlags {
   bundle2: boolean;
   pack4: boolean;
+  tester: boolean;
 }
 
 interface CartState {
@@ -74,7 +75,7 @@ export const useCart = create<CartState>()(
     (set, get) => ({
       items: [],
       isOpen: false,
-      offerFlags: { bundle2: true, pack4: true },
+      offerFlags: { bundle2: true, pack4: true, tester: true },
 
       setOfferFlags: (flags) => set({ offerFlags: flags }),
 
@@ -184,7 +185,10 @@ export const useCart = create<CartState>()(
         const perfumes = get().perfumeItems();
         const testers = get().testerItems();
 
-        const allowance = perfumes.reduce((sum, i) => sum + i.quantity, 0);
+        // Free testers only while the tester offer is live.
+        const allowance = get().offerFlags.tester
+          ? perfumes.reduce((sum, i) => sum + i.quantity, 0)
+          : 0;
         const purchasedSlugs = new Set(perfumes.map((i) => i.slug));
 
         const eligibleUnits = testers

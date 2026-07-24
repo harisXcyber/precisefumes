@@ -36,6 +36,17 @@ export function CheckoutClient() {
     text: string;
   } | null>(null);
 
+  // Email verification (OTP)
+  const [email, setEmail] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpInput, setOtpInput] = useState("");
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [otpBusy, setOtpBusy] = useState(false);
+  const [otpMsg, setOtpMsg] = useState<{
+    type: "success" | "error" | "info";
+    text: string;
+  } | null>(null);
+
   // Affiliate code state
   const [codeInput, setCodeInput] = useState("");
   const [appliedCode, setAppliedCode] = useState<string | null>(null);
@@ -140,6 +151,65 @@ export function CheckoutClient() {
     setCodeMessage(null);
   }
 
+  async function sendOtp() {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setOtpMsg({ type: "error", text: "Enter a valid email first." });
+      return;
+    }
+    setOtpBusy(true);
+    setOtpMsg(null);
+    try {
+      const res = await fetch("/api/otp/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, purpose: "checkout" }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setOtpSent(true);
+        setOtpMsg({
+          type: "success",
+          text: "We emailed you a 6-digit code. Enter it below.",
+        });
+      } else {
+        setOtpMsg({
+          type: "error",
+          text: data.error || "Could not send the code.",
+        });
+      }
+    } catch {
+      setOtpMsg({ type: "error", text: "Could not send the code." });
+    } finally {
+      setOtpBusy(false);
+    }
+  }
+
+  async function verifyOtp() {
+    setOtpBusy(true);
+    setOtpMsg(null);
+    try {
+      const res = await fetch("/api/otp/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, code: otpInput, purpose: "checkout" }),
+      });
+      const data = await res.json();
+      if (data.verified) {
+        setOtpVerified(true);
+        setOtpMsg({ type: "success", text: "Email verified ✓" });
+      } else {
+        setOtpMsg({
+          type: "error",
+          text: "That code is wrong or expired. Try again.",
+        });
+      }
+    } catch {
+      setOtpMsg({ type: "error", text: "Could not verify. Try again." });
+    } finally {
+      setOtpBusy(false);
+    }
+  }
+
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!city) {
@@ -157,14 +227,22 @@ export function CheckoutClient() {
       });
       return;
     }
+    if (!otpVerified) {
+      setSubmitMessage({
+        type: "error",
+        text: "Please verify your email address before placing the order.",
+      });
+      return;
+    }
 
     setIsSubmitting(true);
     setSubmitMessage(null);
 
     const orderData = {
+      otp: otpInput,
       customer: {
         name: formData.get("name"),
-        email: formData.get("email"),
+        email,
         phone,
         address: formData.get("address"),
         city,
@@ -339,35 +417,101 @@ export function CheckoutClient() {
               />
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label htmlFor="email" className="pf-label mb-2 block">
-                  Email
-                </label>
+            {/* Email + verification */}
+            <div>
+              <label htmlFor="email" className="pf-label mb-2 block">
+                Email
+              </label>
+              <div className="flex gap-2">
                 <input
                   type="email"
                   id="email"
                   name="email"
                   required
                   autoComplete="email"
-                  className="w-full"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setOtpVerified(false);
+                    setOtpSent(false);
+                    setOtpMsg(null);
+                  }}
+                  disabled={otpVerified}
+                  className="w-full disabled:opacity-70"
                   placeholder="you@email.com"
                 />
+                {!otpVerified && (
+                  <button
+                    type="button"
+                    onClick={sendOtp}
+                    disabled={otpBusy}
+                    className="shrink-0 rounded-[var(--radius)] border border-fg px-4 text-xs uppercase tracking-[0.12em] transition-colors hover:bg-fg hover:text-bg disabled:opacity-40"
+                  >
+                    {otpBusy ? "…" : otpSent ? "Resend" : "Send code"}
+                  </button>
+                )}
               </div>
-              <div>
-                <label htmlFor="phone" className="pf-label mb-2 block">
-                  Phone
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  required
-                  autoComplete="tel"
-                  className="w-full"
-                  placeholder="+92 3XX XXXXXXX"
-                />
-              </div>
+
+              {otpVerified ? (
+                <p className="mt-2 text-xs font-medium text-[#1a8a4a]">
+                  ✓ Email verified
+                </p>
+              ) : (
+                otpSent && (
+                  <div className="mt-3 flex gap-2">
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={6}
+                      value={otpInput}
+                      onChange={(e) =>
+                        setOtpInput(e.target.value.replace(/\D/g, ""))
+                      }
+                      className="w-40 tracking-[0.3em]"
+                      placeholder="6-digit code"
+                    />
+                    <button
+                      type="button"
+                      onClick={verifyOtp}
+                      disabled={otpBusy || otpInput.length !== 6}
+                      className="shrink-0 rounded-[var(--radius)] bg-fg px-5 text-xs uppercase tracking-[0.12em] text-bg disabled:opacity-40"
+                    >
+                      Verify
+                    </button>
+                  </div>
+                )
+              )}
+              {otpMsg && (
+                <p
+                  className={`mt-2 text-xs ${
+                    otpMsg.type === "error"
+                      ? "text-accent-rose"
+                      : "text-accent-deep"
+                  }`}
+                >
+                  {otpMsg.text}
+                </p>
+              )}
+              {!otpVerified && (
+                <p className="mt-2 text-xs text-fg-faint">
+                  We verify your email with a quick code to prevent fake orders.
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="phone" className="pf-label mb-2 block">
+                Phone
+              </label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                required
+                autoComplete="tel"
+                className="w-full"
+                placeholder="+92 3XX XXXXXXX"
+              />
             </div>
 
             <div>
