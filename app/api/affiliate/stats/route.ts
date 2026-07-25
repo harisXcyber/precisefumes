@@ -5,11 +5,11 @@ import { adminConfigured, createAdminClient } from "@/lib/supabase/admin";
  *  active affiliate. Returns commission totals and recent orders. */
 export async function POST(request: NextRequest) {
   try {
-    const { email, code } = await request.json();
+    const { email } = await request.json();
 
-    if (!email || !code) {
+    if (!email) {
       return NextResponse.json(
-        { error: "Email and code are required" },
+        { error: "Email is required" },
         { status: 400 }
       );
     }
@@ -26,18 +26,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Look up by email only. The referral code is a PUBLIC promo code
+    // (affiliates share it with customers), so it was never a real secret —
+    // and keying on it meant a regenerated code locked the owner out of their
+    // own dashboard and kept showing them the stale code. Identity is
+    // established by the password sign-in; here we just return live figures.
     const supabase = createAdminClient();
     const { data: affiliate } = await supabase
       .from("affiliates")
       .select("id, name, email, referral_code")
       .eq("email", String(email).toLowerCase())
-      .eq("referral_code", String(code).toUpperCase())
       .eq("status", "active")
       .maybeSingle();
 
     if (!affiliate) {
       return NextResponse.json(
-        { error: "No active affiliate matches that email and code." },
+        { error: "No active affiliate matches that email." },
         { status: 404 }
       );
     }
@@ -60,6 +64,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         name: affiliate.name,
+        code: affiliate.referral_code, // live code — dashboard re-syncs to this
         totals: { earned, pending, sales: orders.length },
         orders,
       },

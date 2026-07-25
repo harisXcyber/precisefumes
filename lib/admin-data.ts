@@ -22,6 +22,7 @@ export interface AdminOrder {
   status: string;
   tracking_note: string | null;
   confirmation_sent: boolean;
+  is_test: boolean;
   oshi_id: string | null;
   oshi_tracking: string | null;
   oshi_courier: string | null;
@@ -39,6 +40,18 @@ export async function fetchOrders(limit = 200): Promise<AdminOrder[]> {
     .order("created_at", { ascending: false })
     .limit(limit);
   return (data as AdminOrder[]) ?? [];
+}
+
+/** Count of live (non-test) orders still needing fulfilment — for the nav badge. */
+export async function fetchOpenOrderCount(): Promise<number> {
+  if (!adminConfigured()) return 0;
+  const supabase = createAdminClient();
+  const { count } = await supabase
+    .from("orders")
+    .select("id", { count: "exact", head: true })
+    .in("status", ["new", "confirmed"])
+    .neq("is_test", true);
+  return count ?? 0;
 }
 
 export async function fetchProducts() {

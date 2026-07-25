@@ -3,11 +3,14 @@ import { fetchOrders, fetchProducts, fetchAffiliates } from "@/lib/admin-data";
 import { formatPrice } from "@/lib/utils";
 
 export default async function AdminOverview() {
-  const [orders, products, affiliates] = await Promise.all([
+  const [allOrders, products, affiliates] = await Promise.all([
     fetchOrders(500),
     fetchProducts(),
     fetchAffiliates(),
   ]);
+
+  // Test orders are archived — they never count toward live numbers.
+  const orders = allOrders.filter((o) => !o.is_test);
 
   const open = orders.filter(
     (o) => o.status === "new" || o.status === "confirmed"
@@ -59,7 +62,7 @@ export default async function AdminOverview() {
 
         {orders.length === 0 ? (
           <p className="rounded-[var(--radius-lg)] border border-border bg-bg-soft p-8 text-center text-sm text-fg-soft">
-            No orders yet. They'll appear here the moment a customer checks out.
+            No orders yet. They&apos;ll appear here the moment a customer checks out.
           </p>
         ) : (
           <div className="overflow-x-auto rounded-[var(--radius-lg)] border border-border">

@@ -27,6 +27,7 @@ export async function PATCH(request: NextRequest, ctx: Ctx) {
   }
   if (body.paymentStatus !== undefined) patch.payment_status = body.paymentStatus;
   if (body.trackingNote !== undefined) patch.tracking_note = body.trackingNote;
+  if (body.isTest !== undefined) patch.is_test = !!body.isTest;
   if (body.confirmationSent !== undefined) {
     patch.confirmation_sent = !!body.confirmationSent;
     patch.confirmation_sent_at = body.confirmationSent

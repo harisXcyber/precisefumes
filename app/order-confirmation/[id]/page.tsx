@@ -178,10 +178,20 @@ export default async function OrderConfirmation({
           <Link href="/shop" className="btn-primary">
             Continue Shopping
           </Link>
-          <Link href="/" className="btn-ghost">
-            Back to Home
+          <Link href="/track" className="btn-ghost">
+            Track Your Order
           </Link>
         </div>
+        <p className="mt-6 text-center text-sm text-fg-soft">
+          Track anytime at{" "}
+          <Link
+            href="/track"
+            className="text-accent-deep underline underline-offset-2"
+          >
+            /track
+          </Link>{" "}
+          using order <strong>{orderId}</strong> and your phone or email.
+        </p>
       </div>
     </div>
   );

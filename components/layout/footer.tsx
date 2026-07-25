@@ -16,6 +16,7 @@ const INFO_LINKS = [
   { href: "/about", label: "Our Story" },
   { href: "/blog", label: "Journal" },
   { href: "/contact", label: "Contact" },
+  { href: "/track", label: "Track Order" },
   { href: "/faq", label: "FAQ" },
   { href: "/shipping", label: "Shipping Policy" },
   { href: "/returns", label: "Returns & Refunds" },

@@ -40,6 +40,12 @@ export async function POST(request: NextRequest) {
 
   // ── Book ────────────────────────────────────────────────
   if (action === "book") {
+    if (o.is_test) {
+      return NextResponse.json(
+        { error: "This is a test order — it won't be booked with a courier." },
+        { status: 400 }
+      );
+    }
     if (o.oshi_tracking) {
       return NextResponse.json(
         { error: "Already booked with Oshi.", tracking: o.oshi_tracking },

@@ -22,7 +22,7 @@ const CITIES = [
 ];
 
 export function CheckoutClient() {
-  const { items, subtotal, getPromoInfo, getTesterInfo, offerFlags } =
+  const { items, subtotal, getPromoInfo, getTesterInfo, offerFlags, clearCart } =
     useCart();
 
   // Persisted cart loads on the client only — render after mount
@@ -281,6 +281,9 @@ export function CheckoutClient() {
 
       if (res.ok) {
         const { orderId } = await res.json();
+        // Order is saved — empty the cart so it doesn't linger for the
+        // customer (persisted in localStorage, so it must be cleared).
+        clearCart();
         setSubmitMessage({
           type: "success",
           text: "Order placed! Taking you to your confirmation…",

@@ -10,6 +10,7 @@ interface AffiliateSession {
 }
 
 interface AffiliateStats {
+  code?: string;
   totals: { earned: number; pending: number; sales: number };
   orders: {
     order_ref: string;
@@ -184,12 +185,30 @@ function Dashboard({
     fetch("/api/affiliate/stats", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: session.email, code: session.code }),
+      body: JSON.stringify({ email: session.email }),
     })
       .then((r) => (r.ok ? r.json() : null))
-      .then((d) => d && setLive(d))
+      .then((d) => {
+        if (!d) return;
+        setLive(d);
+        // Self-heal a stale cached code: if the live code differs from what's
+        // in localStorage (e.g. it was regenerated), persist the new one.
+        if (d.code && d.code !== session.code) {
+          try {
+            const raw = localStorage.getItem(SESSION_KEY);
+            const s = raw ? JSON.parse(raw) : session;
+            localStorage.setItem(
+              SESSION_KEY,
+              JSON.stringify({ ...s, code: d.code })
+            );
+          } catch {}
+        }
+      })
       .catch(() => {});
   }, [session.email, session.code]);
+
+  // Always show the live code when we have it; fall back to the cached one.
+  const code = live?.code ?? session.code;
 
   const totals = live?.totals ?? { earned: 0, pending: 0, sales: 0 };
   const stats = [
@@ -259,13 +278,13 @@ function Dashboard({
               </p>
               <div className="mt-5 rounded-[var(--radius-lg)] border-2 border-accent bg-bg p-5 md:p-6">
                 <p className="break-all text-center font-serif text-4xl tracking-[0.2em] md:text-5xl">
-                  {session.code}
+                  {code}
                 </p>
               </div>
               <div className="mt-4 flex flex-col gap-3 sm:flex-row">
                 <button
                   onClick={() => {
-                    navigator.clipboard.writeText(session.code);
+                    navigator.clipboard.writeText(code);
                     setCopied(true);
                     setTimeout(() => setCopied(false), 2000);
                   }}
@@ -276,7 +295,7 @@ function Dashboard({
                 <a
                   className="btn-ghost flex-1 justify-center"
                   href={`https://wa.me/?text=${encodeURIComponent(
-                    `Luxury perfumes at PKR 2,500 instead of 3,000 — use my code ${session.code} at precisefumes.com 🌟`
+                    `Luxury perfumes at PKR 2,500 instead of 3,000 — use my code ${code} at precisefumes.com 🌟`
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -325,7 +344,7 @@ function Dashboard({
                   <p className="font-serif text-xl">No sales yet</p>
                   <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-fg-soft">
                     Every order placed with code{" "}
-                    <strong className="text-fg">{session.code}</strong> will
+                    <strong className="text-fg">{code}</strong> will
                     appear here with its PKR 300 commission.
                   </p>
                 </div>
