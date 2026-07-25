@@ -98,7 +98,7 @@ export function TesterPicker({
                 {o.image && (
                   <Image
                     src={o.image}
-                    alt={o.name}
+                    alt={`${o.name} 5ml perfume tester — Precise Fumes`}
                     fill
                     sizes="48px"
                     className="object-cover"

@@ -8,6 +8,7 @@ import type { Product } from "@/types";
 import { formatPrice } from "@/lib/utils";
 import { useCart } from "@/lib/store/cart";
 import { getScentTone } from "@/lib/tones";
+import { productImageAlt } from "@/lib/seo";
 
 export function ProductCard({ product }: { product: Product }) {
   const addItem = useCart((s) => s.addItem);
@@ -51,7 +52,7 @@ export function ProductCard({ product }: { product: Product }) {
       >
         <Image
           src={primaryImage}
-          alt={product.name}
+          alt={productImageAlt(product.name, product.category)}
           fill
           sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
           className="object-cover"

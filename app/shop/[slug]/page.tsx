@@ -56,8 +56,14 @@ export async function generateMetadata({
       url: `https://precisefumes.com/shop/${product.slug}`,
       type: "website",
       images: product.images?.length
-        ? [{ url: product.images[0], width: 1400, height: 1400 }]
+        ? product.images.map((url) => ({ url, width: 1400, height: 1400 }))
         : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: product.images?.slice(0, 1),
     },
   };
 }
@@ -81,7 +87,7 @@ export default async function ProductPage({ params }: PageProps) {
     slug: product.slug,
     description: product.description,
     price: product.price,
-    image: product.images?.[0],
+    images: product.images,
     category: product.category,
     inStock: product.stock > 0,
   });

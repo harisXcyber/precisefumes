@@ -8,6 +8,7 @@ import type { Product } from "@/types";
 import { formatPrice } from "@/lib/utils";
 import { useCart } from "@/lib/store/cart";
 import { getScentTone } from "@/lib/tones";
+import { productImageAlt } from "@/lib/seo";
 import { TesterPicker, type TesterOption } from "@/components/shop/tester-picker";
 import { WhatsAppIcon } from "@/components/ui/whatsapp-icon";
 import { waLink } from "@/lib/contact";
@@ -72,7 +73,7 @@ export function ProductDetail({
             >
               <Image
                 src={images[activeImage]}
-                alt={product.name}
+                alt={productImageAlt(product.name, product.category, activeImage)}
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -97,7 +98,7 @@ export function ProductDetail({
               >
                 <Image
                   src={img}
-                  alt={`${product.name} ${i + 1}`}
+                  alt={productImageAlt(product.name, product.category, i)}
                   fill
                   sizes="80px"
                   className="object-cover"

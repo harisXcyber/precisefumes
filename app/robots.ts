@@ -18,7 +18,10 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: "https://precisefumes.com/sitemap.xml",
+    sitemap: [
+      "https://precisefumes.com/sitemap.xml",
+      "https://precisefumes.com/image-sitemap.xml",
+    ],
     host: "https://precisefumes.com",
   };
 }

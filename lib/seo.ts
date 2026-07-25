@@ -130,23 +130,38 @@ export function websiteLd() {
   };
 }
 
+/** Keyword-rich, human alt text for a product image — the single biggest
+ *  on-page signal Google Images uses. Index 0 is the primary/bottle shot. */
+export function productImageAlt(
+  name: string,
+  category: string,
+  i = 0
+): string {
+  const who = category === "Her" ? "women" : "men";
+  if (i === 0)
+    return `${name} perfume for ${who} by Precise Fumes — long-lasting Extrait de Parfum`;
+  if (i === 1) return `${name} perfume bottle and box — Precise Fumes Pakistan`;
+  return `${name} by Precise Fumes — premium perfume, photo ${i + 1}`;
+}
+
 interface ProductLdInput {
   name: string;
   slug: string;
   description: string;
   price: number;
-  image?: string;
+  images?: string[];
   category: string;
   inStock: boolean;
 }
 
 export function productLd(p: ProductLdInput) {
+  const images = (p.images ?? []).filter(Boolean);
   return {
     "@context": "https://schema.org",
     "@type": "Product",
     name: `${p.name} — Precise Fumes Perfume`,
     description: p.description,
-    image: p.image ? [p.image] : undefined,
+    image: images.length ? images : undefined,
     sku: p.slug,
     brand: { "@type": "Brand", name: SITE_NAME },
     category: p.category === "Her" ? "Women's Perfume" : "Men's Perfume",
