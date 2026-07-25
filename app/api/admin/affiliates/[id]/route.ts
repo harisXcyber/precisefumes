@@ -18,11 +18,14 @@ export async function PATCH(request: NextRequest, ctx: Ctx) {
   const supabase = createAdminClient();
 
   if (body.action === "markPaid") {
+    // Only pay out commissions whose COD cash has actually been collected
+    // (status 'payable' = the order was delivered). Undelivered 'pending'
+    // commissions are NOT paid out.
     const { error } = await supabase
       .from("affiliate_orders")
       .update({ status: "paid" })
       .eq("affiliate_id", id)
-      .in("status", ["pending", "payable"]);
+      .eq("status", "payable");
     if (error) {
       return NextResponse.json({ error: "Could not update." }, { status: 400 });
     }

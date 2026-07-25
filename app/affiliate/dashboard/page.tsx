@@ -11,7 +11,7 @@ interface AffiliateSession {
 
 interface AffiliateStats {
   code?: string;
-  totals: { earned: number; pending: number; sales: number };
+  totals: { earned: number; pending: number; inProgress?: number; sales: number };
   orders: {
     order_ref: string;
     commission: number;
@@ -210,24 +210,33 @@ function Dashboard({
   // Always show the live code when we have it; fall back to the cached one.
   const code = live?.code ?? session.code;
 
-  const totals = live?.totals ?? { earned: 0, pending: 0, sales: 0 };
+  const totals = live?.totals ?? {
+    earned: 0,
+    pending: 0,
+    inProgress: 0,
+    sales: 0,
+  };
   const stats = [
     {
       label: "Total Earned",
       value: `PKR ${totals.earned.toLocaleString()}`,
-      hint: "Paid-out commissions",
+      hint: "Paid out to you",
     },
     {
       label: "Pending Payout",
       value: `PKR ${totals.pending.toLocaleString()}`,
-      hint: "Awaiting payout",
+      hint: "Delivered — awaiting payout",
+    },
+    {
+      label: "In Progress",
+      value: `PKR ${(totals.inProgress ?? 0).toLocaleString()}`,
+      hint: "Ordered — not delivered yet",
     },
     {
       label: "Sales",
       value: String(totals.sales),
       hint: "Orders with your code",
     },
-    { label: "Per Sale", value: "PKR 300", hint: "Your commission rate" },
   ];
 
   return (

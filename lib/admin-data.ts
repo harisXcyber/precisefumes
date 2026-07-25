@@ -88,15 +88,21 @@ export async function fetchAffiliates() {
 
   return (affiliates ?? []).map((a) => {
     const mine = (commissions ?? []).filter((c) => c.affiliate_id === a.id);
+    // Commission lifecycle: pending (code used, order not delivered) →
+    // payable (delivered = COD cash collected) → paid (affiliate paid out).
+    // Cash is only OWED once it's been collected, i.e. status 'payable'.
+    const sum = (status: string) =>
+      mine
+        .filter((c) => c.status === status)
+        .reduce((s, c) => s + c.commission, 0);
     return {
       ...a,
-      sales: mine.length,
-      owed: mine
-        .filter((c) => c.status !== "paid")
-        .reduce((s, c) => s + c.commission, 0),
-      paid: mine
-        .filter((c) => c.status === "paid")
-        .reduce((s, c) => s + c.commission, 0),
+      // A sale counts as soon as the code is used, but not if it was voided
+      // (order cancelled).
+      sales: mine.filter((c) => c.status !== "void").length,
+      pending: sum("pending"), // sale made, cash not yet received
+      owed: sum("payable"), // cash received, awaiting payout
+      paid: sum("paid"),
     };
   });
 }

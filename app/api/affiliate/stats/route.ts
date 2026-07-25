@@ -54,18 +54,22 @@ export async function POST(request: NextRequest) {
       .limit(50);
 
     const orders = rows ?? [];
-    const earned = orders
-      .filter((o) => o.status === "paid")
-      .reduce((s, o) => s + o.commission, 0);
-    const pending = orders
-      .filter((o) => o.status === "pending")
-      .reduce((s, o) => s + o.commission, 0);
+    const sum = (status: string) =>
+      orders
+        .filter((o) => o.status === status)
+        .reduce((s, o) => s + o.commission, 0);
+    // Commission only becomes real cash once the order is delivered (COD
+    // collected → 'payable'). Undelivered 'pending' sales are "in progress".
+    const earned = sum("paid");
+    const pending = sum("payable"); // delivered, awaiting your payout
+    const inProgress = sum("pending"); // sold, awaiting delivery
+    const sales = orders.filter((o) => o.status !== "void").length;
 
     return NextResponse.json(
       {
         name: affiliate.name,
         code: affiliate.referral_code, // live code — dashboard re-syncs to this
-        totals: { earned, pending, sales: orders.length },
+        totals: { earned, pending, inProgress, sales },
         orders,
       },
       { status: 200 }

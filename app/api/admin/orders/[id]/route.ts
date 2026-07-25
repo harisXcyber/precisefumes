@@ -44,13 +44,23 @@ export async function PATCH(request: NextRequest, ctx: Ctx) {
     return NextResponse.json({ error: "Could not update." }, { status: 400 });
   }
 
-  // Marking an order delivered releases its affiliate commission for payout.
+  // Marking an order delivered = COD cash collected → the commission becomes
+  // payable (owed to the affiliate). Only now does the cash count.
   if (body.status === "delivered") {
     await supabase
       .from("affiliate_orders")
       .update({ status: "payable" })
       .eq("order_id", id)
       .eq("status", "pending");
+  }
+
+  // Cancelling an order voids any unpaid commission on it (leaves the pipeline).
+  if (body.status === "cancelled") {
+    await supabase
+      .from("affiliate_orders")
+      .update({ status: "void" })
+      .eq("order_id", id)
+      .in("status", ["pending", "payable"]);
   }
 
   return NextResponse.json({ ok: true });

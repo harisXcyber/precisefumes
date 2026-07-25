@@ -78,6 +78,7 @@ export function AffiliatesTable({ affiliates }: { affiliates: any[] }) {
             <th className="pf-label p-3">Code</th>
             <th className="pf-label p-3">Pay to</th>
             <th className="pf-label p-3 text-right">Sales</th>
+            <th className="pf-label p-3 text-right">Pipeline</th>
             <th className="pf-label p-3 text-right">Owed</th>
             <th className="pf-label p-3 text-right">Paid</th>
             <th className="pf-label p-3"></th>
@@ -104,6 +105,12 @@ export function AffiliatesTable({ affiliates }: { affiliates: any[] }) {
                 <span className="block text-xs">{a.bank_account_name}</span>
               </td>
               <td className="p-3 text-right tabular-nums">{a.sales}</td>
+              <td
+                className="p-3 text-right tabular-nums text-fg-faint"
+                title="Sales made but not yet delivered — cash not received, so not owed yet"
+              >
+                {formatPrice(a.pending ?? 0)}
+              </td>
               <td className="p-3 text-right tabular-nums font-medium">
                 {formatPrice(a.owed)}
               </td>
@@ -126,6 +133,15 @@ export function AffiliatesTable({ affiliates }: { affiliates: any[] }) {
         </tbody>
       </table>
       </div>
+
+      <p className="text-xs leading-relaxed text-fg-faint">
+        <strong className="text-fg-soft">Pipeline</strong> = sales made but the
+        order isn&apos;t delivered yet — no cash collected, so nothing is owed.{" "}
+        <strong className="text-fg-soft">Owed</strong> counts only once you mark
+        the order <strong>delivered</strong> (COD cash received). Cancelling an
+        order removes its commission. &ldquo;Mark paid&rdquo; only pays out
+        what&apos;s owed.
+      </p>
     </div>
   );
 }
