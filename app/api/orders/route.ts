@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { adminConfigured, createAdminClient } from "@/lib/supabase/admin";
 import { sendEmail, orderConfirmationEmail } from "@/lib/email";
-import { consumeOtp } from "@/lib/otp";
 
 function generateOrderRef(): string {
   const ts = Date.now().toString(36).toUpperCase().slice(-5);
@@ -9,30 +8,15 @@ function generateOrderRef(): string {
   return `PF-${ts}${rand}`;
 }
 
-/** Email OTP is enforced only when the DB is configured (so it can
- *  store codes). Set REQUIRE_ORDER_OTP=false to disable if ever needed. */
-function otpRequired(): boolean {
-  return adminConfigured() && process.env.REQUIRE_ORDER_OTP !== "false";
-}
-
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const {
-      customer,
-      shipping,
-      promo,
-      affiliate,
-      items,
-      subtotal,
-      discount,
-      total,
-      otp,
-    } = body;
+    const { customer, shipping, promo, affiliate, items, subtotal, discount, total } =
+      body;
 
+    // Email is optional; phone is the contact we actually confirm on.
     if (
       !customer?.name ||
-      !customer?.email ||
       !customer?.phone ||
       !customer?.address ||
       !customer?.city
@@ -44,17 +28,6 @@ export async function POST(request: NextRequest) {
     }
     if (!items || items.length === 0) {
       return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
-    }
-
-    // Verify the email with the OTP the customer entered (and consume it).
-    if (otpRequired()) {
-      const ok = otp && (await consumeOtp(customer.email, String(otp)));
-      if (!ok) {
-        return NextResponse.json(
-          { error: "Please verify your email with the code we sent you." },
-          { status: 401 }
-        );
-      }
     }
 
     const ref = generateOrderRef();
@@ -80,7 +53,7 @@ export async function POST(request: NextRequest) {
         .insert({
           ref,
           customer_name: customer.name,
-          customer_email: customer.email,
+          customer_email: customer.email || null,
           customer_phone: customer.phone,
           address: customer.address,
           city: customer.city,
@@ -118,21 +91,23 @@ export async function POST(request: NextRequest) {
       console.log("Order (Supabase not configured):", { ref, customer, total });
     }
 
-    // Confirmation email — best-effort, never blocks the order.
-    await sendEmail({
-      to: customer.email,
-      subject: `Order ${ref} confirmed — Precise Fumes`,
-      html: orderConfirmationEmail({
-        ref,
-        name: customer.name,
-        city: customer.city,
-        items,
-        subtotal,
-        discount: discount ?? 0,
-        shippingFee: shipping?.fee ?? 0,
-        total,
-      }),
-    }).catch(() => ({ sent: false }));
+    // Confirmation email — best-effort, only if they gave an email.
+    if (customer.email) {
+      await sendEmail({
+        to: customer.email,
+        subject: `Order ${ref} confirmed — Precise Fumes`,
+        html: orderConfirmationEmail({
+          ref,
+          name: customer.name,
+          city: customer.city,
+          items,
+          subtotal,
+          discount: discount ?? 0,
+          shippingFee: shipping?.fee ?? 0,
+          total,
+        }),
+      }).catch(() => ({ sent: false }));
+    }
 
     return NextResponse.json({ orderId: ref }, { status: 200 });
   } catch (error) {

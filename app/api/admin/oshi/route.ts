@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
     const result = await bookShipment({
       ref: o.ref,
       name: o.customer_name,
-      email: o.customer_email,
+      email: o.customer_email ?? undefined,
       mobile: o.customer_phone,
       city: o.city,
       address: o.address,

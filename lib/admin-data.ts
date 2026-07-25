@@ -5,7 +5,7 @@ export interface AdminOrder {
   id: string;
   ref: string;
   customer_name: string;
-  customer_email: string;
+  customer_email: string | null;
   customer_phone: string;
   address: string;
   city: string;

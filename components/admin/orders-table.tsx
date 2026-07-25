@@ -544,12 +544,18 @@ export function OrdersTable({ orders }: { orders: AdminOrder[] }) {
                               </div>
                               <div>
                                 <p className="pf-eyebrow mb-1">Email</p>
-                                <a
-                                  href={`mailto:${o.customer_email}`}
-                                  className="break-all text-sm text-accent-deep hover:underline"
-                                >
-                                  {o.customer_email}
-                                </a>
+                                {o.customer_email ? (
+                                  <a
+                                    href={`mailto:${o.customer_email}`}
+                                    className="break-all text-sm text-accent-deep hover:underline"
+                                  >
+                                    {o.customer_email}
+                                  </a>
+                                ) : (
+                                  <p className="text-sm text-fg-faint">
+                                    Not provided
+                                  </p>
+                                )}
                               </div>
 
                               {/* This customer's order history */}

@@ -46,14 +46,14 @@ export default async function AdminCustomers() {
         existing.lastAt = o.created_at;
         existing.name = o.customer_name;
         existing.phone = o.customer_phone;
-        existing.email = o.customer_email;
+        existing.email = o.customer_email ?? "";
       }
     } else {
       map.set(k, {
         key: k,
         name: o.customer_name,
         phone: o.customer_phone,
-        email: o.customer_email,
+        email: o.customer_email ?? "",
         orders: 1,
         spent: total,
         delivered: o.status === "delivered" ? total : 0,
