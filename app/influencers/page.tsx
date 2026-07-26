@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { InfluencerApplyForm } from "@/components/influencers/apply-form";
 import { WhatsAppIcon } from "@/components/ui/whatsapp-icon";
 import { waLink } from "@/lib/contact";
 
@@ -204,12 +203,6 @@ export default function InfluencersPage() {
                 <WhatsAppIcon className="h-4 w-4" />
                 Apply on WhatsApp
               </a>
-              <a
-                href="#apply"
-                className="mt-2 block text-center text-xs uppercase tracking-[0.14em] text-fg-soft underline-offset-4 hover:text-fg hover:underline"
-              >
-                or use the form
-              </a>
             </div>
           ))}
         </div>
@@ -239,44 +232,30 @@ export default function InfluencersPage() {
         </div>
       </section>
 
-      {/* Application */}
+      {/* Application — WhatsApp only */}
       <section id="apply" className="container-lux py-14 md:py-20">
-        <div className="mx-auto max-w-2xl">
-          <div className="mb-8 text-center">
-            <p className="pf-eyebrow">Apply now</p>
-            <h2 className="mt-3 font-serif text-4xl font-normal">
-              Join the programme
-            </h2>
-            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-fg-soft">
-              The fastest way is WhatsApp — one tap and you&apos;re talking to
-              us. Prefer a form? That works too.
-            </p>
-          </div>
-
-          {/* WhatsApp — the fast lane */}
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="pf-eyebrow">Apply now</p>
+          <h2 className="mt-3 font-serif text-4xl font-normal">
+            Join the programme
+          </h2>
+          <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-fg-soft">
+            One tap — your application opens in WhatsApp with everything ready
+            to fill in. Send it and we&apos;ll reply within 1–2 days.
+          </p>
           <a
             href={applyWa("Influencer Programme")}
             target="_blank"
             rel="noopener noreferrer"
-            className="mb-4 flex w-full items-center justify-center gap-2.5 rounded-full bg-[#25D366] px-6 py-4 text-base font-medium text-white transition-transform hover:scale-[1.02]"
+            className="mt-8 flex w-full items-center justify-center gap-2.5 rounded-full bg-[#25D366] px-6 py-4 text-base font-medium text-white transition-transform hover:scale-[1.02]"
           >
             <WhatsAppIcon className="h-5 w-5" />
             Apply on WhatsApp — 0317 2388450
           </a>
-          <p className="mb-8 text-center text-xs text-fg-faint">
-            Opens WhatsApp with your application ready to fill in — handle,
-            followers, views — and send.
+          <p className="mt-3 text-xs text-fg-faint">
+            Tell us your handle, followers and average reel views — that&apos;s
+            all we need to get started.
           </p>
-
-          <div className="mb-8 flex items-center gap-4">
-            <span className="h-px flex-1 bg-border" aria-hidden />
-            <span className="text-xs uppercase tracking-[0.16em] text-fg-faint">
-              or apply with the form
-            </span>
-            <span className="h-px flex-1 bg-border" aria-hidden />
-          </div>
-
-          <InfluencerApplyForm />
         </div>
       </section>
     </div>
