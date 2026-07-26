@@ -21,6 +21,7 @@ const INFO_LINKS = [
   { href: "/shipping", label: "Shipping Policy" },
   { href: "/returns", label: "Returns & Refunds" },
   { href: "/affiliate/signup", label: "Affiliate Program" },
+  { href: "/influencers", label: "Influencer Programme" },
 ];
 
 export function Footer() {

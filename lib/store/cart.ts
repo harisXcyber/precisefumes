@@ -3,12 +3,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { CartItem } from "@/types";
+import { computePromo, computeTesters } from "@/lib/pricing";
 
-export const TESTER_PRICE = 200;
-const BASE_PRICE = 3000;
-const BUNDLE_2_TOTAL = 5000; // any 2 for PKR 5,000
-const PACK_4_TOTAL = 9000; // Buy 3 Get 1 Free — 4 perfumes for PKR 9,000
-export const PACK_4_COMPARE = 12000; // struck-through anchor (4 x 3,000)
+// Canonical pricing constants live in lib/pricing (shared with the
+// server-side order recompute); re-exported here for existing importers.
+export { TESTER_PRICE, PACK_4_COMPARE } from "@/lib/pricing";
 
 interface PromoInfo {
   type: "bundle" | "pack4" | null;
@@ -131,90 +130,18 @@ export const useCart = create<CartState>()(
       perfumeItems: () => get().items.filter((i) => !isTester(i)),
       testerItems: () => get().items.filter(isTester),
 
-      /** Bottle offers (all perfumes PKR 3,000). Testers never count.
-       *  Each offer only applies while it's live (see offerFlags — set
-       *  from the time-limited offers in the DB). Greedy best-price:
-       *  4-packs (PKR 9,000) first if active, then 2-bundles (PKR 5,000)
-       *  if active, rest at base. Expired offers silently stop applying. */
-      getPromoInfo: () => {
-        const perfumes = get().perfumeItems();
-        const qty = perfumes.reduce((sum, i) => sum + i.quantity, 0);
-        if (qty === 0) {
-          return { type: null, discountAmount: 0, description: "" };
-        }
-        const subtotal = perfumes.reduce(
-          (sum, i) => sum + i.price * i.quantity,
-          0
-        );
-        const flags = get().offerFlags;
+      /** Bottle offers — delegated to the shared pricing module (also
+       *  used server-side to recompute every order). Each offer only
+       *  applies while live (offerFlags, set from the DB offers). */
+      getPromoInfo: () => computePromo(get().perfumeItems(), get().offerFlags),
 
-        let remaining = qty;
-        let total = 0;
-        let packs = 0;
-        let pairs = 0;
-        if (flags.pack4) {
-          packs = Math.floor(remaining / 4);
-          total += packs * PACK_4_TOTAL;
-          remaining -= packs * 4;
-        }
-        if (flags.bundle2) {
-          pairs = Math.floor(remaining / 2);
-          total += pairs * BUNDLE_2_TOTAL;
-          remaining -= pairs * 2;
-        }
-        total += remaining * BASE_PRICE;
-
-        const discount = Math.max(0, subtotal - total);
-        if (discount <= 0) {
-          return { type: null, discountAmount: 0, description: "" };
-        }
-
-        let type: PromoInfo["type"] = "bundle";
-        let description = "Bundle savings applied";
-        if (packs >= 1) {
-          type = "pack4";
-          description =
-            packs === 1
-              ? "Buy 3 Get 1 Free — 4 perfumes for PKR 9,000"
-              : `Buy 3 Get 1 Free ×${packs}`;
-        } else if (pairs >= 1) {
-          description = "Bundle — any 2 for PKR 5,000";
-        }
-
-        return { type, discountAmount: discount, description };
-      },
-
-      /** Every bottle earns one free 5ml tester, and it has to be a scent
-       *  you didn't just buy. Extra testers — including of the scent you
-       *  bought — stay at PKR 200 each. */
-      getTesterInfo: () => {
-        const perfumes = get().perfumeItems();
-        const testers = get().testerItems();
-
-        // Free testers only while the tester offer is live.
-        const allowance = get().offerFlags.tester
-          ? perfumes.reduce((sum, i) => sum + i.quantity, 0)
-          : 0;
-        const purchasedSlugs = new Set(perfumes.map((i) => i.slug));
-
-        const eligibleUnits = testers
-          .filter((t) => !purchasedSlugs.has(t.slug))
-          .reduce((sum, t) => sum + t.quantity, 0);
-
-        const freeApplied = Math.min(allowance, eligibleUnits);
-        const unused = Math.max(0, allowance - freeApplied);
-
-        return {
-          allowance,
-          freeApplied,
-          unused,
-          discountAmount: freeApplied * TESTER_PRICE,
-          description:
-            freeApplied === 1
-              ? "Free tester with your perfume"
-              : `${freeApplied} free testers with your perfumes`,
-        };
-      },
+      /** Free-tester rules — same shared module. */
+      getTesterInfo: () =>
+        computeTesters(
+          get().perfumeItems(),
+          get().testerItems(),
+          get().offerFlags.tester
+        ),
 
       total: () => {
         const subtotal = get().subtotal();

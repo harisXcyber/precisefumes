@@ -61,8 +61,8 @@ export function TesterPicker({
             Every perfume you buy comes with{" "}
             <strong className="text-fg">one free 5ml tester</strong> of a
             different scent — so a Buy 3 Get 1 Free order (4 perfumes) earns 4
-            free testers. Extra testers are {formatPrice(TESTER_PRICE)} each,
-            including one of the perfume you&apos;re buying.
+            free testers. Extra testers are {formatPrice(TESTER_PRICE)}
+            {" each"} — including a tester of the scent you&apos;re buying.
           </p>
         </>
       )}

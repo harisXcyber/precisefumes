@@ -5,9 +5,11 @@ import Link from "next/link";
 import { useCart } from "@/lib/store/cart";
 import { formatPrice } from "@/lib/utils";
 import { normalizePkMobile } from "@/lib/contact";
-
-const BASE_PRICE = 3000;
-const AFFILIATE_PRICE = 2500;
+import {
+  BASE_PRICE,
+  AFFILIATE_PRICE,
+  computeShipping,
+} from "@/lib/pricing";
 const CITIES = [
   "Karachi",
   "Lahore",
@@ -78,7 +80,7 @@ export function CheckoutClient() {
     ? standardUnits * (BASE_PRICE - AFFILIATE_PRICE)
     : 0;
 
-  // Bonus codes apply to single perfumes only — never on top of a
+  // Promo codes apply to single perfumes only — never on top of a
   // bundle / buy-2-get-1 offer. Whichever saves more wins.
   const affiliateWins =
     appliedCode !== null && affiliateSavings > promo.discountAmount;
@@ -86,7 +88,7 @@ export function CheckoutClient() {
     ? affiliateSavings
     : promo.discountAmount;
   const activeDiscountLabel = affiliateWins
-    ? `Bonus code ${appliedCode} — PKR 2,500 per perfume`
+    ? `Promo code ${appliedCode} — PKR 2,500 per perfume`
     : promo.description;
 
   const cartTotal = Math.max(
@@ -95,16 +97,22 @@ export function CheckoutClient() {
   );
   const isKarachi = city === "Karachi";
   const freeKarachi = offerFlags.freedelivery; // time-limited offer
-  const shippingFee =
-    city === "" ? 0 : isKarachi ? (freeKarachi ? 0 : 300) : 300;
+  // Free Karachi delivery needs a perfume in the order — a tester-only
+  // order (PKR 200) always pays the delivery fee.
+  const hasPerfume = items.some((i) => i.kind !== "tester");
+  const shippingFee = computeShipping(city, hasPerfume, freeKarachi);
   const shippingLabel =
     city === ""
       ? "Select your city"
       : isKarachi
-        ? freeKarachi
+        ? shippingFee === 0
           ? "Free — 2–5 working days"
           : "PKR 300 — 2–5 working days"
         : "PKR 300 — 5–7 working days";
+  const testerOnlyNote =
+    isKarachi && freeKarachi && !hasPerfume
+      ? "Free Karachi delivery applies with a perfume in your order — tester-only orders ship at PKR 300."
+      : null;
   const finalTotal = cartTotal + shippingFee;
 
   async function applyCode() {
@@ -290,6 +298,11 @@ export function CheckoutClient() {
               <span className="text-fg-soft">Delivery</span>
               <span className="text-right">{shippingLabel}</span>
             </div>
+            {testerOnlyNote && (
+              <p className="text-xs leading-relaxed text-fg-faint">
+                {testerOnlyNote}
+              </p>
+            )}
 
             <div className="mt-2 flex justify-between border-t border-border pt-4 font-serif text-xl">
               <span>Total</span>
@@ -307,15 +320,16 @@ export function CheckoutClient() {
           )}
           {promo.type === null && !appliedCode && (
             <p className="mt-5 rounded-[var(--radius)] bg-bg p-3.5 text-xs leading-relaxed text-fg-soft">
-              💡 Add a second perfume for the{" "}
-              <strong className="text-fg">2-for-PKR-5,000 bundle</strong>, or four
-              for <strong className="text-fg">Buy 3 Get 1 Free — PKR 9,000</strong>.
+              💡 {hasPerfume ? "Add a second perfume" : "Add 2 perfumes"} for
+              the <strong className="text-fg">2-for-PKR-5,000 bundle</strong>,
+              or four for{" "}
+              <strong className="text-fg">Buy 3 Get 1 Free — PKR 9,000</strong>.
             </p>
           )}
           {appliedCode && !affiliateWins && promo.type !== null && (
             <p className="mt-5 rounded-[var(--radius)] bg-bg p-3.5 text-xs leading-relaxed text-fg-soft">
               Your {promo.description.toLowerCase()} saves more than the bonus
-              code, so we applied the better offer. Bonus codes work on single
+              code, so we applied the better offer. Promo codes work on single
               perfumes only.
             </p>
           )}
@@ -416,14 +430,18 @@ export function CheckoutClient() {
                 <option value="">Select your city</option>
                 {CITIES.map((c) => (
                   <option key={c} value={c}>
-                    {c === "Karachi" ? "Karachi — Free delivery" : c}
+                    {c === "Karachi" && freeKarachi && hasPerfume
+                      ? "Karachi — Free delivery"
+                      : c}
                   </option>
                 ))}
               </select>
               {city && (
                 <p className="mt-2 text-xs text-fg-soft">
                   {isKarachi
-                    ? "✓ Free delivery in Karachi, 2–5 working days."
+                    ? shippingFee === 0
+                      ? "✓ Free delivery in Karachi, 2–5 working days."
+                      : "Delivery in Karachi PKR 300, 2–5 working days."
                     : "Nationwide delivery PKR 300, 5–7 working days."}
                 </p>
               )}
@@ -448,10 +466,10 @@ export function CheckoutClient() {
           </div>
         </fieldset>
 
-        {/* Bonus code */}
+        {/* Promo code */}
         <fieldset>
           <legend className="mb-3 font-serif text-xl font-normal">
-            3 · Bonus Code{" "}
+            3 · Promo Code{" "}
             <span className="text-sm text-fg-faint">(optional)</span>
           </legend>
           <p className="mb-4 text-xs leading-relaxed text-fg-soft">

@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { adminConfigured, createAdminClient } from "@/lib/supabase/admin";
 import { sendEmail, orderConfirmationEmail } from "@/lib/email";
+import { getActiveOffers } from "@/lib/offers";
+import { getProducts } from "@/lib/products";
+import {
+  BASE_PRICE,
+  TESTER_PRICE,
+  priceOrder,
+  type PricingFlags,
+} from "@/lib/pricing";
 
 function generateOrderRef(): string {
   const ts = Date.now().toString(36).toUpperCase().slice(-5);
@@ -8,11 +16,11 @@ function generateOrderRef(): string {
   return `PF-${ts}${rand}`;
 }
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { customer, shipping, promo, affiliate, items, subtotal, discount, total } =
-      body;
+    const { customer, affiliate, items } = body;
 
     // Email is optional; phone is the contact we actually confirm on.
     if (
@@ -26,28 +34,67 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    if (!items || items.length === 0) {
+    if (!items || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
     }
 
+    // ── Canonical pricing: never trust client-sent prices or totals. ──
+    // Line prices come from the DB catalog (testers are fixed PKR 200),
+    // discounts/shipping are recomputed from the live offers, and the
+    // stored order carries the server's numbers.
+    const [offers, products] = await Promise.all([
+      getActiveOffers().catch(() => []),
+      getProducts().catch(() => []),
+    ]);
+    const keys = new Set(offers.map((o) => o.offer_key));
+    const flags: PricingFlags = {
+      bundle2: keys.has("bundle2"),
+      pack4: keys.has("pack4"),
+      tester: keys.has("tester"),
+      freedelivery: keys.has("freedelivery"),
+    };
+    const priceBySlug = new Map(products.map((p) => [p.slug, p.price]));
+
+    const lines = (items as any[]).map((i) => ({
+      ...i,
+      quantity: Math.min(99, Math.max(1, Math.round(Number(i.quantity) || 1))),
+      price:
+        i.kind === "tester"
+          ? TESTER_PRICE
+          : (priceBySlug.get(String(i.slug)) ?? BASE_PRICE),
+    }));
+
+    const supabase = adminConfigured() ? createAdminClient() : null;
+
+    // A promo code only counts if it maps to a real, active affiliate.
+    let affiliateRow: { id: string; referral_code: string } | null = null;
+    if (supabase && affiliate?.code) {
+      const { data } = await supabase
+        .from("affiliates")
+        .select("id, referral_code")
+        .eq("referral_code", String(affiliate.code).toUpperCase())
+        .eq("status", "active")
+        .maybeSingle();
+      affiliateRow = data ?? null;
+    }
+
+    const pricing = priceOrder(lines, flags, {
+      affiliateApplied: !!affiliateRow,
+      city: String(customer.city),
+    });
+
+    // Observability: a mismatch means an outdated client or a tampered
+    // payload — the server's numbers win either way.
+    if (body.total !== undefined && Number(body.total) !== pricing.total) {
+      console.warn(
+        `Order total mismatch (client ${body.total} vs server ${pricing.total}) — using server pricing.`
+      );
+    }
+
     const ref = generateOrderRef();
+    const creditAffiliate = affiliateRow && pricing.affiliateWins;
 
-    if (adminConfigured()) {
-      const supabase = createAdminClient();
-
-      // If an affiliate code was used, resolve it to a real, active
-      // affiliate — commission only counts for registered codes.
-      let affiliateRow: { id: string; referral_code: string } | null = null;
-      if (affiliate?.code) {
-        const { data } = await supabase
-          .from("affiliates")
-          .select("id, referral_code")
-          .eq("referral_code", String(affiliate.code).toUpperCase())
-          .eq("status", "active")
-          .maybeSingle();
-        affiliateRow = data ?? null;
-      }
-
+    if (supabase) {
       const { data: order, error } = await supabase
         .from("orders")
         .insert({
@@ -57,16 +104,17 @@ export async function POST(request: NextRequest) {
           customer_phone: customer.phone,
           address: customer.address,
           city: customer.city,
-          shipping_zone: shipping?.zone ?? "nationwide",
-          shipping_fee: shipping?.fee ?? 0,
+          shipping_zone:
+            customer.city === "Karachi" ? "karachi" : "nationwide",
+          shipping_fee: pricing.shippingFee,
           payment_method: "cod",
           payment_status: "pending",
-          items,
-          subtotal,
-          discount: discount ?? 0,
-          promo_type: promo?.type ?? null,
-          affiliate_code: affiliateRow?.referral_code ?? null,
-          affiliate_commission: affiliateRow ? 300 : 0,
+          items: lines,
+          subtotal: pricing.subtotal,
+          discount: pricing.discount,
+          promo_type: creditAffiliate ? null : pricing.promo.type,
+          affiliate_code: creditAffiliate ? affiliateRow!.referral_code : null,
+          affiliate_commission: creditAffiliate ? 300 : 0,
         })
         .select("id")
         .single();
@@ -79,16 +127,16 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      if (affiliateRow) {
+      if (creditAffiliate) {
         await supabase.from("affiliate_orders").insert({
-          affiliate_id: affiliateRow.id,
+          affiliate_id: affiliateRow!.id,
           order_id: order.id,
           order_ref: ref,
           commission: 300,
         });
       }
     } else {
-      console.log("Order (Supabase not configured):", { ref, customer, total });
+      console.log("Order (Supabase not configured):", { ref, customer });
     }
 
     // Confirmation email — best-effort, only if they gave an email.
@@ -100,11 +148,11 @@ export async function POST(request: NextRequest) {
           ref,
           name: customer.name,
           city: customer.city,
-          items,
-          subtotal,
-          discount: discount ?? 0,
-          shippingFee: shipping?.fee ?? 0,
-          total,
+          items: lines,
+          subtotal: pricing.subtotal,
+          discount: pricing.discount,
+          shippingFee: pricing.shippingFee,
+          total: pricing.total,
         }),
       }).catch(() => ({ sent: false }));
     }

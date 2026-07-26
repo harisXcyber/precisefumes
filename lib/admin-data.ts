@@ -117,6 +117,34 @@ export async function fetchAllOffers() {
   return data ?? [];
 }
 
+export interface InfluencerApplication {
+  id: string;
+  name: string;
+  phone: string;
+  email: string | null;
+  instagram: string;
+  followers: string;
+  avg_views: string;
+  avg_likes: string | null;
+  tier: string;
+  pitch: string | null;
+  status: string;
+  created_at: string;
+}
+
+export async function fetchInfluencerApplications(): Promise<
+  InfluencerApplication[]
+> {
+  if (!adminConfigured()) return [];
+  const supabase = createAdminClient();
+  const { data } = await supabase
+    .from("influencer_applications")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(300);
+  return (data as InfluencerApplication[]) ?? [];
+}
+
 export async function fetchMessages() {
   if (!adminConfigured()) return { messages: [], subscribers: [] };
   const supabase = createAdminClient();

@@ -17,7 +17,7 @@ export function sanitizeCodeWord(raw: string): string {
     .slice(0, 12);
 }
 
-/** Bonus code = chosen word + two random digits, e.g. HARIS47 */
+/** Promo code = chosen word + two random digits, e.g. HARIS47 */
 function buildReferralCode(word: string): string {
   return `${word}${String(crypto.randomInt(0, 100)).padStart(2, "0")}`;
 }
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error:
-            "Choose a bonus-code word of at least 2 letters/numbers (e.g. your name).",
+            "Choose a promo-code word of at least 2 letters/numbers (e.g. your name).",
         },
         { status: 400 }
       );
@@ -116,7 +116,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Bonus code = PRECISE + chosen word + a random digit; retry the
+    // Promo code = PRECISE + chosen word + a random digit; retry the
     // digit until it's unique.
     let referralCode = buildReferralCode(word);
     for (let i = 0; i < 12; i++) {

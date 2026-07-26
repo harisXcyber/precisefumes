@@ -279,7 +279,7 @@ function Dashboard({
           <div className="space-y-6 lg:col-span-2">
             <section className="pf-tint rounded-[var(--radius-lg)] border border-border bg-bg-soft p-6 md:p-8">
               <h2 className="font-serif text-2xl font-normal">
-                Your Bonus Code
+                Your Promo Code
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-fg-soft">
                 Share it anywhere. Customers pay PKR 2,500 instead of PKR 3,000

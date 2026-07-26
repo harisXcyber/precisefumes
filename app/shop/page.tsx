@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { getProducts } from "@/lib/products";
 import { ShopGrid } from "@/components/shop/shop-grid";
+import { SITE_URL } from "@/lib/seo";
 
 export const revalidate = 3600;
 
@@ -22,8 +23,28 @@ export const metadata: Metadata = {
 export default async function ShopPage() {
   const products = await getProducts();
 
+  // ItemList — tells Google this is the catalog page and links every
+  // product with its position, name and image (rich-result eligible).
+  const itemListLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Precise Fumes Perfume Collection",
+    numberOfItems: products.length,
+    itemListElement: products.map((p, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `${SITE_URL}/shop/${p.slug}`,
+      name: `${p.name} — Precise Fumes Perfume`,
+      image: p.images?.[0],
+    })),
+  };
+
   return (
     <div className="pt-24 md:pt-28">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }}
+      />
       {/* Page header */}
       <section className="border-b border-border bg-bg-soft py-16 md:py-20">
         <div className="container-lux text-center">

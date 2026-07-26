@@ -9,6 +9,7 @@ import {
   Package,
   Tag,
   Share2,
+  Star,
   MessageSquare,
   Wallet,
 } from "lucide-react";
@@ -39,6 +40,7 @@ export function AdminNav({
     { href: "/admin/products", label: "Products", icon: Package },
     { href: "/admin/offers", label: "Offers", icon: Tag },
     { href: "/admin/affiliates", label: "Affiliates", icon: Share2 },
+    { href: "/admin/influencers", label: "Influencers", icon: Star },
     { href: "/admin/messages", label: "Messages", icon: MessageSquare },
     { href: "/finances", label: "Finances", icon: Wallet, external: true },
   ];

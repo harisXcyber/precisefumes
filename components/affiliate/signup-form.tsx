@@ -53,7 +53,7 @@ export function AffiliateSignupForm() {
     if (cleanWord(codeWord).length < 2) {
       setMessage({
         type: "error",
-        text: "Choose a bonus-code word of at least 2 letters (e.g. your name).",
+        text: "Choose a promo-code word of at least 2 letters (e.g. your name).",
       });
       setIsSubmitting(false);
       return;
@@ -181,13 +181,13 @@ export function AffiliateSignupForm() {
         </div>
       </fieldset>
 
-      {/* Bonus code */}
+      {/* Promo code */}
       <fieldset className="space-y-4 pt-6 border-t border-border">
         <legend className="font-serif text-xl font-normal mb-2">
-          Your Bonus Code
+          Your Promo Code
         </legend>
         <p className="text-xs leading-relaxed text-fg-soft">
-          Choose a word — your name or brand works great. Your bonus code
+          Choose a word — your name or brand works great. Your promo code
           becomes your word + 2 numbers. Share it to earn PKR 300 per sale.
         </p>
         <div>

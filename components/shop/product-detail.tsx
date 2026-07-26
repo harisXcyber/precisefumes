@@ -271,7 +271,7 @@ export function ProductDetail({
           </p>
           <p className="text-fg-soft">
             <strong className="text-fg">Launch bonus — save up to PKR 500</strong>{" "}
-            — apply an affiliate bonus code at checkout and single perfumes
+            — apply an affiliate promo code at checkout and single perfumes
             drop to PKR 2,500.
           </p>
           <p className="text-fg-soft">

@@ -40,10 +40,10 @@ export function AffiliatesTable({ affiliates }: { affiliates: any[] }) {
 
   return (
     <div className="space-y-6">
-      {/* Active bonus codes summary */}
+      {/* Active promo codes summary */}
       <div className="rounded-[var(--radius-lg)] border border-border bg-bg-soft p-5">
         <p className="pf-eyebrow mb-3">
-          Active bonus codes ({activeCodes.length})
+          Active promo codes ({activeCodes.length})
         </p>
         {activeCodes.length === 0 ? (
           <p className="text-sm text-fg-soft">

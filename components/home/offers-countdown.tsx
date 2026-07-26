@@ -7,7 +7,7 @@ import { Countdown } from "@/components/ui/countdown";
 /** Homepage band showing the live, time-limited offers with a
  *  countdown. Renders nothing once every offer has expired. */
 export function OffersCountdown() {
-  const offers = useOffers();
+  const { offers } = useOffers();
   const timed = offers.filter((o) => o.ends_at);
   if (offers.length === 0) return null;
 

@@ -46,12 +46,14 @@ export function Navbar() {
   // Light mode shows dark-text logo; dark mode shows light logo.
   const logoSrc = theme === "dark" ? "/logo-dark.png" : "/logo-light.png";
 
-  // Live offer badges; fall back to the standing offers before load / if none.
-  const offers = useOffers();
-  const offerBadges =
-    offers.length > 0
-      ? offers.map((o) => o.badge || o.title)
-      : ["Any 2 for PKR 5,000", "Buy 3 Get 1 Free", "Free Karachi Delivery"];
+  // Live offer badges. Before the offers have loaded we show the standing
+  // set (avoids a flash of empty bar); once loaded, the truth wins — if
+  // every offer has expired, the bar disappears instead of advertising
+  // offers that no longer exist.
+  const { offers, loaded } = useOffers();
+  const offerBadges = loaded
+    ? offers.map((o) => o.badge || o.title)
+    : ["Any 2 for PKR 5,000", "Buy 3 Get 1 Free", "Free Karachi Delivery"];
 
   return (
     <>
@@ -62,22 +64,24 @@ export function Navbar() {
         )}
       >
         {/* Offers bar — reflects the live, time-limited offers */}
-        <div className="bg-invert-bg text-invert-fg">
-          <p className="container-lux flex h-8 items-center justify-center gap-2 overflow-hidden whitespace-nowrap text-[10px] uppercase tracking-[0.16em] text-invert-fg/85 sm:text-[11px]">
-            {offerBadges.map((label, i) => (
-              <span key={label} className="flex items-center gap-2">
-                {i > 0 && (
-                  <span className="text-accent" aria-hidden>
-                    ·
+        {offerBadges.length > 0 && (
+          <div className="bg-invert-bg text-invert-fg">
+            <p className="container-lux flex h-8 items-center justify-center gap-2 overflow-hidden whitespace-nowrap text-[10px] uppercase tracking-[0.16em] text-invert-fg/85 sm:text-[11px]">
+              {offerBadges.map((label, i) => (
+                <span key={label} className="flex items-center gap-2">
+                  {i > 0 && (
+                    <span className="text-accent" aria-hidden>
+                      ·
+                    </span>
+                  )}
+                  <span className={i === 0 ? "hidden sm:inline" : ""}>
+                    {label}
                   </span>
-                )}
-                <span className={i === 0 ? "hidden sm:inline" : ""}>
-                  {label}
                 </span>
-              </span>
-            ))}
-          </p>
-        </div>
+              ))}
+            </p>
+          </div>
+        )}
 
         <nav className="container-lux relative flex h-16 items-center justify-between md:h-20">
           {/* Left: mobile menu toggle */}

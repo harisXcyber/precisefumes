@@ -145,7 +145,7 @@ export function VerifyContent() {
 
         {/* Your Code */}
         <div className="bg-bg-soft p-8 rounded-[var(--radius)] mb-12">
-          <p className="pf-eyebrow mb-3">Your Unique Bonus Code</p>
+          <p className="pf-eyebrow mb-3">Your Unique Promo Code</p>
           <div className="mb-4 p-4 bg-bg rounded-[var(--radius)] border-2 border-accent">
             <p className="font-serif text-3xl tracking-widest">{referralCode}</p>
           </div>

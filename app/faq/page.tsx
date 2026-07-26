@@ -29,18 +29,18 @@ const FAQS: { q: string; a: React.ReactNode; plain?: string }[] = [
       "Buy 3 Get 1 Free: add four perfumes to your cart and the price drops to just PKR 9,000 instead of PKR 12,000 — four premium perfumes plus four free 5ml testers. Applied automatically, no code needed.",
   },
   {
-    q: "What is a bonus code and how do I use one?",
+    q: "What is a promo code and how do I use one?",
     a: (
       <>
-        Bonus codes come from our affiliates. Enter one at checkout and single
-        perfumes drop from PKR 3,000 to PKR 2,500 each. Bonus codes apply to
+        Promo codes come from our affiliates. Enter one at checkout and single
+        perfumes drop from PKR 3,000 to PKR 2,500 each. Promo codes apply to
         single perfumes only — they don't combine with the bundle or
         Buy&nbsp;3&nbsp;Get&nbsp;1&nbsp;Free offers. If both could apply, we
         automatically give you whichever saves you more.
       </>
     ),
     plain:
-      "Bonus codes come from our affiliates. Enter one at checkout and single perfumes drop from PKR 3,000 to PKR 2,500 each. Bonus codes apply to single perfumes only and don't combine with the bundle or Buy 3 Get 1 Free offers. If both could apply, we automatically give you whichever saves you more.",
+      "Promo codes come from our affiliates. Enter one at checkout and single perfumes drop from PKR 3,000 to PKR 2,500 each. Promo codes apply to single perfumes only and don't combine with the bundle or Buy 3 Get 1 Free offers. If both could apply, we automatically give you whichever saves you more.",
   },
   {
     q: "How do I become an affiliate and earn?",
@@ -50,13 +50,13 @@ const FAQS: { q: string; a: React.ReactNode; plain?: string }[] = [
         <Link href="/affiliate/signup" className="link-underline text-fg">
           affiliate page
         </Link>
-        , verify your email, and you'll get your own bonus code. You earn PKR
+        , verify your email, and you'll get your own promo code. You earn PKR
         300 for every sale made with your code, paid to your EasyPaisa or
         JazzCash account.
       </>
     ),
     plain:
-      "Sign up on the affiliate page, verify your email, and you'll get your own bonus code. You earn PKR 300 for every sale made with your code, paid to your EasyPaisa or JazzCash account.",
+      "Sign up on the affiliate page, verify your email, and you'll get your own promo code. You earn PKR 300 for every sale made with your code, paid to your EasyPaisa or JazzCash account.",
   },
   {
     q: "What are the free 5ml testers?",

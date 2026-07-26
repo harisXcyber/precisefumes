@@ -167,7 +167,7 @@ export function orderConfirmationEmail(o: OrderEmailData): string {
 export function affiliateVerifyEmail(name: string, verifyUrl: string): string {
   return wrap(`
     <h1 style="font-size:24px;font-weight:normal;margin:0 0 8px;">Verify your email</h1>
-    <p style="color:#6d6258;margin:0 0 24px;">Salaam ${name}, one click and your Precise Fumes affiliate account is live — your personal bonus code will be shown right after.</p>
+    <p style="color:#6d6258;margin:0 0 24px;">Salaam ${name}, one click and your Precise Fumes affiliate account is live — your personal promo code will be shown right after.</p>
     <p style="text-align:center;margin:0 0 24px;">
       <a href="${verifyUrl}" style="display:inline-block;background:#c99a4e;color:#14100c;padding:14px 32px;border-radius:999px;text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;font-size:13px;">Verify &amp; get my code</a>
     </p>

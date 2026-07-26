@@ -10,9 +10,17 @@ import {
 import { useCart } from "@/lib/store/cart";
 import type { Offer } from "@/lib/offers";
 
-const OffersContext = createContext<Offer[]>([]);
+interface OffersCtx {
+  offers: Offer[];
+  /** True once the live offers have actually been fetched. Until then,
+   *  consumers should show neutral fallbacks — an empty array before
+   *  load means "unknown", not "no offers". */
+  loaded: boolean;
+}
 
-export function useOffers() {
+const OffersContext = createContext<OffersCtx>({ offers: [], loaded: false });
+
+export function useOffers(): OffersCtx {
   return useContext(OffersContext);
 }
 
@@ -22,24 +30,34 @@ export function useOffers() {
 export function OffersProvider({ children }: { children: React.ReactNode }) {
   const [all, setAll] = useState<Offer[]>([]);
   const [live, setLive] = useState<Offer[]>([]);
+  const [loaded, setLoaded] = useState(false);
   const setOfferFlags = useCart((s) => s.setOfferFlags);
 
-  // Fetch once on mount.
-  useEffect(() => {
-    let cancelled = false;
+  // Fetch on mount; if the network hiccups, retry on the 30s tick below
+  // (until then the cart keeps its optimistic defaults).
+  const load = useCallback(() => {
     fetch("/api/offers")
-      .then((r) => (r.ok ? r.json() : { offers: [] }))
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((d) => {
-        if (!cancelled) setAll(d.offers ?? []);
+        setAll(d.offers ?? []);
+        setLoaded(true);
       })
       .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
   }, []);
 
-  // Re-evaluate which offers are still live, now and every 30s.
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  // Re-evaluate which offers are still live, now and every 30s. Only
+  // once real data has loaded — evaluating an empty pre-fetch list
+  // would wrongly switch every offer off for a moment (or for good,
+  // if the fetch failed).
   const evaluate = useCallback(() => {
+    if (!loaded) {
+      load(); // fetch failed earlier — keep retrying on the tick
+      return;
+    }
     const now = Date.now();
     const current = all.filter(
       (o) => !o.ends_at || new Date(o.ends_at).getTime() > now
@@ -52,7 +70,7 @@ export function OffersProvider({ children }: { children: React.ReactNode }) {
       tester: keys.has("tester"),
       freedelivery: keys.has("freedelivery"),
     });
-  }, [all, setOfferFlags]);
+  }, [all, loaded, load, setOfferFlags]);
 
   useEffect(() => {
     evaluate();
@@ -61,6 +79,8 @@ export function OffersProvider({ children }: { children: React.ReactNode }) {
   }, [evaluate]);
 
   return (
-    <OffersContext.Provider value={live}>{children}</OffersContext.Provider>
+    <OffersContext.Provider value={{ offers: live, loaded }}>
+      {children}
+    </OffersContext.Provider>
   );
 }

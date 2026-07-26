@@ -35,7 +35,7 @@ export default function AffiliateSignup() {
             <h3 className="font-serif text-xl font-normal mb-3">Earn Per Sale</h3>
             <p className="text-sm text-fg-soft">
               Get PKR 300 commission for every fragrance sold through your unique
-              bonus code.
+              promo code.
             </p>
           </div>
 
@@ -83,7 +83,7 @@ export default function AffiliateSignup() {
               <div>
                 <p className="font-medium">Get Your Code</p>
                 <p className="text-sm">
-                  Receive your unique bonus code and start sharing with your network.
+                  Receive your unique promo code and start sharing with your network.
                 </p>
               </div>
             </li>
