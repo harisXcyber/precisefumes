@@ -120,34 +120,51 @@ export function CheckoutClient() {
     if (!code) return;
     setCheckingCode(true);
     setCodeMessage(null);
-    try {
-      const res = await fetch("/api/affiliate/validate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
-      });
-      const data = await res.json();
-      if (res.ok && data.valid) {
-        setAppliedCode(code);
-        setCodeMessage({
-          type: "success",
-          text: "Code applied — single perfumes now PKR 2,500 each.",
+    // Mobile connections drop packets — retry the check twice silently
+    // before bothering the customer with an error.
+    let lastNetworkError = false;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const res = await fetch("/api/affiliate/validate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code }),
+          cache: "no-store",
         });
-      } else {
-        setAppliedCode(null);
-        setCodeMessage({
-          type: "error",
-          text: data.error || "This code is not valid.",
-        });
+        const data = await res.json();
+        lastNetworkError = false;
+        if (res.ok && data.valid) {
+          setAppliedCode(code);
+          setCodeMessage({
+            type: "success",
+            text: "Code applied — single perfumes now PKR 2,500 each.",
+          });
+        } else if (res.status === 503) {
+          // Server itself asked for a retry — loop again.
+          lastNetworkError = true;
+          await new Promise((r) => setTimeout(r, 900));
+          continue;
+        } else {
+          setAppliedCode(null);
+          setCodeMessage({
+            type: "error",
+            text: data.error || "This code is not valid.",
+          });
+        }
+        setCheckingCode(false);
+        return;
+      } catch {
+        lastNetworkError = true;
+        await new Promise((r) => setTimeout(r, 900));
       }
-    } catch {
+    }
+    if (lastNetworkError) {
       setCodeMessage({
         type: "error",
-        text: "Could not check the code. Please try again.",
+        text: "Couldn't reach the server — check your internet and tap Apply again.",
       });
-    } finally {
-      setCheckingCode(false);
     }
+    setCheckingCode(false);
   }
 
   function removeCode() {

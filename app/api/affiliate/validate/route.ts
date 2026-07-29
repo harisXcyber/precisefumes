@@ -19,12 +19,21 @@ export async function POST(request: NextRequest) {
 
     if (adminConfigured()) {
       const supabase = createAdminClient();
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("affiliates")
         .select("referral_code")
         .eq("referral_code", normalized)
         .eq("status", "active")
         .maybeSingle();
+
+      // A database hiccup is NOT an invalid code — tell the customer to
+      // retry instead of wrongly rejecting a good code.
+      if (error) {
+        return NextResponse.json(
+          { valid: false, error: "Couldn't check the code right now — please try again." },
+          { status: 503 }
+        );
+      }
 
       if (!data) {
         return NextResponse.json(

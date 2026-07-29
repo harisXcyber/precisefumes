@@ -1,6 +1,18 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // One canonical host: anything on www is permanently redirected to the
+  // apex domain, so every visitor (and Google) lives on precisefumes.com.
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.precisefumes.com" }],
+        destination: "https://precisefumes.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     // Serve modern formats — big savings on the large logo PNGs.
     formats: ["image/avif", "image/webp"],
