@@ -145,7 +145,7 @@ export function AffiliatesTable({ affiliates }: { affiliates: any[] }) {
           <input
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
-            placeholder="e.g. Ali Bhai"
+            placeholder="e.g. Precise Fumes"
             className="w-full"
           />
         </div>
