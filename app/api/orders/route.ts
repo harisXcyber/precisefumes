@@ -66,12 +66,17 @@ export async function POST(request: NextRequest) {
 
     const supabase = adminConfigured() ? createAdminClient() : null;
 
-    // A promo code only counts if it maps to a real, active affiliate.
-    let affiliateRow: { id: string; referral_code: string } | null = null;
+    // A promo code only counts if it maps to a real, active code row —
+    // whether from affiliate signup or created directly by the admin.
+    let affiliateRow: {
+      id: string;
+      referral_code: string;
+      commission: number;
+    } | null = null;
     if (supabase && affiliate?.code) {
       const { data } = await supabase
         .from("affiliates")
-        .select("id, referral_code")
+        .select("id, referral_code, commission")
         .eq("referral_code", String(affiliate.code).toUpperCase())
         .eq("status", "active")
         .maybeSingle();
@@ -114,7 +119,7 @@ export async function POST(request: NextRequest) {
           discount: pricing.discount,
           promo_type: creditAffiliate ? null : pricing.promo.type,
           affiliate_code: creditAffiliate ? affiliateRow!.referral_code : null,
-          affiliate_commission: creditAffiliate ? 300 : 0,
+          affiliate_commission: creditAffiliate ? affiliateRow!.commission : 0,
         })
         .select("id")
         .single();
@@ -128,11 +133,14 @@ export async function POST(request: NextRequest) {
       }
 
       if (creditAffiliate) {
+        // Commission is per-code: 300 for signup affiliates, whatever the
+        // admin chose for direct codes (0 = discount-only, still tracked
+        // so the sales count per code stays visible).
         await supabase.from("affiliate_orders").insert({
           affiliate_id: affiliateRow!.id,
           order_id: order.id,
           order_ref: ref,
-          commission: 300,
+          commission: affiliateRow!.commission,
         });
       }
     } else {

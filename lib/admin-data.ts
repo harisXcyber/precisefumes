@@ -80,7 +80,7 @@ export async function fetchAffiliates() {
   const supabase = createAdminClient();
   const { data: affiliates } = await supabase
     .from("affiliates")
-    .select("id, email, name, referral_code, status, bank_method, bank_phone, bank_account_name, created_at")
+    .select("id, email, name, referral_code, status, bank_method, bank_phone, bank_account_name, source, commission, created_at")
     .order("created_at", { ascending: false });
   const { data: commissions } = await supabase
     .from("affiliate_orders")
