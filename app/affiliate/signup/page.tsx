@@ -1,14 +1,23 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { AffiliateSignupForm } from "@/components/affiliate/signup-form";
+import { Countdown } from "@/components/ui/countdown";
+import { getActiveOffers } from "@/lib/offers";
 
 export const metadata: Metadata = {
-  title: "Become an Affiliate",
+  title: "Become an Affiliate — Free Registration (Limited Offer)",
   description:
-    "Join the Precise Fumes affiliate program and earn PKR 300 per sale.",
+    "Join the Precise Fumes affiliate program FREE for a limited time (normally PKR 2,500) and earn up to PKR 100,000 per month with your promo code.",
 };
 
-export default function AffiliateSignup() {
+// Re-check the registration offer every few minutes.
+export const revalidate = 300;
+
+export default async function AffiliateSignup() {
+  const offers = await getActiveOffers();
+  const signupOffer = offers.find((o) => o.offer_key === "affsignup");
+  const freeSignup = !!signupOffer;
+
   return (
     <div className="min-h-screen bg-bg text-fg">
       {/* Hero */}
@@ -18,9 +27,43 @@ export default function AffiliateSignup() {
             Become an Affiliate
           </h1>
           <p className="text-lg text-invert-fg/80">
-            Earn PKR 300 commission on every sale you refer. Share Precise Fumes
-            with your network and get rewarded.
+            Earn PKR 300 commission on every sale you refer — up to{" "}
+            <strong className="text-invert-fg">PKR 100,000 per month</strong>{" "}
+            just by sharing your promo code.
           </p>
+
+          {/* Registration fee — free while the offer runs */}
+          {freeSignup ? (
+            <div className="mx-auto mt-8 max-w-md rounded-[var(--radius-lg)] border-2 border-accent bg-accent/10 p-6">
+              <p className="text-xs uppercase tracking-[0.18em] text-accent">
+                Limited-time offer
+              </p>
+              <p className="mt-3 font-serif text-3xl">
+                <span className="text-invert-fg/50 line-through">
+                  PKR 2,500
+                </span>{" "}
+                <span className="text-accent">FREE Registration</span>
+              </p>
+              <p className="mt-2 text-sm text-invert-fg/70">
+                Join free before the offer ends — the PKR 2,500 registration
+                fee returns after that.
+              </p>
+              {signupOffer?.ends_at && (
+                <div className="mt-4 flex justify-center">
+                  <Countdown
+                    endsAt={signupOffer.ends_at}
+                    compact
+                    className="font-serif text-2xl text-accent"
+                  />
+                </div>
+              )}
+            </div>
+          ) : (
+            <p className="mx-auto mt-8 max-w-md rounded-[var(--radius-lg)] border border-invert-fg/20 p-4 text-sm text-invert-fg/70">
+              Registration fee: <strong className="text-invert-fg">PKR 2,500</strong>
+            </p>
+          )}
+
           <Link
             href="/affiliate/dashboard"
             className="mt-8 inline-flex items-center gap-2 rounded-full border-2 border-accent bg-accent/10 px-7 py-3 text-sm font-medium uppercase tracking-[0.14em] text-accent transition-colors hover:bg-accent hover:text-on-accent"
@@ -110,9 +153,9 @@ export default function AffiliateSignup() {
       {/* Signup Form */}
       <section className="container-lux py-16 md:py-20 max-w-2xl mx-auto">
         <h2 className="font-serif text-3xl font-normal mb-12 text-center">
-          Get Started
+          {freeSignup ? "Get Started — Free" : "Get Started"}
         </h2>
-        <AffiliateSignupForm />
+        <AffiliateSignupForm signupOpen={freeSignup} />
       </section>
     </div>
   );

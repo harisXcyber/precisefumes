@@ -4,6 +4,7 @@ import { adminConfigured, createAdminClient } from "@/lib/supabase/admin";
 import { hashPassword } from "@/lib/password";
 import { normalizePkMobile } from "@/lib/contact";
 import { sendOtp } from "@/lib/otp";
+import { getActiveOffers } from "@/lib/offers";
 
 function generateToken(): string {
   return crypto.randomBytes(32).toString("hex");
@@ -28,6 +29,20 @@ function isValidEmail(email: string): boolean {
 
 export async function POST(request: NextRequest) {
   try {
+    // Free self-signup only while the registration offer is live. After
+    // it expires, registration costs PKR 2,500 and is arranged on
+    // WhatsApp (the admin then creates the code directly).
+    const offers = await getActiveOffers().catch(() => []);
+    if (!offers.some((o) => o.offer_key === "affsignup")) {
+      return NextResponse.json(
+        {
+          error:
+            "The free-registration offer has ended — registration is now PKR 2,500. WhatsApp us at 0317 2388450 and we'll set you up.",
+        },
+        { status: 403 }
+      );
+    }
+
     const body = await request.json();
     const {
       email,

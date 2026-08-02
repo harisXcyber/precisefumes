@@ -2,7 +2,8 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
-import { normalizePkMobile } from "@/lib/contact";
+import { normalizePkMobile, waLink } from "@/lib/contact";
+import { WhatsAppIcon } from "@/components/ui/whatsapp-icon";
 
 type BankMethod = "easypaisa" | "jazzcash";
 
@@ -10,7 +11,13 @@ function cleanWord(raw: string): string {
   return raw.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 12);
 }
 
-export function AffiliateSignupForm() {
+export function AffiliateSignupForm({
+  signupOpen = true,
+}: {
+  /** False once the free-registration offer has expired — the form is
+   *  replaced with the paid-registration WhatsApp flow. */
+  signupOpen?: boolean;
+}) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{
     type: "success" | "error";
@@ -99,6 +106,39 @@ export function AffiliateSignupForm() {
     } finally {
       setIsSubmitting(false);
     }
+  }
+
+  // Free-registration offer over → paid registration via WhatsApp.
+  if (!signupOpen) {
+    return (
+      <div className="max-w-xl mx-auto rounded-[var(--radius-lg)] border border-border bg-bg-soft p-8 text-center">
+        <p className="font-serif text-2xl">
+          Registration fee: PKR 2,500
+        </p>
+        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-fg-soft">
+          The free-registration offer has ended. To join the affiliate
+          program, message us on WhatsApp — we&apos;ll take your PKR 2,500
+          registration and set up your account and promo code for you.
+        </p>
+        <a
+          href={waLink(
+            "Assalam-o-Alaikum Precise Fumes! I'd like to register as an affiliate (PKR 2,500 registration). Please guide me through the payment and setup."
+          )}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-medium text-white transition-transform hover:scale-[1.02]"
+        >
+          <WhatsAppIcon className="h-4 w-4" />
+          Register via WhatsApp
+        </a>
+        <p className="mt-6 text-xs text-fg-faint">
+          Already an affiliate?{" "}
+          <Link href="/affiliate/dashboard" className="underline underline-offset-2 hover:text-fg">
+            Sign in to your dashboard
+          </Link>
+        </p>
+      </div>
+    );
   }
 
   return (
