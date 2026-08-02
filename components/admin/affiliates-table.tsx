@@ -12,6 +12,7 @@ export function AffiliatesTable({ affiliates }: { affiliates: any[] }) {
   const [newCode, setNewCode] = useState("");
   const [newName, setNewName] = useState("");
   const [newPhone, setNewPhone] = useState("");
+  const [newEmail, setNewEmail] = useState("");
   const [paysCommission, setPaysCommission] = useState(true);
   const [creating, setCreating] = useState(false);
   const [createMsg, setCreateMsg] = useState<{
@@ -32,6 +33,7 @@ export function AffiliatesTable({ affiliates }: { affiliates: any[] }) {
           code: cleanCode,
           name: newName,
           phone: newPhone,
+          email: newEmail,
           paysCommission,
         }),
       });
@@ -44,7 +46,9 @@ export function AffiliatesTable({ affiliates }: { affiliates: any[] }) {
         {
           id: data.id,
           name: newName,
-          email: `code.${data.code.toLowerCase()}@admin.precisefumes.com`,
+          email:
+            newEmail.trim().toLowerCase() ||
+            `code.${data.code.toLowerCase()}@admin.precisefumes.com`,
           referral_code: data.code,
           status: "active",
           source: "admin",
@@ -68,6 +72,7 @@ export function AffiliatesTable({ affiliates }: { affiliates: any[] }) {
       setNewCode("");
       setNewName("");
       setNewPhone("");
+      setNewEmail("");
       setPaysCommission(true);
     } catch {
       setCreateMsg({ type: "error", text: "Network error — try again." });
@@ -157,6 +162,19 @@ export function AffiliatesTable({ affiliates }: { affiliates: any[] }) {
             value={newPhone}
             onChange={(e) => setNewPhone(e.target.value)}
             placeholder="03XX XXXXXXX"
+            className="w-full"
+          />
+        </div>
+        <div className="sm:col-span-3">
+          <label className="pf-label mb-1.5 block">
+            Email for sale alerts{" "}
+            <span className="text-fg-faint">(optional)</span>
+          </label>
+          <input
+            type="email"
+            value={newEmail}
+            onChange={(e) => setNewEmail(e.target.value)}
+            placeholder="they get a 'your code made a sale' email on every order"
             className="w-full"
           />
         </div>

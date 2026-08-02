@@ -175,6 +175,32 @@ export function affiliateVerifyEmail(name: string, verifyUrl: string): string {
   `);
 }
 
+/** Sent to a code owner the moment an order is placed with their code. */
+export function affiliateSaleEmail(o: {
+  name: string;
+  code: string;
+  orderRef: string;
+  commission: number;
+  hasDashboard: boolean;
+}): string {
+  const commissionLine =
+    o.commission > 0
+      ? `<p style="color:#6d6258;margin:0 0 16px;">Your <strong>PKR ${o.commission}</strong> commission is in progress — it's released as soon as the order is delivered and the cash is collected.</p>`
+      : `<p style="color:#6d6258;margin:0 0 16px;">Your code gave them PKR 500 off per perfume.</p>`;
+  const dashboardLine = o.hasDashboard
+    ? `<p style="text-align:center;margin:24px 0 0;">
+      <a href="https://precisefumes.com/affiliate/dashboard" style="display:inline-block;background:#c99a4e;color:#14100c;padding:12px 28px;border-radius:999px;text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;font-size:12px;">View my dashboard</a>
+    </p>`
+    : "";
+  return wrap(`
+    <h1 style="font-size:24px;font-weight:normal;margin:0 0 8px;">Your code just made a sale! 🎉</h1>
+    <p style="color:#6d6258;margin:0 0 16px;">Salaam ${o.name} — someone just placed order <strong>${o.orderRef}</strong> using your promo code <strong style="letter-spacing:0.1em;">${o.code}</strong>.</p>
+    ${commissionLine}
+    <p style="color:#a39f96;font-size:13px;margin:0;">Keep sharing your code — every sale counts.</p>
+    ${dashboardLine}
+  `);
+}
+
 export function contactNotificationEmail(
   name: string,
   email: string,

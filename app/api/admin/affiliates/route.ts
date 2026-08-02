@@ -41,6 +41,14 @@ export async function POST(request: NextRequest) {
   // Commission is optional — untick it for discount-only codes.
   const commission = b.paysCommission === false ? 0 : 300;
   const phone = b.phone ? (normalizePkMobile(String(b.phone)) ?? "—") : "—";
+  // Optional real email → the owner gets "your code made a sale" alerts.
+  const notifyEmail = String(b.email ?? "").trim().toLowerCase();
+  if (notifyEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(notifyEmail)) {
+    return NextResponse.json(
+      { error: "That notification email doesn't look valid." },
+      { status: 400 }
+    );
+  }
 
   const supabase = createAdminClient();
 
@@ -57,10 +65,10 @@ export async function POST(request: NextRequest) {
   }
 
   const { data: created, error } = await supabase.from("affiliates").insert({
-    // Placeholder identity — this row is code plumbing, not an account.
-    // The email is synthetic and the password is random, so nobody can
-    // sign in to a dashboard with it.
-    email: `code.${code.toLowerCase()}@admin.precisefumes.com`,
+    // The password is random, so nobody can sign in to a dashboard with
+    // this row. If the admin gave a real email, sale alerts go there;
+    // otherwise a synthetic address keeps the row valid and silent.
+    email: notifyEmail || `code.${code.toLowerCase()}@admin.precisefumes.com`,
     name,
     password_hash: hashPassword(crypto.randomBytes(24).toString("hex")),
     bank_method: "admin",

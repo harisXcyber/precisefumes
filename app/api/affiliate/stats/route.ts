@@ -34,14 +34,14 @@ export async function POST(request: NextRequest) {
     const supabase = createAdminClient();
     const { data: affiliate } = await supabase
       .from("affiliates")
-      .select("id, name, email, referral_code")
+      .select("id, name, email, referral_code, status")
       .eq("email", String(email).toLowerCase())
-      .eq("status", "active")
+      .in("status", ["active", "pending_verification"])
       .maybeSingle();
 
     if (!affiliate) {
       return NextResponse.json(
-        { error: "No active affiliate matches that email." },
+        { error: "No affiliate matches that email." },
         { status: 404 }
       );
     }
@@ -69,6 +69,7 @@ export async function POST(request: NextRequest) {
       {
         name: affiliate.name,
         code: affiliate.referral_code, // live code — dashboard re-syncs to this
+        status: affiliate.status, // dashboard shows the verify gate if pending
         totals: { earned, pending, inProgress, sales },
         orders,
       },

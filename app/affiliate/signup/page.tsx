@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Link from "next/link";
 import { AffiliateSignupForm } from "@/components/affiliate/signup-form";
 
 export const metadata: Metadata = {
@@ -20,6 +21,12 @@ export default function AffiliateSignup() {
             Earn PKR 300 commission on every sale you refer. Share Precise Fumes
             with your network and get rewarded.
           </p>
+          <Link
+            href="/affiliate/dashboard"
+            className="mt-8 inline-flex items-center gap-2 rounded-full border-2 border-accent bg-accent/10 px-7 py-3 text-sm font-medium uppercase tracking-[0.14em] text-accent transition-colors hover:bg-accent hover:text-on-accent"
+          >
+            Already an affiliate? Sign In →
+          </Link>
         </div>
       </section>
 

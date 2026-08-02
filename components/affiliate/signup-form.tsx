@@ -76,19 +76,12 @@ export function AffiliateSignupForm() {
       });
 
       if (res.ok) {
-        const data = await res.json();
-        if (data.verifyUrl) {
-          setVerifyUrl(data.verifyUrl);
-          setMessage({
-            type: "success",
-            text: "Signup successful! Click the button below to verify and get your code.",
-          });
-        } else {
-          setMessage({
-            type: "success",
-            text: "Signup successful! We've emailed you a verification link — check your inbox, and your spam/junk folder too (it sometimes lands there). It can take a minute to arrive.",
-          });
-        }
+        await res.json();
+        setVerifyUrl("/affiliate/dashboard");
+        setMessage({
+          type: "success",
+          text: "Account created! We've emailed you a 6-digit verification code (check spam too). Sign in to your dashboard and enter it there — your promo code activates the moment you do.",
+        });
         (e.target as HTMLFormElement).reset();
         setCodeWord("");
       } else {
@@ -321,7 +314,7 @@ export function AffiliateSignupForm() {
 
       {verifyUrl && (
         <a href={verifyUrl} className="btn-primary w-full justify-center">
-          Verify & Get My Code →
+          Open Dashboard & Enter My Code →
         </a>
       )}
 
@@ -333,12 +326,12 @@ export function AffiliateSignupForm() {
         {isSubmitting ? "Signing Up..." : "Create Affiliate Account"}
       </button>
 
-      <p className="text-xs text-fg-soft text-center">
-        Already have an account?{" "}
-        <Link href="/affiliate/dashboard" className="link-underline font-medium">
-          Sign in to dashboard
-        </Link>
-      </p>
+      <Link
+        href="/affiliate/dashboard"
+        className="btn-ghost w-full justify-center text-center"
+      >
+        Already an affiliate? Sign In to Dashboard →
+      </Link>
     </form>
   );
 }

@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { adminConfigured, createAdminClient } from "@/lib/supabase/admin";
-import { sendEmail, orderConfirmationEmail } from "@/lib/email";
+import {
+  sendEmail,
+  orderConfirmationEmail,
+  affiliateSaleEmail,
+} from "@/lib/email";
 import { getActiveOffers } from "@/lib/offers";
 import { getProducts } from "@/lib/products";
 import {
@@ -72,11 +76,14 @@ export async function POST(request: NextRequest) {
       id: string;
       referral_code: string;
       commission: number;
+      email: string;
+      name: string;
+      source: string;
     } | null = null;
     if (supabase && affiliate?.code) {
       const { data } = await supabase
         .from("affiliates")
-        .select("id, referral_code, commission")
+        .select("id, referral_code, commission, email, name, source")
         .eq("referral_code", String(affiliate.code).toUpperCase())
         .eq("status", "active")
         .maybeSingle();
@@ -142,6 +149,23 @@ export async function POST(request: NextRequest) {
           order_ref: ref,
           commission: affiliateRow!.commission,
         });
+
+        // Tell the code owner their code just made a sale — best-effort,
+        // and never to the synthetic addresses behind admin-created codes.
+        const ownerEmail = affiliateRow!.email;
+        if (ownerEmail && !ownerEmail.endsWith("@admin.precisefumes.com")) {
+          sendEmail({
+            to: ownerEmail,
+            subject: `Your code ${affiliateRow!.referral_code} just made a sale! 🎉`,
+            html: affiliateSaleEmail({
+              name: affiliateRow!.name,
+              code: affiliateRow!.referral_code,
+              orderRef: ref,
+              commission: affiliateRow!.commission,
+              hasDashboard: affiliateRow!.source !== "admin",
+            }),
+          }).catch(() => ({ sent: false }));
+        }
       }
     } else {
       console.log("Order (Supabase not configured):", { ref, customer });

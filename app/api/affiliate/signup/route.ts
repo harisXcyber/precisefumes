@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { adminConfigured, createAdminClient } from "@/lib/supabase/admin";
 import { hashPassword } from "@/lib/password";
-import { sendEmail, affiliateVerifyEmail } from "@/lib/email";
 import { normalizePkMobile } from "@/lib/contact";
+import { sendOtp } from "@/lib/otp";
 
 function generateToken(): string {
   return crypto.randomBytes(32).toString("hex");
@@ -89,16 +89,10 @@ export async function POST(request: NextRequest) {
     }
 
     const token = generateToken();
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://precisefumes.com";
-    const verifyUrl = `${baseUrl}/affiliate/verify?token=${token}`;
 
     if (!adminConfigured()) {
-      // Database not connected yet — flow still completes via direct link.
       console.log("Affiliate signup (no DB):", { email, name });
-      return NextResponse.json(
-        { message: "Signup received.", verifyUrl },
-        { status: 200 }
-      );
+      return NextResponse.json({ message: "Signup received." }, { status: 200 });
     }
 
     const supabase = createAdminClient();
@@ -153,20 +147,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const emailResult = await sendEmail({
-      to: email,
-      subject: "Verify your email — Precise Fumes Affiliates",
-      html: affiliateVerifyEmail(name, verifyUrl),
-    });
+    // Email a 6-digit verification code (30-min expiry). The affiliate
+    // signs in to the dashboard and enters it there — their promo code
+    // stays inactive until they do.
+    const otp = await sendOtp(email, "affiliate-verify");
 
-    // If mail isn't configured yet, hand back the link so the flow
-    // still completes end-to-end.
     return NextResponse.json(
       {
-        message: emailResult.sent
-          ? "Verification email sent."
+        message: otp.ok
+          ? "Verification code sent."
           : "Signup received.",
-        ...(emailResult.sent ? {} : { verifyUrl }),
+        otpSent: otp.ok,
       },
       { status: 200 }
     );

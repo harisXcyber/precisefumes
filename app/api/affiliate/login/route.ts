@@ -34,12 +34,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (affiliate.status !== "active") {
+    // Unverified affiliates can sign in too — the dashboard shows a
+    // big "verify your email" gate and lets them enter their code there.
+    if (
+      affiliate.status !== "active" &&
+      affiliate.status !== "pending_verification"
+    ) {
       return NextResponse.json(
-        {
-          error:
-            "Your email isn't verified yet — click the link in your verification email first.",
-        },
+        { error: "This account is not active." },
         { status: 403 }
       );
     }
@@ -49,6 +51,7 @@ export async function POST(request: NextRequest) {
         name: affiliate.name,
         email: affiliate.email,
         code: affiliate.referral_code,
+        status: affiliate.status,
       },
       { status: 200 }
     );

@@ -7,10 +7,12 @@ interface AffiliateSession {
   email: string;
   name?: string;
   code: string;
+  status?: string;
 }
 
 interface AffiliateStats {
   code?: string;
+  status?: string;
   totals: { earned: number; pending: number; inProgress?: number; sales: number };
   orders: {
     order_ref: string;
@@ -85,7 +87,12 @@ function SignIn({ onSignIn }: { onSignIn: (s: AffiliateSession) => void }) {
       });
       const data = await res.json();
       if (res.ok) {
-        onSignIn({ email: data.email, code: data.code, name: data.name });
+        onSignIn({
+          email: data.email,
+          code: data.code,
+          name: data.name,
+          status: data.status,
+        });
       } else {
         setError(data.error ?? "Incorrect email or password.");
       }
@@ -181,6 +188,96 @@ function Dashboard({
   const [copied, setCopied] = useState(false);
   const [live, setLive] = useState<AffiliateStats | null>(null);
 
+  // ── Email verification (6-digit code) ─────────────────
+  const [localStatus, setLocalStatus] = useState<string | null>(null);
+  const [otpInput, setOtpInput] = useState("");
+  const [otpBusy, setOtpBusy] = useState(false);
+  const [resendIn, setResendIn] = useState(0);
+  const [otpMsg, setOtpMsg] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
+
+  // Tick the resend cooldown down once a second.
+  useEffect(() => {
+    if (resendIn <= 0) return;
+    const id = setInterval(() => setResendIn((s) => Math.max(0, s - 1)), 1000);
+    return () => clearInterval(id);
+  }, [resendIn]);
+
+  const status = localStatus ?? live?.status ?? session.status ?? "active";
+  const verified = status === "active";
+
+  function persistSession(patch: Partial<AffiliateSession>) {
+    try {
+      const raw = localStorage.getItem(SESSION_KEY);
+      const s = raw ? JSON.parse(raw) : session;
+      localStorage.setItem(SESSION_KEY, JSON.stringify({ ...s, ...patch }));
+    } catch {}
+  }
+
+  async function verifyEmail() {
+    setOtpBusy(true);
+    setOtpMsg(null);
+    try {
+      const res = await fetch("/api/affiliate/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: session.email, code: otpInput }),
+      });
+      const data = await res.json();
+      if (res.ok && data.ok) {
+        setLocalStatus("active");
+        persistSession({ status: "active" });
+        setOtpMsg({
+          type: "success",
+          text: "Email verified — your promo code is LIVE! 🎉",
+        });
+      } else {
+        setOtpMsg({
+          type: "error",
+          text: data.error || "That code is wrong or expired.",
+        });
+      }
+    } catch {
+      setOtpMsg({ type: "error", text: "Network error — try again." });
+    } finally {
+      setOtpBusy(false);
+    }
+  }
+
+  async function resendCode() {
+    setOtpBusy(true);
+    setOtpMsg(null);
+    try {
+      const res = await fetch("/api/affiliate/resend-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: session.email }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setResendIn(120);
+        setOtpMsg({
+          type: "success",
+          text: "Fresh code sent — check your inbox (and spam folder).",
+        });
+      } else if (data.cooldown) {
+        setResendIn(Number(data.cooldown));
+        setOtpMsg({
+          type: "error",
+          text: `Please wait ${data.cooldown}s before resending.`,
+        });
+      } else {
+        setOtpMsg({ type: "error", text: data.error || "Could not resend." });
+      }
+    } catch {
+      setOtpMsg({ type: "error", text: "Network error — try again." });
+    } finally {
+      setOtpBusy(false);
+    }
+  }
+
   useEffect(() => {
     fetch("/api/affiliate/stats", {
       method: "POST",
@@ -191,18 +288,20 @@ function Dashboard({
       .then((d) => {
         if (!d) return;
         setLive(d);
-        // Self-heal a stale cached code: if the live code differs from what's
-        // in localStorage (e.g. it was regenerated), persist the new one.
-        if (d.code && d.code !== session.code) {
-          try {
-            const raw = localStorage.getItem(SESSION_KEY);
-            const s = raw ? JSON.parse(raw) : session;
-            localStorage.setItem(
-              SESSION_KEY,
-              JSON.stringify({ ...s, code: d.code })
-            );
-          } catch {}
-        }
+        // Self-heal stale cached values (regenerated code, or a status
+        // that changed since last login).
+        try {
+          const raw = localStorage.getItem(SESSION_KEY);
+          const s = raw ? JSON.parse(raw) : session;
+          localStorage.setItem(
+            SESSION_KEY,
+            JSON.stringify({
+              ...s,
+              ...(d.code ? { code: d.code } : {}),
+              ...(d.status ? { status: d.status } : {}),
+            })
+          );
+        } catch {}
       })
       .catch(() => {});
   }, [session.email, session.code]);
@@ -259,6 +358,61 @@ function Dashboard({
           </button>
         </div>
 
+        {/* ── Verification gate — impossible to miss ─────── */}
+        {!verified && (
+          <div className="mb-10 rounded-[var(--radius-lg)] border-2 border-accent-rose/50 bg-accent-rose/10 p-6 text-center md:p-10">
+            <p className="font-serif text-3xl leading-tight md:text-5xl">
+              ⚠ Your code won&apos;t work yet
+            </p>
+            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-fg-soft">
+              Verify your email first. We sent a{" "}
+              <strong className="text-fg">6-digit code</strong> to{" "}
+              <strong className="text-fg">{session.email}</strong> — enter it
+              below to activate your promo code. The code expires in 30
+              minutes.
+            </p>
+            <div className="mx-auto mt-6 flex max-w-sm flex-col gap-3 sm:flex-row">
+              <input
+                type="text"
+                inputMode="numeric"
+                maxLength={6}
+                value={otpInput}
+                onChange={(e) => setOtpInput(e.target.value.replace(/\D/g, ""))}
+                placeholder="6-digit code"
+                className="w-full text-center text-lg tracking-[0.4em]"
+              />
+              <button
+                onClick={verifyEmail}
+                disabled={otpBusy || otpInput.length !== 6}
+                className="btn-primary shrink-0 justify-center disabled:opacity-50"
+              >
+                {otpBusy ? "…" : "Verify"}
+              </button>
+            </div>
+            <button
+              onClick={resendCode}
+              disabled={otpBusy || resendIn > 0}
+              className="mt-4 text-xs uppercase tracking-[0.14em] text-fg-soft underline-offset-4 hover:text-fg hover:underline disabled:opacity-50"
+            >
+              {resendIn > 0 ? `Resend code in ${resendIn}s` : "Resend code"}
+            </button>
+            {otpMsg && (
+              <p
+                className={`mt-3 text-sm font-medium ${
+                  otpMsg.type === "error" ? "text-accent-rose" : "text-[#1a8a4a]"
+                }`}
+              >
+                {otpMsg.text}
+              </p>
+            )}
+          </div>
+        )}
+        {verified && otpMsg?.type === "success" && (
+          <p className="mb-8 rounded-[var(--radius)] border border-[#1a8a4a]/30 bg-[#1a8a4a]/10 p-4 text-center text-sm font-medium text-[#1a8a4a]">
+            {otpMsg.text}
+          </p>
+        )}
+
         {/* Stats */}
         <div className="mb-10 grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6">
           {stats.map((s) => (
@@ -285,8 +439,21 @@ function Dashboard({
                 Share it anywhere. Customers pay PKR 2,500 instead of PKR 3,000
                 on single perfumes — you earn PKR 300 per sale.
               </p>
-              <div className="mt-5 rounded-[var(--radius-lg)] border-2 border-accent bg-bg p-5 md:p-6">
-                <p className="break-all text-center font-serif text-4xl tracking-[0.2em] md:text-5xl">
+              <div
+                className={`mt-5 rounded-[var(--radius-lg)] border-2 bg-bg p-5 md:p-6 ${
+                  verified ? "border-accent" : "border-accent-rose/50"
+                }`}
+              >
+                {!verified && (
+                  <p className="mb-3 rounded-full bg-accent-rose/15 px-4 py-1.5 text-center text-xs font-semibold uppercase tracking-[0.14em] text-accent-rose">
+                    Inactive — verify your email first
+                  </p>
+                )}
+                <p
+                  className={`break-all text-center font-serif text-4xl tracking-[0.2em] md:text-5xl ${
+                    verified ? "" : "opacity-40"
+                  }`}
+                >
                   {code}
                 </p>
               </div>

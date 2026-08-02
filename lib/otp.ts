@@ -3,14 +3,34 @@ import crypto from "crypto";
 import { adminConfigured, createAdminClient } from "@/lib/supabase/admin";
 import { sendEmail } from "@/lib/email";
 
-const TTL_MIN = 10;
-const RESEND_COOLDOWN_SEC = 45;
+/** Per-purpose behaviour: how long a code lives, how often it can be
+ *  re-sent, and what the email tells the reader to do with it. */
+const PURPOSES: Record<
+  string,
+  { ttlMin: number; cooldownSec: number; blurb: string }
+> = {
+  checkout: {
+    ttlMin: 10,
+    cooldownSec: 45,
+    blurb: "Enter this code to confirm your order.",
+  },
+  "affiliate-verify": {
+    ttlMin: 30,
+    cooldownSec: 120,
+    blurb:
+      "Enter this code in your affiliate dashboard to verify your email and activate your promo code.",
+  },
+};
+
+function purposeConfig(purpose: string) {
+  return PURPOSES[purpose] ?? PURPOSES.checkout;
+}
 
 function sixDigit(): string {
   return String(crypto.randomInt(0, 1_000_000)).padStart(6, "0");
 }
 
-function otpEmail(code: string): string {
+function otpEmail(code: string, blurb: string, ttlMin: number): string {
   return `
 <div style="margin:0;padding:32px 16px;background:#faf8f5;font-family:Georgia,serif;color:#1a1714;">
   <div style="max-width:480px;margin:0 auto;background:#fff;border:1px solid #e8e2d8;border-radius:16px;overflow:hidden;">
@@ -20,7 +40,7 @@ function otpEmail(code: string): string {
     <div style="padding:32px;text-align:center;">
       <p style="color:#6d6258;margin:0 0 16px;">Your verification code is</p>
       <p style="font-size:36px;letter-spacing:.3em;font-weight:bold;margin:0 0 16px;">${code}</p>
-      <p style="color:#a39f96;font-size:13px;margin:0;">Enter this code to confirm your order. It expires in ${TTL_MIN} minutes. If you didn't request it, ignore this email.</p>
+      <p style="color:#a39f96;font-size:13px;margin:0;">${blurb} It expires in ${ttlMin} minutes. If you didn't request it, ignore this email.</p>
     </div>
   </div>
 </div>`;
@@ -43,6 +63,7 @@ export async function sendOtp(
     return { ok: false, error: "Enter a valid email address." };
   }
   const supabase = createAdminClient();
+  const cfg = purposeConfig(purpose);
 
   // Cooldown: block rapid re-sends.
   const { data: recent } = await supabase
@@ -55,17 +76,17 @@ export async function sendOtp(
     .maybeSingle();
   if (recent) {
     const ageSec = (Date.now() - new Date(recent.created_at).getTime()) / 1000;
-    if (ageSec < RESEND_COOLDOWN_SEC) {
+    if (ageSec < cfg.cooldownSec) {
       return {
         ok: false,
         error: "Please wait before requesting another code.",
-        cooldown: Math.ceil(RESEND_COOLDOWN_SEC - ageSec),
+        cooldown: Math.ceil(cfg.cooldownSec - ageSec),
       };
     }
   }
 
   const code = sixDigit();
-  const expires_at = new Date(Date.now() + TTL_MIN * 60_000).toISOString();
+  const expires_at = new Date(Date.now() + cfg.ttlMin * 60_000).toISOString();
   const { error } = await supabase
     .from("otp_codes")
     .insert({ email, code, purpose, expires_at });
@@ -74,7 +95,7 @@ export async function sendOtp(
   const sent = await sendEmail({
     to: email,
     subject: `${code} is your Precise Fumes verification code`,
-    html: otpEmail(code),
+    html: otpEmail(code, cfg.blurb, cfg.ttlMin),
   });
   if (!sent.sent) {
     return { ok: false, error: "Could not send the code. Please try again." };
