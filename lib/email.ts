@@ -185,7 +185,7 @@ export function affiliateSaleEmail(o: {
 }): string {
   const commissionLine =
     o.commission > 0
-      ? `<p style="color:#6d6258;margin:0 0 16px;">Your <strong>PKR ${o.commission}</strong> commission is in progress — it's released as soon as the order is delivered and the cash is collected.</p>`
+      ? `<p style="color:#6d6258;margin:0 0 16px;">Once this order is <strong>confirmed and completed</strong> (delivered, cash collected), you'll receive your <strong>PKR ${o.commission}</strong> commission for it.</p>`
       : `<p style="color:#6d6258;margin:0 0 16px;">Your code gave them PKR 500 off per perfume.</p>`;
   const dashboardLine = o.hasDashboard
     ? `<p style="text-align:center;margin:24px 0 0;">
@@ -193,8 +193,8 @@ export function affiliateSaleEmail(o: {
     </p>`
     : "";
   return wrap(`
-    <h1 style="font-size:24px;font-weight:normal;margin:0 0 8px;">Your code just made a sale! 🎉</h1>
-    <p style="color:#6d6258;margin:0 0 16px;">Salaam ${o.name} — someone just placed order <strong>${o.orderRef}</strong> using your promo code <strong style="letter-spacing:0.1em;">${o.code}</strong>.</p>
+    <h1 style="font-size:24px;font-weight:normal;margin:0 0 8px;">Your code was just used! 🎉</h1>
+    <p style="color:#6d6258;margin:0 0 16px;">Salaam ${o.name} — your promo code <strong style="letter-spacing:0.1em;">${o.code}</strong> was used to place order <strong>${o.orderRef}</strong>.</p>
     ${commissionLine}
     <p style="color:#a39f96;font-size:13px;margin:0;">Keep sharing your code — every sale counts.</p>
     ${dashboardLine}

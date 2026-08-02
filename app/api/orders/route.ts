@@ -156,7 +156,7 @@ export async function POST(request: NextRequest) {
         if (ownerEmail && !ownerEmail.endsWith("@admin.precisefumes.com")) {
           sendEmail({
             to: ownerEmail,
-            subject: `Your code ${affiliateRow!.referral_code} just made a sale! 🎉`,
+            subject: `Your code ${affiliateRow!.referral_code} was just used in an order 🎉`,
             html: affiliateSaleEmail({
               name: affiliateRow!.name,
               code: affiliateRow!.referral_code,
