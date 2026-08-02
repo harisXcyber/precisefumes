@@ -146,10 +146,13 @@ export function orderConfirmationEmail(o: OrderEmailData): string {
         `<tr><td style="padding:8px 0;border-bottom:1px solid #f0ebe2;">${i.name} · ${i.size} × ${i.quantity}</td><td style="padding:8px 0;border-bottom:1px solid #f0ebe2;text-align:right;">${pkr(i.price * i.quantity)}</td></tr>`
     )
     .join("");
+  // Describe what was actually charged — delivery is only free while the
+  // free-delivery offer is live (and only with a perfume in the order).
+  const days = o.city === "Karachi" ? "2–5 working days" : "5–7 working days";
   const delivery =
-    o.city === "Karachi"
-      ? "Free delivery — 2–5 working days"
-      : "PKR 300 — 5–7 working days";
+    o.shippingFee === 0
+      ? `Free delivery — ${days}`
+      : `Delivery PKR ${o.shippingFee} — ${days}`;
   return wrap(`
     <h1 style="font-size:24px;font-weight:normal;margin:0 0 8px;">Order confirmed</h1>
     <p style="color:#6d6258;margin:0 0 24px;">Thank you, ${o.name}. Your order <strong>${o.ref}</strong> is being prepared.</p>

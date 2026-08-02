@@ -146,9 +146,10 @@ export default async function OrderConfirmation({
             <div className="border-t border-border pt-5">
               <p className="pf-eyebrow mb-2">Delivery Timeline</p>
               <p className="text-sm text-fg-soft">
-                <strong>Karachi:</strong> 2–5 working days (free)
+                <strong>Karachi:</strong> 2–5 working days
                 <br />
-                <strong>Nationwide:</strong> 5–7 working days (PKR 300)
+                <strong>Nationwide:</strong> 5–7 working days — any delivery
+                charge is shown in your order summary above
               </p>
             </div>
 
