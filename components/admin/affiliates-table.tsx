@@ -3,6 +3,26 @@
 import { useState } from "react";
 import { formatPrice } from "@/lib/utils";
 
+// Pakistan time on both server and client so hydration matches.
+const TZ = "Asia/Karachi";
+function createdDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("en-GB", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: TZ,
+  });
+}
+function createdTime(iso: string): string {
+  return new Date(iso).toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: TZ,
+  });
+}
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function AffiliatesTable({ affiliates }: { affiliates: any[] }) {
   const [rows, setRows] = useState(affiliates);
@@ -60,6 +80,7 @@ export function AffiliatesTable({ affiliates }: { affiliates: any[] }) {
           pending: 0,
           owed: 0,
           paid: 0,
+          created_at: new Date().toISOString(),
         },
         ...prev,
       ]);
@@ -255,11 +276,12 @@ export function AffiliatesTable({ affiliates }: { affiliates: any[] }) {
       </div>
 
       <div className="overflow-x-auto rounded-[var(--radius-lg)] border border-border">
-      <table className="w-full min-w-[48rem] text-sm">
+      <table className="w-full min-w-[56rem] text-sm">
         <thead className="bg-bg-soft">
           <tr className="text-left">
             <th className="pf-label p-3">Affiliate</th>
             <th className="pf-label p-3">Code</th>
+            <th className="pf-label p-3">Created</th>
             <th className="pf-label p-3">Pay to</th>
             <th className="pf-label p-3 text-right">Sales</th>
             <th className="pf-label p-3 text-right">Pipeline</th>
@@ -300,6 +322,20 @@ export function AffiliatesTable({ affiliates }: { affiliates: any[] }) {
               </td>
               <td className="p-3 font-medium tracking-wider">
                 {a.referral_code}
+              </td>
+              <td className="p-3 text-fg-soft">
+                {a.created_at ? (
+                  <>
+                    <span className="block whitespace-nowrap text-xs">
+                      {createdDate(a.created_at)}
+                    </span>
+                    <span className="block whitespace-nowrap text-xs text-fg-faint">
+                      {createdTime(a.created_at)}
+                    </span>
+                  </>
+                ) : (
+                  "—"
+                )}
               </td>
               <td className="p-3 text-fg-soft">
                 {a.source === "admin" ? (
